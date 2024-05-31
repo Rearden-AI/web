@@ -48,7 +48,6 @@ export const Header = () => {
             </span>
           </p>
         )}
-
         <ConnectButton />
       </div>
     </BorderWrapper>

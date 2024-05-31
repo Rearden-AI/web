@@ -1,11 +1,11 @@
 import { InternalAxiosRequestConfig } from 'axios';
 
-import { getToken } from './token';
+import { StorageNames, getLocalStorageValue } from './local-storage';
 
 export const setAxiosHeader = (
   config: InternalAxiosRequestConfig<unknown>,
 ): InternalAxiosRequestConfig<unknown> => {
-  const token = getToken();
+  const token = getLocalStorageValue(StorageNames.ACCESS_TOKEN);
 
   if (token) config.headers.set('Authorization', `Bearer ${token}`);
 

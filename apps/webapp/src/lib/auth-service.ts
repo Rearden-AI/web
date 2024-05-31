@@ -1,12 +1,12 @@
+import { Ed25519Keypair } from '@mysten/sui.js/keypairs/ed25519';
 import {
-  jwtToAddress,
   genAddressSeed,
+  generateNonce,
+  generateRandomness,
   getExtendedEphemeralPublicKey,
   getZkLoginSignature,
-  generateRandomness,
-  generateNonce,
+  jwtToAddress,
 } from '@mysten/zklogin';
-import { Ed25519Keypair } from '@mysten/sui.js/keypairs/ed25519';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import {
@@ -16,6 +16,7 @@ import {
   PartialZkLoginSignature,
   VerificationPayload,
 } from '../types/zklogin';
+import { StorageNames, getLocalStorageValue, setLocalStorageValue } from './local-storage';
 import { SUI_CLIENT } from './sui-client';
 
 class AuthService implements AuthServiceInterface {
@@ -94,13 +95,13 @@ class AuthService implements AuthServiceInterface {
   }
 
   private getJwtData(): ParsedJWTData {
-    const jwt = sessionStorage.getItem('jwt_data');
+    const jwt = getLocalStorageValue(StorageNames.JWT_DATA);
     if (!jwt) throw new Error('jwt doesnt exist');
     return JSON.parse(jwt) as ParsedJWTData;
   }
 
   private decodeJwt() {
-    const jwt = sessionStorage.getItem('sui_jwt_token');
+    const jwt = getLocalStorageValue(StorageNames.SUI_TOKEN);
     if (!jwt) throw new Error('sui_jwt_token doesnt exist');
     return jwtDecode(jwt);
   }
@@ -132,7 +133,7 @@ class AuthService implements AuthServiceInterface {
       i = 0;
     const l = s.length;
     if (l > 0) while (i < l) h = ((h << 5) - h + s.charCodeAt(i++)) | 0;
-    return h.toString();
+    return h.toString().replace('-', '');
   }
 
   isAuthenticated() {
@@ -141,7 +142,7 @@ class AuthService implements AuthServiceInterface {
   }
 
   jwt() {
-    return sessionStorage.getItem('sui_jwt_token');
+    return getLocalStorageValue(StorageNames.SUI_TOKEN);
   }
 
   async login() {
@@ -161,7 +162,7 @@ class AuthService implements AuthServiceInterface {
       ephemeralKeyPair,
     };
 
-    sessionStorage.setItem('jwt_data', JSON.stringify(jwtData));
+    setLocalStorageValue(StorageNames.JWT_DATA, JSON.stringify(jwtData));
 
     const params = {
       client_id: process.env['NEXT_PUBLIC_OAUTH_CLIENT_ID']!,

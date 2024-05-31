@@ -1,10 +1,10 @@
 import { AxiosInstance } from 'axios';
-import { ApiRoutes } from './api-routes';
-import { ChallengeResponse, SupportedChains, TokenResponse } from '../types/auth';
 import { toHex } from 'viem';
-import { setToken } from './token';
 import { Config, Connector } from 'wagmi';
 import { ConnectMutate } from 'wagmi/query';
+import { ChallengeResponse, SupportedChains, TokenResponse } from '../types/auth';
+import { ApiRoutes } from './api-routes';
+import { StorageNames, setLocalStorageValue } from './local-storage';
 
 export const connect = async (
   axiosInstance: AxiosInstance,
@@ -28,7 +28,7 @@ export const connect = async (
   const { data } = await axiosInstance.post<TokenResponse>(
     ApiRoutes.AUTH + `?address=${address}&chain=${SupportedChains.ETH}&signature=${signature}`,
   );
-  setToken(data.token);
+  setLocalStorageValue(StorageNames.ACCESS_TOKEN, data.token);
   if (connector)
     onConnect({
       connector: connector,

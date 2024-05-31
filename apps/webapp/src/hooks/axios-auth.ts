@@ -1,12 +1,12 @@
 'use client';
 
-import { useEffect } from 'react';
 import Axios, { AxiosError, AxiosRequestConfig } from 'axios';
+import { useEffect } from 'react';
 
 import { ApiRoutes } from '../lib/api-routes';
 import axiosInstance, { RetryQueueItem } from '../lib/axios';
+import { StorageNames, getLocalStorageValue, setLocalStorageValue } from '../lib/local-storage';
 import { setAxiosHeader } from '../lib/set-axios-header';
-import { getToken, setToken } from '../lib/token';
 
 const useAxiosAuth = () => {
   useEffect(() => {
@@ -29,7 +29,7 @@ const useAxiosAuth = () => {
           if (!isRefreshing) {
             isRefreshing = true;
             try {
-              const token = getToken();
+              const token = getLocalStorageValue(StorageNames.ACCESS_TOKEN);
               if (token) {
                 const axios = Axios.create({
                   baseURL: process.env['NEXT_PUBLIC_API_URL'],
@@ -44,7 +44,7 @@ const useAxiosAuth = () => {
                   .then(async (response: { data: { token: string } }) => {
                     if (!response.data.token) return;
 
-                    setToken(response.data.token);
+                    setLocalStorageValue(StorageNames.ACCESS_TOKEN, response.data.token);
 
                     return axiosInstance(originalRequest);
                   })
