@@ -1,0 +1,50 @@
+version: '3'
+
+services:
+  defi_copilot:
+    container_name: defi_copilot
+    image: defi_copilot:latest
+    build:
+      context: ./
+      dockerfile: ./apps/webapp/Dockerfile
+      args:
+        NODE: development
+    restart: always
+    ports:
+      - 9000:3000
+    networks:
+      - coplilot_network
+  defi_copilot_stage:
+    container_name: defi_copilot_stage
+    image: defi_copilot_stage:latest
+    build:
+      context: ./
+      dockerfile: ./apps/webapp/Dockerfile
+      args:
+        NODE: production
+    restart: always
+    ports:
+      - 9001:3000
+    networks:
+      - coplilot_network
+  defi_copilot_sui:
+    container_name: defi_copilot_sui
+    image: defi_copilot_sui:latest
+    build:
+      context: ./
+      dockerfile: ./apps/webapp/Dockerfile
+      args:
+        NODE: staging
+    restart: always
+    ports:
+      - 9002:3000
+    networks:
+      - coplilot_network
+
+  # Add more containers below (nginx, postgres, etc.)
+
+# Define a network, which allows containers to communicate
+# with each other, by using their container name as a hostname
+networks:
+  coplilot_network:
+    external: true

@@ -1,0 +1,183 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 7%; /* #111 */
+    --foreground: 24 18% 65%; /* --Thatch, #B5A295 */
+
+    --card: 0 0% 10%; /* --Cod-Gray, #191919*/
+    /* --card-foreground: 0 0% 98%; */
+
+    --card-secondary: 0 0% 13%; /* #202020 */
+
+    /* --popover: 249 31% 13%; */
+    /* --popover-foreground: 222.2 84% 4.9%; */
+
+    --primary: 267 69% 63%; /* #9A5FE2 */
+    --primary-foreground: 0 0% 100%; /* #FFF */
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 26 21% 81%; /* --Sisal, #D8CCC3 */
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 24 53% 17%; /* --Brown-Derby, #412614 */
+    --border-secondary: 0 0% 18%; /* #2D2D2D */
+    --border-third: 27 9% 19%; /* --Dark-grey, #36312D */
+    --input: 249 51% 8%; /* #0D0A1F */
+
+    --ring: 222.2 84% 4.9%;
+
+    --sidebar: 249 31% 13%; /* #1A172C */
+
+    --radius: 0.75rem; /* 12px */
+
+    --icon: 0 0% 100%; /* #FFFFFF */
+    --icon-foreground: 248 22% 35%; /* #4B466D */
+
+    --sandstone: 24 9% 43%; /* --Sandstone, #776B63 */
+    --error: 4 90% 58%; /* --Error, #F44336 */
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border text-foreground font-inter font-medium text-sm;
+  }
+
+  body {
+    @apply bg-background;
+  }
+
+  h1 {
+    @apply text-[32px] leading-[48px] font-semibold lg:text-[56px] lg:leading-[64px] lg:font-medium;
+  }
+
+  h2 {
+    @apply text-2xl leading-[34px] font-bold;
+  }
+}
+
+@layer components {
+  .group-hover-text {
+    @apply text-white transition-colors duration-200 ease-in-out;
+  }
+
+  .group-hover-stroke {
+    @apply stroke-white transition-colors duration-200 ease-in-out;
+  }
+
+  .text-hover {
+    @apply text-foreground transition-colors duration-200 ease-in-out hover:text-white;
+  }
+
+  .fill-hover {
+    @apply fill-foreground transition-colors duration-200 ease-in-out hover:fill-white;
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-[#F6D933] from-[1.65%] via-[#C9E576] via-[54.49%] to-[#D5F284] to-[98.27%] w-fit;
+  }
+
+  .text-gradient-secondary {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-[#C9E576] from-[3.76%] to-[#6EE198] to-[96.1%] w-fit;
+  }
+}
+
+.scrollbar-w-2::-webkit-scrollbar {
+  width: 0.25rem;
+  height: 0.25rem;
+}
+
+.scrollbar-track-black-lighter::-webkit-scrollbar-track {
+  --bg-opacity: 1;
+  background-color: #111;
+  background-color: rgba(17, 17, 17, var(--bg-opacity));
+}
+
+.scrollbar-thumb-black::-webkit-scrollbar-thumb {
+  --bg-opacity: 1;
+  background-color: #111;
+  background-color: rgba(17, 17, 17, var(--bg-opacity));
+}
+
+.scrollbar-thumb-rounded::-webkit-scrollbar-thumb {
+  border-radius: 0.25rem;
+}
+
+.image-gradient-133deg {
+  background: linear-gradient(
+      133deg,
+      rgba(45, 45, 45, 0.24) -117.25%,
+      rgba(246, 246, 246, 0.13) -9.28%,
+      rgba(57, 57, 57, 0.23) 96.57%
+    ),
+    #111;
+}
+
+ul li::before {
+  display: inline-block;
+  content: '';
+  background-image: url('../icons/arrow-li.svg');
+  width: 24px;
+  height: 24px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  margin-right: 4px;
+}
+
+.counter-reset {
+  counter-reset: li;
+}
+
+.counter-reset > li:before {
+  content: counter(li); /* Use the counter as content */
+  counter-increment: li; /* Increment the counter by 1 */
+  margin-right: 12px;
+  background:
+    linear-gradient(133deg, #191919, #191919) padding-box,
+    linear-gradient(101.12deg, rgba(255, 123, 33, 0.09) 9.87%, rgba(242, 78, 206, 0.054) 301.83%)
+      border-box;
+  border-radius: 7px;
+  border: 1px solid transparent;
+  height: fit-content;
+  padding: 4px 10px;
+  color: #ff7b21;
+}
+
+.txt-inherit {
+  font-size: inherit;
+  line-height: inherit;
+  font-weight: inherit;
+}
+
+.button-primary-bg:hover {
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
+    linear-gradient(101.12deg, #ff7b21 9.87%, rgba(242, 78, 206, 0.6) 301.83%);
+}
+
+.button-primary-bg:disabled {
+  background: linear-gradient(
+      101.12deg,
+      rgba(255, 123, 33, 0.5) 9.87%,
+      rgba(242, 78, 206, 0.3) 301.83%
+    ),
+    linear-gradient(0deg, #000000, #000000);
+}
+.button-cross:hover {
+  background: linear-gradient(
+      101.12deg,
+      rgba(255, 123, 33, 0.1) 9.87%,
+      rgba(242, 78, 206, 0.06) 301.83%
+    ),
+    linear-gradient(0deg, #191919, #191919);
+}

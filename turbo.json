@@ -1,0 +1,43 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": ["**/.env.*local"],
+  "globalEnv": [
+    "NEXT_PUBLIC_API_URL",
+    "NEXT_PUBLIC_OAUTH_CLIENT_ID",
+    "NEXT_PUBLIC_OPENID_PROVIDER_URL",
+    "NEXT_PUBLIC_PROVER_URL",
+    "NEXT_PUBLIC_OAUTH_REDIRECT_URL"
+  ],
+  "pipeline": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": [".next/**", "!.next/cache/**"],
+      "cache": false
+    },
+    "//#format:prettier": {
+      "cache": false
+    },
+    "clean": {
+      "cache": false
+    },
+    "//#lint:prettier": {
+      "cache": false
+    },
+    "lint": {
+      "dependsOn": ["//#lint:prettier"],
+      "inputs": ["**/*.ts", "**/*.tsx", "package.json"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "format": {
+      "cache": false,
+      "dependsOn": ["format:ts"]
+    },
+    "format:ts": {
+      "cache": false,
+      "dependsOn": ["//#format:prettier"]
+    }
+  }
+}
