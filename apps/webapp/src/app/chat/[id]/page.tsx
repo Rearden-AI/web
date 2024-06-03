@@ -11,8 +11,7 @@ import useAxiosAuth from '../../../hooks/axios-auth';
 import { API_ID, ApiRoutes } from '../../../lib/api-routes';
 import { useStore } from '../../../state';
 import { chatsSelector } from '../../../state/chats';
-import { Action, ChatResponse, ExtendedChatSchema, Role } from '../../../types/chat';
-import { suiActions } from '../../../lib/constants';
+import { ChatResponse, ExtendedChatSchema, Role } from '../../../types/chat';
 
 export default function ChatPage({ params }: { params: { id: string } }) {
   const { selectedChat, writeToChat, selectChat } = useStore(chatsSelector);
@@ -96,7 +95,7 @@ export default function ChatPage({ params }: { params: { id: string } }) {
                               writeToChat({
                                 role: Role.SYSTEM,
                                 content: data.body,
-                                strategies: suiActions as Action[],
+                                strategies: data.strategies,
                                 timestamp: data.timestamp,
                               });
                             } catch (error) {
@@ -110,7 +109,7 @@ export default function ChatPage({ params }: { params: { id: string } }) {
                     )}
                   </div>
                   {message.strategies?.length ? (
-                    <StrategyMessage strategies={suiActions as Action[]} />
+                    <StrategyMessage strategies={message.strategies} />
                   ) : (
                     <Fragment />
                   )}

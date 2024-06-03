@@ -3,7 +3,6 @@ import { create, StateCreator } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 
 import { ChatsSlice, createChatsSlice } from './chats';
-import { AccountsSlice, createAccountsSlice } from './accounts';
 import { createPricesSlice, PricesSlice } from './prices';
 
 /**
@@ -15,7 +14,6 @@ enableMapSet();
 
 export interface AllSlices {
   chats: ChatsSlice;
-  accounts: AccountsSlice;
   prices: PricesSlice;
 }
 
@@ -29,7 +27,6 @@ export type SliceCreator<SliceInterface> = StateCreator<
 export const initializeStore = () => {
   return immer((setState, getState: () => AllSlices, store) => ({
     chats: createChatsSlice()(setState, getState, store),
-    accounts: createAccountsSlice()(setState, getState, store),
     prices: createPricesSlice()(setState, getState, store),
   }));
 };

@@ -14,10 +14,10 @@ import {
   DialogTrigger,
 } from '@rearden/ui/components/ui/dialog';
 import { AddLiquidityForm } from './add-liquidity-form';
-import { TransactionFormSui } from './transaction-form-sui';
 import useAxiosAuth from '../../../hooks/axios-auth';
 import { API_ID, ApiRoutes } from '../../../lib/api-routes';
 import { useParams } from 'next/navigation';
+import { TransactionForm } from './transaction-form';
 
 export const ActionsModal = ({ wallet, strategies }: { wallet: string; strategies: Action[] }) => {
   const axiosInstance = useAxiosAuth();
@@ -65,7 +65,7 @@ export const ActionsModal = ({ wallet, strategies }: { wallet: string; strategie
               setResult={setResult}
             />
           ) : (
-            <TransactionFormSui
+            <TransactionForm
               key={index}
               index={index + 1}
               action={i}

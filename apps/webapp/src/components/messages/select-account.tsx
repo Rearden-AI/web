@@ -13,15 +13,14 @@ import {
   SelectValue,
 } from '@rearden/ui/components/ui/select';
 import { ActionsModal } from './actions-modal';
-import { useStore } from '../../state';
-import { accountsSelector } from '../../state/accounts';
+import { useAccount } from 'wagmi';
 
 interface SelectAccountProps {
   strategies: Action[];
 }
 
 export const SelectAccount = ({ strategies }: SelectAccountProps) => {
-  const { selectedAccount: address } = useStore(accountsSelector);
+  const { address } = useAccount();
   const [wallet, setWallet] = useState('');
 
   const accounts = useMemo(() => {

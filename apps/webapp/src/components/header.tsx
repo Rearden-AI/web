@@ -7,20 +7,20 @@ import { BorderWrapper } from './border-wrapper';
 import { ConnectButton } from './connect-btn';
 import { Icons } from '@rearden/ui/components/icons';
 import { formatUnits } from 'viem';
-import { useStore } from '../state';
-import { accountsSelector } from '../state/accounts';
-import { suiService } from '../lib/sui-service';
+import { useAccount } from 'wagmi';
+import { getBalance } from '@wagmi/core';
+import { wagmiConfig } from '../lib/wagmi';
 
 export const Header = () => {
-  const { selectedAccount: address } = useStore(accountsSelector);
+  const { address } = useAccount();
 
   const [balance, setBalance] = useState<string>('0.00');
 
   useEffect(() => {
     if (!address) return;
     void (async () => {
-      const balance = await suiService.getBalance({
-        owner: address,
+      const balance = await getBalance(wagmiConfig, {
+        address,
       });
 
       const formatted = formatUnits(balance.value, balance.decimals);

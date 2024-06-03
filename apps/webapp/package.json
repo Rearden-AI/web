@@ -10,18 +10,13 @@
     "lint": "eslint src"
   },
   "dependencies": {
-    "@cetusprotocol/cetus-sui-clmm-sdk": "^4.3.0",
-    "@mysten/sui.js": "^0.54.1",
-    "@mysten/zklogin": "^0.6.3",
     "@rearden/ui": "workspace:*",
     "@tanstack/react-query": "^5.29.2",
     "@wagmi/core": "^2.10.3",
     "axios": "^1.6.8",
     "bignumber.js": "^9.1.2",
-    "bn.js": "^5.2.1",
     "clsx": "^2.1.0",
     "immer": "^10.0.4",
-    "jwt-decode": "^4.0.0",
     "lucide": "^0.372.0",
     "lucide-react": "^0.316.0",
     "moment": "^2.30.1",

@@ -23,11 +23,4 @@ export const Networks: Record<
     explorer: 'https://holesky.etherscan.io',
     iconUrl: '/ETH.png',
   },
-  99999999999: {
-    name: 'SUI Mainnet',
-    explorer: 'https://suivision.xyz',
-    contractPathname: 'https://suivision.xyz/package/',
-    txPathname: 'https://suivision.xyz/txblock/',
-    iconUrl: '/SUI.png',
-  },
 };

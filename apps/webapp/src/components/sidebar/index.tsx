@@ -15,8 +15,7 @@ import { ChatSchema } from '../../types/chat';
 import { PaginatedResponse } from '../../types/generic';
 import { ApiRoutes } from '../../lib/api-routes';
 import { filterObjectsByProperty } from '../../lib/filter-objectby-property';
-
-import { accountsSelector } from '../../state/accounts';
+import { useAccount } from 'wagmi';
 
 const getChats = async ({
   pageParam,
@@ -39,11 +38,11 @@ export const Sidebar = () => {
 
   const axiosInstance = useAxiosAuth();
   const { all, addChats } = useStore(chatsSelector);
-  const { selectedAccount } = useStore(accountsSelector);
+  const { address } = useAccount();
 
   const { data, fetchNextPage } = useInfiniteQuery({
     queryKey: ['chats'],
-    enabled: Boolean(selectedAccount),
+    enabled: Boolean(address),
     initialPageParam: 1,
     queryFn: ({ pageParam }) => getChats({ pageParam, axiosInstance, prevChats: all }),
     getNextPageParam: (lastPage, allPages) => (lastPage.length ? allPages.length + 1 : undefined),
