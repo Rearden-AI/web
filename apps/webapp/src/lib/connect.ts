@@ -6,7 +6,7 @@ import { ChallengeResponse, SupportedChains, TokenResponse } from '../types/auth
 import { ApiRoutes } from './api-routes';
 import { StorageNames, setLocalStorageValue } from './local-storage';
 
-export const connect = async (
+export const metamaskConnect = async (
   axiosInstance: AxiosInstance,
   onConnect: ConnectMutate<Config>,
   connector?: Connector,
