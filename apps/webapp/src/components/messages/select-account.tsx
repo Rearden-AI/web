@@ -13,17 +13,18 @@ import {
   SelectValue,
 } from '@rearden/ui/components/ui/select';
 import { ActionsModal } from './actions-modal';
-import { useAccount } from 'wagmi';
+import { useSession } from 'next-auth/react';
 
 interface SelectAccountProps {
   strategies: Action[];
 }
 
 export const SelectAccount = ({ strategies }: SelectAccountProps) => {
-  const { address } = useAccount();
+  const { data: session } = useSession();
   const [wallet, setWallet] = useState('');
 
   const accounts = useMemo(() => {
+    const address = session?.address;
     if (!address) return [];
     return [
       {
@@ -38,7 +39,7 @@ export const SelectAccount = ({ strategies }: SelectAccountProps) => {
         value: address,
       },
     ];
-  }, [address]);
+  }, [session]);
 
   return (
     <div className='flex flex-col gap-6'>

@@ -7,17 +7,21 @@ import { BorderWrapper } from './border-wrapper';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { Icons } from '@rearden/ui/components/icons';
 import { formatUnits } from 'viem';
-import { useAccount } from 'wagmi';
+import { useSession } from 'next-auth/react';
 import { getBalance } from '@wagmi/core';
 import { wagmiConfig } from '../lib/wagmi';
 
 export const Header = () => {
-  const { address } = useAccount();
+  const { data: session } = useSession();
 
   const [balance, setBalance] = useState<string>('0.00');
 
   useEffect(() => {
-    if (!address) return;
+    const address = session?.address;
+    if (!address) {
+      setBalance('');
+      return;
+    }
     void (async () => {
       const balance = await getBalance(wagmiConfig, {
         address,
@@ -27,7 +31,7 @@ export const Header = () => {
 
       setBalance(formatted);
     })();
-  }, [address]);
+  }, [session]);
 
   return (
     <BorderWrapper className='px-5 py-4'>
@@ -40,7 +44,7 @@ export const Header = () => {
         <h2>Rearden</h2>
       </Link>
       <div className='flex items-center gap-10'>
-        {address && (
+        {session?.address && (
           <p className='text-base font-bold'>
             Total balance:{' '}
             <span className='w-fit bg-primary-gradient bg-clip-text text-base font-bold text-transparent'>
@@ -48,7 +52,7 @@ export const Header = () => {
             </span>
           </p>
         )}
-        <ConnectButton />
+        <ConnectButton showBalance={false} />
       </div>
     </BorderWrapper>
   );

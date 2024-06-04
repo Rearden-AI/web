@@ -15,7 +15,7 @@ import { ChatSchema } from '../../types/chat';
 import { PaginatedResponse } from '../../types/generic';
 import { ApiRoutes } from '../../lib/api-routes';
 import { filterObjectsByProperty } from '../../lib/filter-objectby-property';
-import { useAccount } from 'wagmi';
+import { useSession } from 'next-auth/react';
 
 const getChats = async ({
   pageParam,
@@ -38,11 +38,11 @@ export const Sidebar = () => {
 
   const axiosInstance = useAxiosAuth();
   const { all, addChats } = useStore(chatsSelector);
-  const { address } = useAccount();
+  const { data: session } = useSession();
 
   const { data, fetchNextPage } = useInfiniteQuery({
     queryKey: ['chats'],
-    enabled: Boolean(address),
+    enabled: Boolean(session?.address),
     initialPageParam: 1,
     queryFn: ({ pageParam }) => getChats({ pageParam, axiosInstance, prevChats: all }),
     getNextPageParam: (lastPage, allPages) => (lastPage.length ? allPages.length + 1 : undefined),
@@ -58,7 +58,7 @@ export const Sidebar = () => {
   }, [data?.pages, addChats]);
 
   useEffect(() => {
-    if (!address) return;
+    if (!session?.address) return;
     const observer = new IntersectionObserver(entries => {
       const target = entries[0];
       if (target?.isIntersecting) {
@@ -76,7 +76,7 @@ export const Sidebar = () => {
         observer.unobserve(loaderRef.current);
       }
     };
-  }, [fetchNextPage, address]);
+  }, [fetchNextPage, session]);
 
   return (
     <BorderWrapper
