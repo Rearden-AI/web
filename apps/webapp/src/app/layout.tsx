@@ -6,6 +6,7 @@ import { Header } from '../components/header';
 import { Sidebar } from '../components/sidebar';
 import { Providers } from './providers';
 import '@rearden/ui/styles/globals.css';
+import '@rainbow-me/rainbowkit/styles.css';
 
 export const metadata: Metadata = {
   title: 'Rearden - Web3 Copilot',
@@ -18,10 +19,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <Providers>
-      <html lang='en' suppressHydrationWarning>
-        <head />
-        <body className={cn(inter.variable)}>
+    <html lang='en' suppressHydrationWarning>
+      <head />
+
+      <body className={cn(inter.variable)}>
+        <Providers>
           <div className='flex h-screen w-full flex-col gap-4 px-6 py-4'>
             <Header />
             <div className='flex flex-1'>
@@ -32,8 +34,8 @@ export default function RootLayout({
               </div>
             </div>
           </div>
-        </body>
-      </html>
-    </Providers>
+        </Providers>
+      </body>
+    </html>
   );
 }

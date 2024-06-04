@@ -58,6 +58,7 @@ export const Sidebar = () => {
   }, [data?.pages, addChats]);
 
   useEffect(() => {
+    if (!address) return;
     const observer = new IntersectionObserver(entries => {
       const target = entries[0];
       if (target?.isIntersecting) {
@@ -75,7 +76,7 @@ export const Sidebar = () => {
         observer.unobserve(loaderRef.current);
       }
     };
-  }, [fetchNextPage]);
+  }, [fetchNextPage, address]);
 
   return (
     <BorderWrapper

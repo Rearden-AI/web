@@ -10,6 +10,7 @@
     "lint": "eslint src"
   },
   "dependencies": {
+    "@rainbow-me/rainbowkit": "2",
     "@rearden/ui": "workspace:*",
     "@tanstack/react-query": "^5.29.2",
     "@wagmi/core": "^2.10.3",

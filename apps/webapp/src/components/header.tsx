@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { PagePath } from '../lib/nav-routes';
 import { BorderWrapper } from './border-wrapper';
-import { ConnectButton } from './connect-btn';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { Icons } from '@rearden/ui/components/icons';
 import { formatUnits } from 'viem';
 import { useAccount } from 'wagmi';
