@@ -1,5 +1,6 @@
 import type { Config } from 'tailwindcss';
 import tailwindCssAnimatePlugin from 'tailwindcss-animate';
+import { DEFAULT_CIPHERS } from 'tls';
 
 export default {
   darkMode: ['class'],
@@ -75,6 +76,9 @@ export default {
         sidebar: 'hsl(var(--sidebar))',
         sandstone: 'hsl(var(--sandstone))',
         error: 'hsl(var(--error))',
+        orange: {
+          DEFAULT: 'hsl(var(--orange))',
+        },
       },
       borderRadius: {
         lg: 'var(--radius)',
