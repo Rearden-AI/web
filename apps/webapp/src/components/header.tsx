@@ -10,6 +10,7 @@ import { formatUnits } from 'viem';
 import { useSession } from 'next-auth/react';
 import { getBalance } from '@wagmi/core';
 import { wagmiConfig } from '../lib/wagmi';
+import { CustomConnectButton } from './custom-connect-button';
 
 export const Header = () => {
   const { data: session } = useSession();
@@ -52,7 +53,8 @@ export const Header = () => {
             </span>
           </p>
         )}
-        <ConnectButton showBalance={false} />
+        {/* <ConnectButton showBalance={false} /> */}
+        <CustomConnectButton />
       </div>
     </BorderWrapper>
   );
