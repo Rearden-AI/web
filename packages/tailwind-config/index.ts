@@ -1,6 +1,5 @@
 import type { Config } from 'tailwindcss';
 import tailwindCssAnimatePlugin from 'tailwindcss-animate';
-import { DEFAULT_CIPHERS } from 'tls';
 
 export default {
   darkMode: ['class'],
@@ -109,11 +108,11 @@ export default {
 
       backgroundImage: () => ({
         'image-gradient-101deg':
-          'linear-gradient(101.12deg, rgba(255,123,33,0.1) 9.87%, rgba(242,78,206,0.06) 301.83%)', //header, sidebar, sidebar user info
+          'linear-gradient(101.12deg, rgba(255,123,33,0.1) 9.87%, rgba(242,78,206,0.06) 301.83%)',
         'image-gradient-secondary-101deg':
-          'linear-gradient(101.12deg, rgba(255,123,33,0.3) 9.87%, rgba(242,78,206,0.18) 301.83%)', // sidebar account, input, select
+          'linear-gradient(101.12deg, rgba(255,123,33,0.3) 9.87%, rgba(242,78,206,0.18) 301.83%)',
         'image-gradient-third-101deg':
-          'linear-gradient(101.12deg, rgba(255,123,33,0.09) 9.87%, rgba(242,78,206,0.054) 301.83%)', // li number
+          'linear-gradient(101.12deg, rgba(255,123,33,0.09) 9.87%, rgba(242,78,206,0.054) 301.83%)',
         'image-gradient-222deg':
           'linear-gradient(222.06deg, rgba(209,107,105,0.7) 4.72%, rgba(107,55,54,0.105) 93.81%)',
         'primary-gradient':

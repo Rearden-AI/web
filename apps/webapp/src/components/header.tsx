@@ -3,12 +3,12 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { PagePath } from '../lib/nav-routes';
-import { BorderWrapper } from './border-wrapper';
 import { ConnectButton } from './connect-btn';
 import { Icons } from '@rearden/ui/components/icons';
 import { formatUnits } from 'viem';
 import { useAccount } from 'wagmi';
 import { getBalance } from '@wagmi/core';
+import { BorderWrapper } from '@rearden/ui/components/border-wrapper';
 import { wagmiConfig } from '../lib/wagmi';
 
 export const Header = () => {

@@ -2,11 +2,11 @@ import Image from 'next/image';
 
 export const Ecosystem = () => {
   return (
-    <div className='mt-[230px] flex flex-col w-full items-center gap-20'>
-      <div className='w-full flex items-center justify-center'>
+    <div className='mt-[230px] flex w-full flex-col items-center gap-20'>
+      <div className='flex w-full items-center justify-center'>
         <div className='w-[45%]'>
           {/* TODO add icon under first letter */}
-          <div className='text-[44px] relative leading-[52px] font-medium text-center'>
+          <div className='relative text-center text-[44px] font-medium leading-[52px]'>
             Rearden Ecosystem — The Endgame of Environment
           </div>
         </div>

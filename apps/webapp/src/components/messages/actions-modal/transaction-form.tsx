@@ -17,8 +17,8 @@ import { prepareDeposit, prepareSwap } from '../../../lib/prepare-transaction-ar
 import { validateAmount } from '../../../lib/validation';
 import { wagmiConfig } from '../../../lib/wagmi';
 import { Action, ActionType } from '../../../types/chat';
-import { BorderWrapper } from '../../border-wrapper';
-import { InputElement } from '../../input';
+import { BorderWrapper } from '@rearden/ui/components/border-wrapper';
+import { InputElement } from '@rearden/ui/components/input';
 import { ActionDetailCard } from './action-detail-card';
 import { ModalLoader } from './modal-loader';
 

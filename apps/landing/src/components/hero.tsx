@@ -23,43 +23,43 @@ const cards = [
 
 export const Hero = () => {
   return (
-    <div className='pt-[42px] px-12 flex flex-col relative'>
-      <div className='flex items-center gap-2 mb-[138px]'>
+    <div className='relative flex flex-col px-12 pt-[42px]'>
+      <div className='mb-[138px] flex items-center gap-2'>
         <div>
           <Icons.logo className='size-[22px]' />
         </div>
         <p className='text-2xl font-bold leading-[34px]'>Rearden</p>
       </div>
-      <div className='flex justify-center mb-10'>
+      <div className='mb-10 flex justify-center'>
         <Icons.landing_hero />
       </div>
-      <div className='flex flex-col items-center gap-3 mb-[60px]'>
-        <p className='text-[40px] leading-[44px] font-medium text-muted-foreground'>Web3 Copilot</p>
-        <p className='text-2xl leading-[30px] font-medium'>Power Up Your Investment strategies</p>
-        <div className='flex items-center gap-5 mt-7'>
+      <div className='mb-[60px] flex flex-col items-center gap-3'>
+        <p className='text-[40px] font-medium leading-[44px] text-muted-foreground'>Web3 Copilot</p>
+        <p className='text-2xl font-medium leading-[30px]'>Power Up Your Investment strategies</p>
+        <div className='mt-7 flex items-center gap-5'>
           <Button className='w-[208px]' variant='secondary'>
             Read more
           </Button>
           <Button className='w-[208px]'>Join waitlist</Button>
         </div>
       </div>
-      <div className='flex justify-center mb-[120px]'>
+      <div className='mb-[120px] flex justify-center'>
         <Image src='/hero.webp' alt='' width={962} height={601} />
       </div>
       <div className='flex justify-between'>
         {cards.map(i => (
           <div key={i.label} className='flex items-center gap-6'>
-            <div className='rounded-full p-4 border border-border'>
+            <div className='rounded-full border border-border p-4'>
               <Image src={i.iconUri} width={32} height={31} alt='' />
             </div>
-            <p className='text-xl leading-[24px] font-medium'>{i.label}</p>
+            <p className='text-xl font-medium leading-[24px]'>{i.label}</p>
           </div>
         ))}
       </div>
-      <div className='absolute size-[458px] rounded-[458px] bg-orange blur-[345px] top-[-167px] left-[-303px] z-[-10]' />
-      <div className='absolute size-[458px] rounded-[458px] bg-[rgba(253,122,36,0.40)] blur-[345px] top-[773px] left-[-183px] z-[-10]' />
-      <div className='absolute size-[458px] rounded-[458px] bg-orange blur-[345px] top-[-57px] right-8 z-[-10]' />
-      <div className='absolute size-[458px] rounded-[458px] bg-[rgba(253,122,36,0.40)] blur-[345px] top-[726px] right-[433px] z-[-10]' />
+      <div className='absolute left-[-303px] top-[-167px] -z-10 size-[458px] rounded-[458px] bg-orange blur-[345px]' />
+      <div className='absolute left-[-183px] top-[773px] -z-10 size-[458px] rounded-[458px] bg-[rgba(253,122,36,0.40)] blur-[345px]' />
+      <div className='absolute right-8 top-[-57px] -z-10 size-[458px] rounded-[458px] bg-orange blur-[345px]' />
+      <div className='absolute right-[433px] top-[726px] -z-10 size-[458px] rounded-[458px] bg-[rgba(253,122,36,0.40)] blur-[345px]' />
     </div>
   );
 };

@@ -1,10 +1,5 @@
 import { useMemo } from 'react';
-
-export interface Validation {
-  checkFn: (txt: string) => boolean;
-  type: 'warn' | 'error'; // corresponds to red or yellow
-  issue: string;
-}
+import { Validation } from '@rearden/ui/components/input';
 
 export const useValidationResult = (validations: Validation[], value: string) => {
   const validationResult = useMemo(() => {

@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { Networks } from '../../lib/networks';
 import { Action, ActionType } from '../../types/chat';
 import { ActionTypeCard } from '../action-type-card';
-import { BorderWrapper } from '../border-wrapper';
+import { BorderWrapper } from '@rearden/ui/components/border-wrapper';
 import { Icons } from '@rearden/ui/components/icons';
 import { TokenInfo } from './actions-modal/token-info';
 

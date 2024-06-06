@@ -11,7 +11,7 @@ import { API_ID, ApiRoutes } from '../lib/api-routes';
 import { useStore } from '../state';
 import { chatsSelector } from '../state/chats';
 import { ChatResponse, ChatSchema, Role } from '../types/chat';
-import { BorderWrapper } from './border-wrapper';
+import { BorderWrapper } from '@rearden/ui/components/border-wrapper';
 
 export const ChatInput = () => {
   const inputRef = useRef<HTMLInputElement | null>(null);

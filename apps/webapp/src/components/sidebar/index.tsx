@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { PagePath, sidebarLinks } from '../../lib/nav-routes';
 import { useStore } from '../../state';
 import { chatsSelector } from '../../state/chats';
-import { BorderWrapper } from '../border-wrapper';
+import { BorderWrapper } from '@rearden/ui/components/border-wrapper';
 import { Icons } from '@rearden/ui/components/icons';
 import { ChatItem } from './chat-item';
 import useAxiosAuth from '../../hooks/axios-auth';

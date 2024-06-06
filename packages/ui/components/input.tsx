@@ -1,10 +1,17 @@
+'use client';
+
 import { useRef, useState } from 'react';
 import Image from 'next/image';
 
-import { Validation } from '../hooks/validation-result';
-import { cn } from '@rearden/ui/lib/utils';
+import { Input, InputProps } from './ui/input';
+import { cn } from '../lib/utils';
 import { BorderWrapper } from './border-wrapper';
-import { Input, InputProps } from '@rearden/ui/components/ui/input';
+
+export interface Validation {
+  checkFn: (txt: string) => boolean;
+  type: 'warn' | 'error'; // corresponds to red or yellow
+  issue: string;
+}
 
 export const InputElement = ({
   label,
@@ -38,14 +45,16 @@ export const InputElement = ({
         }}
         onBlur={() => setFocus(false)}
       >
-        <div className='flex w-fit items-center gap-2'>
-          <div className='size-6'>
-            {balance?.symbol && (
-              <Image src={`/${balance.symbol}.png`} height={24} width={24} alt={balance.symbol} />
-            )}
+        {balance && (
+          <div className='flex w-fit items-center gap-2'>
+            <div className='size-6'>
+              {balance.symbol && (
+                <Image src={`/${balance.symbol}.png`} height={24} width={24} alt={balance.symbol} />
+              )}
+            </div>
+            <p className='text-base font-semibold'>{balance.symbol}</p>
           </div>
-          <p className='text-base font-semibold'>{balance?.symbol}</p>
-        </div>
+        )}
         <Input {...props} className='ml-3 h-6 pl-0' ref={inputRef} />
       </BorderWrapper>
       {balance && (

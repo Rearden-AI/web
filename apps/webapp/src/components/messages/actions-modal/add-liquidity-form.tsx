@@ -16,10 +16,10 @@ import { prepareAddLiquidity } from '../../../lib/prepare-transaction-args';
 import { validateAmount } from '../../../lib/validation';
 import { wagmiConfig } from '../../../lib/wagmi';
 import { Action } from '../../../types/chat';
-import { BorderWrapper } from '../../border-wrapper';
-import { InputElement } from '../../input';
+import { BorderWrapper } from '@rearden/ui/components/border-wrapper';
 import { ActionDetailCard } from './action-detail-card';
 import { ModalLoader } from './modal-loader';
+import { InputElement } from '@rearden/ui/components/input';
 
 interface AddLiquidityFormProps {
   index: number;
