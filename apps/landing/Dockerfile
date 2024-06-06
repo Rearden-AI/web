@@ -7,7 +7,7 @@ WORKDIR /app
 RUN yarn global add turbo
 
 COPY . .
-RUN turbo prune --scope=webapp --docker
+RUN turbo prune --scope=landing --docker
 
 
 # Installer
@@ -28,13 +28,7 @@ RUN pnpm install
 COPY --from=builder /app/out/full/ .
 COPY turbo.json turbo.json
 
-ARG NODE
-ENV NODE=${NODE}
-
-COPY ./apps/webapp/.env.${NODE} ./apps/webapp/.env.production
-ENV NODE_ENV=production
-
-RUN turbo build --filter=webapp...
+RUN turbo build --filter=landing...
 
 # Runner
 FROM node:18-alpine AS runner
@@ -44,13 +38,13 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 USER nextjs
 
-COPY --from=installer /app/apps/webapp/next.config.mjs .
-COPY --from=installer /app/apps/webapp/package.json .
+COPY --from=installer /app/apps/landing/next.config.mjs .
+COPY --from=installer /app/apps/landing/package.json .
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=installer --chown=nextjs:nodejs /app/apps/webapp/.next/standalone ./
-COPY --from=installer --chown=nextjs:nodejs /app/apps/webapp/.next/static ./apps/webapp/.next/static
-COPY --from=installer --chown=nextjs:nodejs /app/apps/webapp/public ./apps/webapp/public
+COPY --from=installer --chown=nextjs:nodejs /app/apps/landing/.next/standalone ./
+COPY --from=installer --chown=nextjs:nodejs /app/apps/landing/.next/static ./apps/landing/.next/static
+COPY --from=installer --chown=nextjs:nodejs /app/apps/landing/public ./apps/landing/public
 
-CMD node apps/webapp/server.js
+CMD node apps/landing/server.js

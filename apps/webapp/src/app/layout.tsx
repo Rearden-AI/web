@@ -10,6 +10,9 @@ import '@rearden/ui/styles/globals.css';
 export const metadata: Metadata = {
   title: 'Rearden - Web3 Copilot',
   description: 'Rearden - Web3 Copilot',
+  icons: {
+    icon: '/favicon.svg',
+  },
 };
 
 export default function RootLayout({
