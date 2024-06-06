@@ -6,12 +6,12 @@ import { useEffect, useRef, useState } from 'react';
 import { Icons } from '@rearden/ui/components/icons';
 import { Input } from '@rearden/ui/components/ui/input';
 import { cn } from '@rearden/ui/lib/utils';
-import useAxiosAuth from '../hooks/axios-auth';
 import { API_ID, ApiRoutes } from '../lib/api-routes';
 import { useStore } from '../state';
 import { chatsSelector } from '../state/chats';
 import { ChatResponse, ChatSchema, Role } from '../types/chat';
 import { BorderWrapper } from './border-wrapper';
+import axiosInstance from '../lib/axios';
 
 export const ChatInput = () => {
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -19,7 +19,6 @@ export const ChatInput = () => {
   const { writeToChat, addChat, renameChat } = useStore(chatsSelector);
   const pathname = usePathname();
   const params = useParams<{ id?: string }>();
-  const axiosInstance = useAxiosAuth();
 
   const [input, setInput] = useState('');
   const [focus, setFocus] = useState<boolean>(false);
@@ -45,6 +44,7 @@ export const ChatInput = () => {
           const { data } = await axiosInstance.post<ChatResponse>(
             ApiRoutes.CHAT_BY_ID.replace(API_ID, chatId),
             { message: input, timestamp: timestamp },
+            { withCredentials: true },
           );
 
           writeToChat({
@@ -57,7 +57,11 @@ export const ChatInput = () => {
       } else {
         void (async () => {
           try {
-            const { data: chat } = await axiosInstance.post<ChatSchema>(ApiRoutes.CHATS);
+            const { data: chat } = await axiosInstance.post<ChatSchema>(
+              ApiRoutes.CHATS,
+              undefined,
+              { withCredentials: true },
+            );
 
             const timestamp = Date.now();
             addChat({ ...chat, isNew: true }, input, timestamp);
@@ -67,6 +71,7 @@ export const ChatInput = () => {
             const { data } = await axiosInstance.post<ChatResponse>(
               ApiRoutes.CHAT_BY_ID.replace(API_ID, chat.uuid),
               { message: input, timestamp },
+              { withCredentials: true },
             );
 
             writeToChat({

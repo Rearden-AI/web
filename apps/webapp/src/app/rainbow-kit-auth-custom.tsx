@@ -23,11 +23,11 @@ export const RainbowKitAuthCustomProvider = ({
 
   const authenticationAdapter = createAuthenticationAdapter({
     getNonce: async () => {
-      const dat = await axiosInstance.get<string>(ApiRoutes.NONCE, {
+      const { data } = await axiosInstance.get<string>(ApiRoutes.NONCE, {
         withCredentials: true,
       });
 
-      return dat.data;
+      return data;
     },
 
     createMessage: ({ nonce, address, chainId }) => {
@@ -49,38 +49,23 @@ export const RainbowKitAuthCustomProvider = ({
     verify: async ({ message, signature }) => {
       try {
         setStatus('loading');
-
         console.log({ message, signature });
 
-        // const verifyRes = {
-        //   ok: true,
-        //   message,
-        //   signature,
-        //   address: '0x9a868D58C7F31DAd95626e9632A937Fff69a4F0e',
-        //   token: 'bbb',
-        // };
-
-        const { data } = await axiosInstance.post(
+        const { data } = await axiosInstance.post<boolean>(
           ApiRoutes.VERIFY,
           {
             signature,
-            message: JSON.stringify(message),
+            message: message.prepareMessage(),
           },
           { withCredentials: true },
         );
-        // const verifyRes = await fetch('/api/verify', {
-        //   method: 'POST',
-        //   headers: { 'Content-Type': 'application/json' },
-        //   body: JSON.stringify({ message, signature }),
-        // });
 
-        // await signIn('credentials', {
-        //   address: verifyRes.address,
-        //   token: verifyRes.token,
-        //   redirect: false,
-        // });
-        // setStatus('authenticated');
-        // return Boolean(verifyRes.ok);
+        await signIn('credentials', {
+          address: message.address,
+          redirect: false,
+        });
+        setStatus('authenticated');
+        return data;
       } catch (error) {
         setStatus('unauthenticated');
         return false;

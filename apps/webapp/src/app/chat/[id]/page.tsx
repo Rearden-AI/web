@@ -7,16 +7,15 @@ import { ExecuteButton } from '../../../components/execute-button';
 import { Markdown } from '../../../components/markdown';
 import { ResultMessage } from '../../../components/messages/result-message';
 import { StrategyMessage } from '../../../components/messages/strategy-message';
-import useAxiosAuth from '../../../hooks/axios-auth';
 import { API_ID, ApiRoutes } from '../../../lib/api-routes';
 import { useStore } from '../../../state';
 import { chatsSelector } from '../../../state/chats';
 import { ChatResponse, ExtendedChatSchema, Role } from '../../../types/chat';
+import axiosInstance from '../../../lib/axios';
 
 export default function ChatPage({ params }: { params: { id: string } }) {
   const { selectedChat, writeToChat, selectChat } = useStore(chatsSelector);
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
-  const axiosInstance = useAxiosAuth();
 
   useEffect(() => {
     if (selectedChat?.isNew && selectedChat.uuid === params.id) return;
@@ -24,6 +23,7 @@ export default function ChatPage({ params }: { params: { id: string } }) {
       try {
         const { data: chat } = await axiosInstance.get<ExtendedChatSchema>(
           ApiRoutes.CHAT_BY_ID.replace(API_ID, params.id),
+          { withCredentials: true },
         );
 
         selectChat({ ...chat, history: chat.history.reverse() });
@@ -32,7 +32,7 @@ export default function ChatPage({ params }: { params: { id: string } }) {
       }
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [axiosInstance, params.id, selectChat, selectedChat?.isNew]);
+  }, [params.id, selectChat, selectedChat?.isNew]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });

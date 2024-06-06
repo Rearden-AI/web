@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { PagePath } from '../lib/nav-routes';
 import { BorderWrapper } from './border-wrapper';
-import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { Icons } from '@rearden/ui/components/icons';
 import { formatUnits } from 'viem';
 import { useSession } from 'next-auth/react';
@@ -53,7 +52,6 @@ export const Header = () => {
             </span>
           </p>
         )}
-        {/* <ConnectButton showBalance={false} /> */}
         <CustomConnectButton />
       </div>
     </BorderWrapper>

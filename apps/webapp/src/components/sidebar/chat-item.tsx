@@ -6,17 +6,16 @@ import { Icons } from '@rearden/ui/components/icons';
 import { Input } from '@rearden/ui/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@rearden/ui/components/ui/popover';
 import { cn } from '@rearden/ui/lib/utils';
-import useAxiosAuth from '../../hooks/axios-auth';
 import { API_ID, ApiRoutes } from '../../lib/api-routes';
 import { ID, PagePath } from '../../lib/nav-routes';
 import { useStore } from '../../state';
 import { chatsSelector } from '../../state/chats';
 import { ChatSchema } from '../../types/chat';
 import { ApproveDeleteModal } from './approve-delete-modal';
+import axiosInstance from '../../lib/axios';
 
 export const ChatItem = ({ chat }: { chat: ChatSchema }) => {
   const params = useParams<{ id?: string }>();
-  const axiosInstance = useAxiosAuth();
 
   const [open, setOpen] = useState<boolean>(false);
   const [editMode, setEditMode] = useState<boolean>(false);
@@ -29,9 +28,13 @@ export const ChatItem = ({ chat }: { chat: ChatSchema }) => {
 
   const handleRename = () => {
     void (async () => {
-      await axiosInstance.patch(ApiRoutes.CHAT_BY_ID.replace(API_ID, chat.uuid), {
-        name: name || null,
-      });
+      await axiosInstance.patch(
+        ApiRoutes.CHAT_BY_ID.replace(API_ID, chat.uuid),
+        {
+          name: name || null,
+        },
+        { withCredentials: true },
+      );
       setEditMode(false);
       renameChat(chat.uuid, name);
     })();
