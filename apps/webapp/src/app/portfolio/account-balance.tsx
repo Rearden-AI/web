@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import { useAccount } from 'wagmi';
+import { useSession } from 'next-auth/react';
 
 import { Skeleton } from '@rearden/ui/components/ui/skeleton';
 import {
@@ -18,11 +18,12 @@ import { wagmiConfig } from '../../lib/wagmi';
 import { formatUnits } from 'viem';
 
 export const AccountBalance = () => {
-  const { address } = useAccount();
+  const { data: session } = useSession();
   const [tokens, setTokens] = useState<GetBalanceReturnType[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
+    const address = session?.address;
     if (!address) {
       setTokens([]);
       return;
@@ -42,7 +43,7 @@ export const AccountBalance = () => {
       setTokens(tokensRes);
       setLoading(false);
     })();
-  }, [address]);
+  }, [session]);
 
   return (
     <div className='flex flex-col gap-6'>

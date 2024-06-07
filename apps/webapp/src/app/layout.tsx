@@ -1,11 +1,14 @@
-import type { Metadata } from 'next';
 import { inter } from '@rearden/ui/lib/fonts';
 import { cn } from '@rearden/ui/lib/utils';
+import type { Metadata } from 'next';
+import { getServerSession } from 'next-auth/next';
 import { ChatInput } from '../components/chat-input';
 import { Header } from '../components/header';
 import { Sidebar } from '../components/sidebar';
 import { Providers } from './providers';
+import '@rainbow-me/rainbowkit/styles.css';
 import '@rearden/ui/styles/globals.css';
+import { authOptions } from '../lib/auth';
 
 export const metadata: Metadata = {
   title: 'Rearden - Web3 Copilot',
@@ -15,16 +18,14 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const session = await getServerSession(authOptions);
+
   return (
-    <Providers>
-      <html lang='en' suppressHydrationWarning>
-        <head />
-        <body className={cn(inter.variable)}>
+    <html lang='en' suppressHydrationWarning>
+      <head />
+      <body className={cn(inter.variable)}>
+        <Providers session={session}>
           <div className='flex h-screen w-full flex-col gap-4 px-6 py-4'>
             <Header />
             <div className='flex flex-1'>
@@ -35,8 +36,8 @@ export default function RootLayout({
               </div>
             </div>
           </div>
-        </body>
-      </html>
-    </Providers>
+        </Providers>
+      </body>
+    </html>
   );
 }

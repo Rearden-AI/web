@@ -14,13 +14,12 @@ import {
   DialogTrigger,
 } from '@rearden/ui/components/ui/dialog';
 import { AddLiquidityForm } from './add-liquidity-form';
-import useAxiosAuth from '../../../hooks/axios-auth';
 import { API_ID, ApiRoutes } from '../../../lib/api-routes';
 import { useParams } from 'next/navigation';
 import { TransactionForm } from './transaction-form';
+import axiosInstance from '../../../lib/axios';
 
 export const ActionsModal = ({ wallet, strategies }: { wallet: string; strategies: Action[] }) => {
-  const axiosInstance = useAxiosAuth();
   const { writeToChat } = useStore(chatsSelector);
   const [open, setOpen] = useState<boolean>(false);
   const [currentStep, setCurrentStep] = useState<number>(1);
@@ -37,6 +36,7 @@ export const ActionsModal = ({ wallet, strategies }: { wallet: string; strategie
           transaction_ids: result,
           message: '',
         },
+        { withCredentials: true },
       );
 
       writeToChat({
@@ -49,7 +49,7 @@ export const ActionsModal = ({ wallet, strategies }: { wallet: string; strategie
       setCurrentStep(1);
       setResult([]);
     })();
-  }, [result, strategies, writeToChat, params, axiosInstance]);
+  }, [result, strategies, writeToChat, params]);
 
   const steps = useMemo(() => {
     return strategies.map((i, index) => {

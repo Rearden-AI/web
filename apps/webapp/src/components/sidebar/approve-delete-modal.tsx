@@ -9,16 +9,15 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@rearden/ui/components/ui/dialog';
-import useAxiosAuth from '../../hooks/axios-auth';
 import { API_ID, ApiRoutes } from '../../lib/api-routes';
 import { PagePath } from '../../lib/nav-routes';
 import { useStore } from '../../state';
 import { chatsSelector } from '../../state/chats';
 import { ChatSchema } from '../../types/chat';
+import axiosInstance from '../../lib/axios';
 
 export const ApproveDeleteModal = ({ chat }: { chat: ChatSchema }) => {
   const router = useRouter();
-  const axiosInstance = useAxiosAuth();
   const params = useParams<{ id?: string }>();
   const { removeChat } = useStore(chatsSelector);
 
@@ -64,7 +63,9 @@ export const ApproveDeleteModal = ({ chat }: { chat: ChatSchema }) => {
               onClick={e => {
                 e.preventDefault();
                 void (async () => {
-                  await axiosInstance.delete(ApiRoutes.CHAT_BY_ID.replace(API_ID, chat.uuid));
+                  await axiosInstance.delete(ApiRoutes.CHAT_BY_ID.replace(API_ID, chat.uuid), {
+                    withCredentials: true,
+                  });
                   removeChat(chat.uuid);
                   params.id === chat.uuid && router.push(PagePath.INDEX);
                   setOpen(false);

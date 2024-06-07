@@ -8,26 +8,24 @@ import { chatsSelector } from '../../state/chats';
 import { BorderWrapper } from '@rearden/ui/components/border-wrapper';
 import { Icons } from '@rearden/ui/components/icons';
 import { ChatItem } from './chat-item';
-import useAxiosAuth from '../../hooks/axios-auth';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { AxiosInstance } from 'axios';
 import { ChatSchema } from '../../types/chat';
 import { PaginatedResponse } from '../../types/generic';
 import { ApiRoutes } from '../../lib/api-routes';
 import { filterObjectsByProperty } from '../../lib/filter-objectby-property';
-import { useAccount } from 'wagmi';
+import { useSession } from 'next-auth/react';
+import axiosInstance from '../../lib/axios';
 
 const getChats = async ({
   pageParam,
-  axiosInstance,
   prevChats,
 }: {
   pageParam: number;
-  axiosInstance: AxiosInstance;
   prevChats: ChatSchema[];
 }) => {
   const { data: response } = await axiosInstance.get<PaginatedResponse<ChatSchema[]>>(
     ApiRoutes.CHATS + `?page_number=${pageParam}&page_size=15`,
+    { withCredentials: true },
   );
 
   return filterObjectsByProperty<ChatSchema>(response.data, prevChats, 'uuid');
@@ -36,15 +34,14 @@ const getChats = async ({
 export const Sidebar = () => {
   const loaderRef = useRef<HTMLDivElement | null>(null);
 
-  const axiosInstance = useAxiosAuth();
   const { all, addChats } = useStore(chatsSelector);
-  const { address } = useAccount();
+  const { data: session } = useSession();
 
   const { data, fetchNextPage } = useInfiniteQuery({
     queryKey: ['chats'],
-    enabled: Boolean(address),
+    enabled: Boolean(session?.address),
     initialPageParam: 1,
-    queryFn: ({ pageParam }) => getChats({ pageParam, axiosInstance, prevChats: all }),
+    queryFn: ({ pageParam }) => getChats({ pageParam, prevChats: all }),
     getNextPageParam: (lastPage, allPages) => (lastPage.length ? allPages.length + 1 : undefined),
   });
 
@@ -58,6 +55,7 @@ export const Sidebar = () => {
   }, [data?.pages, addChats]);
 
   useEffect(() => {
+    if (!session?.address) return;
     const observer = new IntersectionObserver(entries => {
       const target = entries[0];
       if (target?.isIntersecting) {
@@ -75,7 +73,7 @@ export const Sidebar = () => {
         observer.unobserve(loaderRef.current);
       }
     };
-  }, [fetchNextPage]);
+  }, [fetchNextPage, session]);
 
   return (
     <BorderWrapper

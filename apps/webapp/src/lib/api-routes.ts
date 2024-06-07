@@ -10,4 +10,6 @@ export enum ApiRoutes {
   STRATEGY_EXECUTIONS = '/strategy_executions',
   TRANSACTIONS = '/transactions',
   TRANSACTIONS_BY_ID = '/transactions/{id}',
+  NONCE = '/auth/nonce',
+  VERIFY = '/auth/verify',
 }
