@@ -1,6 +1,8 @@
 import { Icons } from '@rearden/ui/components/icons';
-import { Button } from '@rearden/ui/components/ui/button';
+import { Button, buttonVariants } from '@rearden/ui/components/ui/button';
+import { cn } from '@rearden/ui/lib/utils';
 import Image from 'next/image';
+import { X_LINK } from '../utils/constants';
 
 const cards = [
   {
@@ -37,9 +39,19 @@ export const Hero = () => {
         <p className='text-[40px] font-medium leading-[44px] text-muted-foreground'>Web3 Copilot</p>
         <p className='text-2xl font-medium leading-[30px]'>Power Up Your Investment strategies</p>
         <div className='mt-7 flex items-center gap-5'>
-          <Button className='w-[208px]' variant='secondary'>
+          <a
+            className={cn(
+              buttonVariants({
+                variant: 'secondary',
+              }),
+              'w-[208px]',
+            )}
+            href={X_LINK}
+            target='_blank'
+            rel='noopener noreferrer'
+          >
             Read more
-          </Button>
+          </a>
           <Button className='w-[208px]'>Join waitlist</Button>
         </div>
       </div>

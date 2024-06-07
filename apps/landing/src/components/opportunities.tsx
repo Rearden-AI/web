@@ -22,7 +22,7 @@ export const Opportunities = () => {
   return (
     <div className='mt-[230px] flex w-full flex-col items-center gap-[60px]'>
       <p className='text-[44px] font-medium leading-[52px]'>
-        Have missed such opportunities on this cycle?
+        Have you missed such opportunities during this cycle?
       </p>
       <div className='flex w-full items-center justify-between pr-[46px]'>
         <Image src='/opportunities.png' width={602} height={520} alt='' />

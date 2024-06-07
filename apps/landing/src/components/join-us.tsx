@@ -15,7 +15,7 @@ export const JoinUs = () => {
           className='flex w-full max-w-[782px] flex-col gap-8'
         >
           <p className='mb-2 text-[32px] font-medium leading-10 text-muted-foreground'>
-            Connect your wallet and leave email
+            Get notified when beta is ready
           </p>
           <InputElement className='w-full' placeholder='Email' />
           <Button className='w-[208px] self-end' type='button'>
