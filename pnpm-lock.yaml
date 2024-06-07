@@ -36,7 +36,6 @@ importers:
         specifier: ^1.6.0
         version: 1.6.0
 
-<<<<<<< HEAD
   apps/landing:
     dependencies:
       '@rearden/ui':
@@ -95,8 +94,6 @@ importers:
         specifier: ^5.4.5
         version: 5.4.5
 
-=======
->>>>>>> rainbow
   apps/webapp:
     dependencies:
       '@rainbow-me/rainbowkit':
