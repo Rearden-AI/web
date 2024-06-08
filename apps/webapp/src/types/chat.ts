@@ -1,4 +1,4 @@
-import { AbiParameter, AbiStateMutability, Hex } from 'viem';
+import { Abi, AbiParameter, AbiStateMutability, Hex } from 'viem';
 import { TransactionResult } from './transactions';
 
 export interface AbiFunction {
@@ -69,6 +69,7 @@ export interface ChatResponse {
   contains_strategy_previews?: string[];
   exec_logs?: string;
   timestamp: number;
+  action_data: ActionData;
 }
 
 export interface ChatSchema {
@@ -86,6 +87,7 @@ export interface HistoryMessage {
   contains_strategy_previews?: string[];
   transactions?: TransactionResult[];
   timestamp: number;
+  action_data?: ActionData;
 }
 
 export interface ExtendedChatSchema extends ChatSchema {
@@ -101,3 +103,45 @@ export enum Role {
 export interface SelectedChat extends ExtendedChatSchema {
   isNew?: boolean;
 }
+
+export interface ActionData {
+  chain: 'eth';
+  description: string;
+  transaction_data: {
+    to: Hex;
+    method_name: string;
+    method_parameters: unknown[];
+    value: {
+      input_id: number;
+    };
+  };
+  abis: Record<Hex, Abi>;
+  inputs: ActionDataInput[];
+}
+
+export interface TokenAmount {
+  id: number;
+  value: 'user_input';
+  description: string;
+  type: 'token_amount';
+  decimals: number;
+}
+
+export interface MethodResult {
+  id: number;
+  value: 'method_result';
+  type: 'amount';
+  to: Hex;
+  method_name: string;
+  method_parameters: unknown[];
+  method_result: number;
+}
+
+export type ActionDataInput =
+  | TokenAmount
+  | MethodResult
+  | {
+      id: number;
+      type: 'deadline';
+      value: undefined;
+    };

@@ -12,6 +12,7 @@ import { useStore } from '../../../state';
 import { chatsSelector } from '../../../state/chats';
 import { ChatResponse, ExtendedChatSchema, Role } from '../../../types/chat';
 import axiosInstance from '../../../lib/axios';
+import { ActionDataChain } from './action-data-chain';
 
 export default function ChatPage({ params }: { params: { id: string } }) {
   const { selectedChat, writeToChat, selectChat } = useStore(chatsSelector);
@@ -39,6 +40,9 @@ export default function ChatPage({ params }: { params: { id: string } }) {
   }, [selectedChat?.history.length]);
 
   if (!selectedChat) return <></>;
+
+  console.log(selectedChat);
+  
 
   return (
     <div className='flex flex-1 flex-col-reverse pt-2'>
@@ -108,7 +112,7 @@ export default function ChatPage({ params }: { params: { id: string } }) {
                       <Fragment />
                     )}
                   </div>
-                  {message.strategies?.length ? (
+                  {/* {message.strategies?.length ? (
                     <StrategyMessage strategies={message.strategies} />
                   ) : (
                     <Fragment />
@@ -117,6 +121,11 @@ export default function ChatPage({ params }: { params: { id: string } }) {
                     <ResultMessage result={message.transactions} />
                   ) : (
                     <Fragment />
+                  )} */}
+                  {message.action_data ? (
+                    <ActionDataChain actionData={message.action_data} />
+                  ) : (
+                    <></>
                   )}
                 </div>
               </div>

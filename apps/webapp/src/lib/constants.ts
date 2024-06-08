@@ -1,4 +1,4 @@
-import { ActionType, ChatSchemaState, Role } from '../types/chat';
+import { ActionData, ActionType, ChatSchemaState, Role } from '../types/chat';
 import { maverickAbi, syncSwapRouterAbi } from './abi';
 
 export const mockChatAirdrop = {
@@ -15,178 +15,294 @@ export const mockChatAirdrop = {
     {
       role: Role.SYSTEM,
       content: `In a process called Airdrop, early users are rewarded with the protocol's native token for performing actions that benefit the protocol. \n\nA crypto airdrop usually involves the following steps:\n\n1. The project team communicates the details and requirements of the airdrop through their official channels or cryptocurrency communities.\n2. The interested participants register for the airdrop by providing their wallet address and other information or performing the required tasks.\n3. The project team verifies the eligibility and validity of the participants and distributes the tokens to their wallets according to the rules of the airdrop.\n4. The participants receive the tokens in their wallets and can use them according to the terms and conditions of the project.\n\nAre you interested in airdrop hunting?`,
-    },
-    {
-      role: Role.USER,
-      content: 'Yep, are there any options to try it out?',
-    },
-    {
-      role: Role.SYSTEM,
-      content: `Sure, one of the current trending option is zkSync Airdrop (L2 network with high likelihood of distributing tokens to the community). Here is the strategy to participate in early adoption of zkSync network using ETH asset:\n\n1. Bridge ETH to zkSync using Orbiter. Source https://www.orbiter.finance/\n2. Swap Assets on SyncSwap. Source https://syncswap.xyz/\n3. Provide Liquidity to Maverick. Source https://app.mav.xyz/?chain=1\n\nIf you are okay with this strategy, I can prepare its execution.`,
-      contains_strategy_previews: ['deposit_eth_lido', '"deposit_steth_eigenlayer"'],
-    },
-    {
-      role: Role.SYSTEM,
-      content: '',
-      strategies: [
-        // {
-        //   action_type: ActionType.TRANSFER,
-        //   details: {
-        //     name: 'Bridge ETH to zkSync using Orbiter',
-        //     dapp_link: 'https://www.orbiter.finance/',
-        //     from: 'ETH', // need to add API
-        //     to: 'ETH',
-        //     network: 1, // need to add API
-        //     token_address_in: null,
-        //   },
-        //   body: {
-        //     token_address_in: null,
-        //     contract_address: '0x80C67432656d59144cEFf962E8fAF8926599bCF8',
-        //   },
-        // },
-        {
-          action_type: ActionType.SWAP,
-          details: {
-            name: 'Swap ETH→USDC on SyncSwap.',
-            dapp_link: 'https://syncswap.xyz/',
-            from: 'ETH', // need to add API
-            to: 'USDC', // need to add API
-            network: 324, // need to add API
-            token_address_in: null,
-          },
-          body: {
-            token_address_in: '0x5aea5775959fbc2557cc8789bc1bf90a239d9a91',
-            contract_address: '0x2da10A1e27bF85cEdD8FFb1AbBe97e53391C0295',
-            pool_address: '0x7e30d17C78c42e715e58eC20Dd703786549AA5F1',
-            abi: syncSwapRouterAbi[0],
-            withdraw_mode: '1',
-            token_in: '0x0000000000000000000000000000000000000000',
-            callback_data: '0x',
-            amount_out_min: BigInt(0),
-            deadline: BigInt(Math.floor(Date.now() / 1000) + 1800),
+      action_data: {
+        chain: 'eth',
+        description: 'Buy USDT',
+        transaction_data: {
+          to: '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D',
+          method_name: 'swapETHForExactTokens',
+          method_parameters: [
+            {
+              input_id: 0,
+            },
+            [
+              '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
+              '0xdAC17F958D2ee523a2206206994597C13D831ec7',
+            ],
+            '0x9a868D58C7F31DAd95626e9632A937Fff69a4F0e',
+            {
+              input_id: 1,
+            },
+          ],
+          value: {
+            input_id: 2,
           },
         },
-        {
-          action_type: ActionType.SWAP,
-          details: {
-            name: 'Swap ETH→LUSD on SyncSwap.',
-            dapp_link: 'https://syncswap.xyz/',
-            from: 'ETH', // need to add API
-            to: 'LUSD', // need to add API
-            network: 324, // need to add API
-            token_address_in: null,
-          },
-          body: {
-            token_address_in: '0x5aea5775959fbc2557cc8789bc1bf90a239d9a91',
-            contract_address: '0x2da10A1e27bF85cEdD8FFb1AbBe97e53391C0295',
-            pool_address: '0x4E7d2e3f40998DaeB59a316148BFbF8efd1F7F3c',
-            abi: syncSwapRouterAbi[0],
-            withdraw_mode: '1',
-            token_in: '0x0000000000000000000000000000000000000000',
-            callback_data: '0x',
-            amount_out_min: BigInt(0),
-            deadline: BigInt(Math.floor(Date.now() / 1000) + 1800),
-          },
-        },
-        {
-          action_type: ActionType.TRANSACTION,
-          details: {
-            name: 'Approve USDC on Maverick',
-            dapp_link: 'https://app.mav.xyz/',
-            network: 324,
-            token_address_in: '0x1d17CBcF0D6D143135aE902365D2E5e2A16538D4',
-          },
-          body: {
-            contract_address: '0x1d17CBcF0D6D143135aE902365D2E5e2A16538D4',
-            abi: {
-              constant: false,
+        abis: {
+          '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D': [
+            {
               inputs: [
-                { name: '_spender', type: 'address' },
-                { name: '_amount', type: 'uint256' },
+                {
+                  internalType: 'uint256',
+                  name: 'amountOut',
+                  type: 'uint256',
+                },
+                {
+                  internalType: 'address[]',
+                  name: 'path',
+                  type: 'address[]',
+                },
               ],
-              name: 'approve',
-              outputs: [{ name: '', type: 'bool' }],
-              payable: false,
-              stateMutability: 'nonpayable',
+              name: 'getAmountsIn',
+              outputs: [
+                {
+                  internalType: 'uint256[]',
+                  name: 'amounts',
+                  type: 'uint256[]',
+                },
+              ],
+              stateMutability: 'view',
               type: 'function',
             },
-            arguments: [
-              {
-                name: '_spender',
-                value: '0x39e098a153ad69834a9dac32f0fca92066ad03f4',
-              },
-              { name: '_amount' },
-            ],
-          },
-        },
-
-        {
-          action_type: ActionType.TRANSACTION,
-          details: {
-            name: 'Approve LUSD on Maverick',
-            dapp_link: 'https://app.mav.xyz/',
-            network: 324, // need to add API
-            token_address_in: '0x503234F203fC7Eb888EEC8513210612a43Cf6115', // need to add API
-          },
-          body: {
-            contract_address: '0x503234F203fC7Eb888EEC8513210612a43Cf6115',
-            abi: {
-              constant: false,
+            {
               inputs: [
-                { name: '_spender', type: 'address' },
-                { name: '_amount', type: 'uint256' },
+                {
+                  internalType: 'uint256',
+                  name: 'amountOut',
+                  type: 'uint256',
+                },
+                {
+                  internalType: 'address[]',
+                  name: 'path',
+                  type: 'address[]',
+                },
+                {
+                  internalType: 'address',
+                  name: 'to',
+                  type: 'address',
+                },
+                {
+                  internalType: 'uint256',
+                  name: 'deadline',
+                  type: 'uint256',
+                },
               ],
-              name: 'approve',
-              outputs: [{ name: '', type: 'bool' }],
-              payable: false,
-              stateMutability: 'nonpayable',
+              name: 'swapETHForExactTokens',
+              outputs: [
+                {
+                  internalType: 'uint256[]',
+                  name: 'amounts',
+                  type: 'uint256[]',
+                },
+              ],
+              stateMutability: 'payable',
               type: 'function',
             },
-            arguments: [
+          ],
+        },
+        inputs: [
+          {
+            id: 0,
+            value: 'user_input',
+            description: 'Enter USDT amount',
+            type: 'token_amount',
+            decimals: 6,
+          },
+          {
+            id: 1,
+            type: 'deadline',
+          },
+          {
+            id: 2,
+            value: 'method_result',
+            type: 'amount',
+            to: '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D',
+            method_name: 'getAmountsIn',
+            method_parameters: [
               {
-                name: '_spender',
-                value: '0x39e098a153ad69834a9dac32f0fca92066ad03f4',
+                input_id: 0,
               },
-              { name: '_amount' },
+              [
+                '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
+                '0xdAC17F958D2ee523a2206206994597C13D831ec7',
+              ],
             ],
+            method_result: 0,
           },
-        },
-
-        {
-          action_type: ActionType.ADD_LIQUIDITY,
-          details: {
-            name: 'Provide Liquidity to Maverick. ',
-            dapp_link: 'https://app.mav.xyz/',
-            from: ['USDC', 'LUSD'], // need to add API
-            to: 'LP LUSD-USDC', // need to add API
-            network: 324, // need to add API
-            token_address_in: '0x1d17CBcF0D6D143135aE902365D2E5e2A16538D4',
-            token_address_out: '0x503234F203fC7Eb888EEC8513210612a43Cf6115',
-            apy: '0.9%',
-          },
-          body: {
-            token_address_in: '0x503234f203fc7eb888eec8513210612a43cf6115',
-            contract_address: '0x39E098A153Ad69834a9Dac32f0FCa92066aD03f4',
-            abi: maverickAbi[0],
-          },
-        },
-        // {
-        //   action_type: ActionType.TRANSFER,
-        //   details: {
-        //     name: "Register a Domain Name on zkSync",
-        //     dapp_link: "https://app.zkns.domains/. ",
-        //     from: "ETH", // need to add API
-        //     network: 324, // need to add API
-        //     token_address_in: null,
-        //   },
-        //   body: {
-        //     token_address_in: null,
-        //     contract_address: "0x80C67432656d59144cEFf962E8fAF8926599bCF8",
-        //   },
-        // },
-        // 0xAE23B6E7f91DDeBD3B70d74d20583E3e674Bd94f method DIRECT REGISTER // https://app.zkns.domains/name/zk/234/register
-      ],
+        ],
+      } as ActionData,
     },
+    // {
+    //   role: Role.USER,
+    //   content: 'Yep, are there any options to try it out?',
+    // },
+    // {
+    //   role: Role.SYSTEM,
+    //   content: `Sure, one of the current trending option is zkSync Airdrop (L2 network with high likelihood of distributing tokens to the community). Here is the strategy to participate in early adoption of zkSync network using ETH asset:\n\n1. Bridge ETH to zkSync using Orbiter. Source https://www.orbiter.finance/\n2. Swap Assets on SyncSwap. Source https://syncswap.xyz/\n3. Provide Liquidity to Maverick. Source https://app.mav.xyz/?chain=1\n\nIf you are okay with this strategy, I can prepare its execution.`,
+    //   contains_strategy_previews: ['deposit_eth_lido', '"deposit_steth_eigenlayer"'],
+    // },
+    // {
+    //   role: Role.SYSTEM,
+    //   content: '',
+    //   strategies: [
+    //     // {
+    //     //   action_type: ActionType.TRANSFER,
+    //     //   details: {
+    //     //     name: 'Bridge ETH to zkSync using Orbiter',
+    //     //     dapp_link: 'https://www.orbiter.finance/',
+    //     //     from: 'ETH', // need to add API
+    //     //     to: 'ETH',
+    //     //     network: 1, // need to add API
+    //     //     token_address_in: null,
+    //     //   },
+    //     //   body: {
+    //     //     token_address_in: null,
+    //     //     contract_address: '0x80C67432656d59144cEFf962E8fAF8926599bCF8',
+    //     //   },
+    //     // },
+    //     {
+    //       action_type: ActionType.SWAP,
+    //       details: {
+    //         name: 'Swap ETH→USDC on SyncSwap.',
+    //         dapp_link: 'https://syncswap.xyz/',
+    //         from: 'ETH', // need to add API
+    //         to: 'USDC', // need to add API
+    //         network: 324, // need to add API
+    //         token_address_in: null,
+    //       },
+    //       body: {
+    //         token_address_in: '0x5aea5775959fbc2557cc8789bc1bf90a239d9a91',
+    //         contract_address: '0x2da10A1e27bF85cEdD8FFb1AbBe97e53391C0295',
+    //         pool_address: '0x7e30d17C78c42e715e58eC20Dd703786549AA5F1',
+    //         abi: syncSwapRouterAbi[0],
+    //         withdraw_mode: '1',
+    //         token_in: '0x0000000000000000000000000000000000000000',
+    //         callback_data: '0x',
+    //         amount_out_min: BigInt(0),
+    //         deadline: BigInt(Math.floor(Date.now() / 1000) + 1800),
+    //       },
+    //     },
+    //     {
+    //       action_type: ActionType.SWAP,
+    //       details: {
+    //         name: 'Swap ETH→LUSD on SyncSwap.',
+    //         dapp_link: 'https://syncswap.xyz/',
+    //         from: 'ETH', // need to add API
+    //         to: 'LUSD', // need to add API
+    //         network: 324, // need to add API
+    //         token_address_in: null,
+    //       },
+    //       body: {
+    //         token_address_in: '0x5aea5775959fbc2557cc8789bc1bf90a239d9a91',
+    //         contract_address: '0x2da10A1e27bF85cEdD8FFb1AbBe97e53391C0295',
+    //         pool_address: '0x4E7d2e3f40998DaeB59a316148BFbF8efd1F7F3c',
+    //         abi: syncSwapRouterAbi[0],
+    //         withdraw_mode: '1',
+    //         token_in: '0x0000000000000000000000000000000000000000',
+    //         callback_data: '0x',
+    //         amount_out_min: BigInt(0),
+    //         deadline: BigInt(Math.floor(Date.now() / 1000) + 1800),
+    //       },
+    //     },
+    //     {
+    //       action_type: ActionType.TRANSACTION,
+    //       details: {
+    //         name: 'Approve USDC on Maverick',
+    //         dapp_link: 'https://app.mav.xyz/',
+    //         network: 324,
+    //         token_address_in: '0x1d17CBcF0D6D143135aE902365D2E5e2A16538D4',
+    //       },
+    //       body: {
+    //         contract_address: '0x1d17CBcF0D6D143135aE902365D2E5e2A16538D4',
+    //         abi: {
+    //           constant: false,
+    //           inputs: [
+    //             { name: '_spender', type: 'address' },
+    //             { name: '_amount', type: 'uint256' },
+    //           ],
+    //           name: 'approve',
+    //           outputs: [{ name: '', type: 'bool' }],
+    //           payable: false,
+    //           stateMutability: 'nonpayable',
+    //           type: 'function',
+    //         },
+    //         arguments: [
+    //           {
+    //             name: '_spender',
+    //             value: '0x39e098a153ad69834a9dac32f0fca92066ad03f4',
+    //           },
+    //           { name: '_amount' },
+    //         ],
+    //       },
+    //     },
+
+    //     {
+    //       action_type: ActionType.TRANSACTION,
+    //       details: {
+    //         name: 'Approve LUSD on Maverick',
+    //         dapp_link: 'https://app.mav.xyz/',
+    //         network: 324, // need to add API
+    //         token_address_in: '0x503234F203fC7Eb888EEC8513210612a43Cf6115', // need to add API
+    //       },
+    //       body: {
+    //         contract_address: '0x503234F203fC7Eb888EEC8513210612a43Cf6115',
+    //         abi: {
+    //           constant: false,
+    //           inputs: [
+    //             { name: '_spender', type: 'address' },
+    //             { name: '_amount', type: 'uint256' },
+    //           ],
+    //           name: 'approve',
+    //           outputs: [{ name: '', type: 'bool' }],
+    //           payable: false,
+    //           stateMutability: 'nonpayable',
+    //           type: 'function',
+    //         },
+    //         arguments: [
+    //           {
+    //             name: '_spender',
+    //             value: '0x39e098a153ad69834a9dac32f0fca92066ad03f4',
+    //           },
+    //           { name: '_amount' },
+    //         ],
+    //       },
+    //     },
+
+    //     {
+    //       action_type: ActionType.ADD_LIQUIDITY,
+    //       details: {
+    //         name: 'Provide Liquidity to Maverick. ',
+    //         dapp_link: 'https://app.mav.xyz/',
+    //         from: ['USDC', 'LUSD'], // need to add API
+    //         to: 'LP LUSD-USDC', // need to add API
+    //         network: 324, // need to add API
+    //         token_address_in: '0x1d17CBcF0D6D143135aE902365D2E5e2A16538D4',
+    //         token_address_out: '0x503234F203fC7Eb888EEC8513210612a43Cf6115',
+    //         apy: '0.9%',
+    //       },
+    //       body: {
+    //         token_address_in: '0x503234f203fc7eb888eec8513210612a43cf6115',
+    //         contract_address: '0x39E098A153Ad69834a9Dac32f0FCa92066aD03f4',
+    //         abi: maverickAbi[0],
+    //       },
+    //     },
+    //     // {
+    //     //   action_type: ActionType.TRANSFER,
+    //     //   details: {
+    //     //     name: "Register a Domain Name on zkSync",
+    //     //     dapp_link: "https://app.zkns.domains/. ",
+    //     //     from: "ETH", // need to add API
+    //     //     network: 324, // need to add API
+    //     //     token_address_in: null,
+    //     //   },
+    //     //   body: {
+    //     //     token_address_in: null,
+    //     //     contract_address: "0x80C67432656d59144cEFf962E8fAF8926599bCF8",
+    //     //   },
+    //     // },
+    //     // 0xAE23B6E7f91DDeBD3B70d74d20583E3e674Bd94f method DIRECT REGISTER // https://app.zkns.domains/name/zk/234/register
+    //   ],
+    // },
   ],
 };
 

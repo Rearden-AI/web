@@ -22,9 +22,9 @@ export const Providers = ({
     <SessionProvider refetchInterval={0} session={session}>
       <WagmiProvider config={wagmiConfig}>
         <QueryClientProvider client={queryClient}>
-          <RainbowKitAuthCustomProvider session={session}>
+          {/* <RainbowKitAuthCustomProvider session={session}> */}
             <RainbowKitProvider theme={rainbowTheme}>{children} </RainbowKitProvider>
-          </RainbowKitAuthCustomProvider>
+          {/* </RainbowKitAuthCustomProvider> */}
         </QueryClientProvider>
       </WagmiProvider>
     </SessionProvider>

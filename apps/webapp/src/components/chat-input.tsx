@@ -38,7 +38,7 @@ export const ChatInput = () => {
         writeToChat({
           role: Role.USER,
           content: input,
-          timestamp,
+          timestamp, 
         });
         void (async () => {
           const { data } = await axiosInstance.post<ChatResponse>(
@@ -52,6 +52,7 @@ export const ChatInput = () => {
             content: data.body,
             contains_strategy_previews: data.contains_strategy_previews,
             timestamp: data.timestamp,
+            action_data: data.action_data
           });
         })();
       } else {

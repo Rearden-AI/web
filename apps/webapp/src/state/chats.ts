@@ -1,4 +1,5 @@
 import { AllSlices, SliceCreator } from '.';
+import { mockChatAirdrop } from '../lib/constants'
 import { ChatSchema, ExtendedChatSchema, HistoryMessage, Role, SelectedChat } from '../types/chat';
 
 export interface ChatsSlice {
@@ -14,7 +15,8 @@ export interface ChatsSlice {
 
 export const createChatsSlice = (): SliceCreator<ChatsSlice> => (set, get) => {
   return {
-    all: [],
+    all: [mockChatAirdrop],
+    selectedChat: mockChatAirdrop,
     selectChat: chat => {
       set(state => {
         state.chats.selectedChat = chat;
