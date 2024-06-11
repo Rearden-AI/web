@@ -2,12 +2,9 @@ import { readContract } from '@wagmi/core';
 import { Hex, parseUnits } from 'viem';
 import { wagmiConfig } from '../../../../wagmi';
 import { AbiFunction, ActionDataInputWithValue } from '../types/chat';
+import { checkProperty } from './check-property';
 
-export const objectIncludeKey = (obj: unknown, key: string) => {
-  return obj instanceof Object && obj.hasOwnProperty(key);
-};
-
-export const getParamValue = async (
+export const prepareArgs = async (
   i: ActionDataInputWithValue,
   array: ActionDataInputWithValue[],
   abis: Record<Hex, AbiFunction[]>,
@@ -29,9 +26,9 @@ export const getParamValue = async (
 
       const args = await Promise.all(
         input.method_parameters.map(async (param: unknown) => {
-          if (objectIncludeKey(param, 'input_id')) {
+          if (checkProperty(param, 'input_id')) {
             const selected = array.find(j => j.id === (param as { input_id: number }).input_id)!;
-            return await getParamValue(selected, array, abis);
+            return await prepareArgs(selected, array, abis);
           }
           return param;
         }),
@@ -42,7 +39,7 @@ export const getParamValue = async (
         address: input.to,
         functionName: input.method_name,
         args: args.map(i => {
-          if (objectIncludeKey(i, 'preparedValue'))
+          if (checkProperty(i, 'preparedValue'))
             return (i as { preparedValue: unknown }).preparedValue;
 
           return i;

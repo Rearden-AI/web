@@ -9,7 +9,7 @@ import { useEffect, useRef } from 'react';
 import axiosInstance from '../../config/axios';
 import { ApiRoutes } from '../../constants/api-routes';
 import { PagePath, sidebarLinks } from '../../constants/nav-routes';
-import { filterObjectsByProperty } from '../../lib/filter-objectby-property';
+import { filterUniqueByKey } from '../../lib/filter-unique-by-key';
 import { useStore } from '../../state';
 import { chatsSelector } from '../../state/chats';
 import { ChatSchema } from '../../types/chat';
@@ -28,7 +28,7 @@ const getChats = async ({
     { withCredentials: true },
   );
 
-  return filterObjectsByProperty<ChatSchema>(response.data, prevChats, 'uuid');
+  return filterUniqueByKey<ChatSchema>(response.data, prevChats, 'uuid');
 };
 
 export const Sidebar = () => {

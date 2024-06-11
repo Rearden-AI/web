@@ -4,7 +4,8 @@ import { waitForTransactionReceipt, writeContract } from '@wagmi/core';
 import { useEffect, useState } from 'react';
 import { Abi } from 'viem';
 import { wagmiConfig } from '../../../../../../wagmi';
-import { getParamValue, objectIncludeKey } from '../../../lib/get-param-value';
+import { checkProperty } from '../../../lib/check-property';
+import { prepareArgs } from '../../../lib/prepare-args';
 import { ActionData, ActionDataInputWithValue, TokenAmount } from '../../../types/chat';
 
 export const ActionDataChain = ({ actionData }: { actionData: ActionData }) => {
@@ -23,11 +24,11 @@ export const ActionDataChain = ({ actionData }: { actionData: ActionData }) => {
     void (async () => {
       try {
         const dynamicParams = await Promise.all(
-          values.map(async (i, _, array) => await getParamValue(i, array, actionData.abis)),
+          values.map(async (i, _, array) => await prepareArgs(i, array, actionData.abis)),
         );
 
         const functionParams = actionData.transaction_data.method_parameters.map(param => {
-          if (objectIncludeKey(param, 'input_id')) {
+          if (checkProperty(param, 'input_id')) {
             const inputId = (param as { input_id: number }).input_id;
             return dynamicParams.find(i => i.id === inputId)?.preparedValue;
           }

@@ -49,7 +49,6 @@ export const RainbowKitAuthCustomProvider = ({
     verify: async ({ message, signature }) => {
       try {
         setStatus('loading');
-        console.log({ message, signature });
 
         const { data } = await axiosInstance.post<boolean>(
           ApiRoutes.VERIFY,

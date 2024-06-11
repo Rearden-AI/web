@@ -1,9 +1,7 @@
 import { enableMapSet } from 'immer';
 import { create, StateCreator } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
-
 import { ChatsSlice, createChatsSlice } from './chats';
-import { createPricesSlice, PricesSlice } from './prices';
 
 /**
  * Required to enable use of `Map`s in Zustand state when using Immer
@@ -14,7 +12,6 @@ enableMapSet();
 
 export interface AllSlices {
   chats: ChatsSlice;
-  prices: PricesSlice;
 }
 
 export type SliceCreator<SliceInterface> = StateCreator<
@@ -27,7 +24,6 @@ export type SliceCreator<SliceInterface> = StateCreator<
 export const initializeStore = () => {
   return immer((setState, getState: () => AllSlices, store) => ({
     chats: createChatsSlice()(setState, getState, store),
-    prices: createPricesSlice()(setState, getState, store),
   }));
 };
 
