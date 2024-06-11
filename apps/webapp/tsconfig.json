@@ -1,6 +1,6 @@
 {
   "extends": "tsconfig/nextjs.json",
-  "include": ["src", "*.ts", ".next/types/**/*.ts", "../../wagmi.ts"],
+  "include": ["src", "*.ts", ".next/types/**/*.ts", "src/config/wagmi.ts"],
   "exclude": ["node_modules"],
   "compilerOptions": {
     "module": "esnext"

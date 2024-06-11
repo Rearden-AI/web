@@ -3,7 +3,7 @@ import { Button } from '@rearden/ui/components/ui/button';
 import { waitForTransactionReceipt, writeContract } from '@wagmi/core';
 import { useEffect, useState } from 'react';
 import { Abi } from 'viem';
-import { wagmiConfig } from '../../../../../../wagmi';
+import { wagmiConfig } from '../../../config/wagmi';
 import { checkProperty } from '../../../lib/check-property';
 import { prepareArgs } from '../../../lib/prepare-args';
 import { ActionData, ActionDataInputWithValue, TokenAmount } from '../../../types/chat';
@@ -15,7 +15,7 @@ export const ActionDataChain = ({ actionData }: { actionData: ActionData }) => {
     setValues(
       actionData.inputs.map(i => ({
         ...i,
-        inputtedValue: i.value === 'user_input' ? '' : undefined,
+        inputtedValue: i.value === 'user_input' ? '0.0001' : undefined,
       })),
     );
   }, []);

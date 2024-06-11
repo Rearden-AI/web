@@ -5,8 +5,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Session } from 'next-auth';
 import { SessionProvider } from 'next-auth/react';
 import { WagmiProvider } from 'wagmi';
-import { wagmiConfig } from '../../../../wagmi';
 import { rainbowTheme } from '../config/rainbow-theme';
+import { wagmiConfig } from '../config/wagmi';
 
 const queryClient = new QueryClient();
 

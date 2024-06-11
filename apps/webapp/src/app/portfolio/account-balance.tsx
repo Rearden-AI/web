@@ -15,7 +15,7 @@ import {
 } from '@rearden/ui/components/ui/table';
 import { getBalance, type GetBalanceReturnType } from '@wagmi/core';
 import { formatUnits } from 'viem';
-import { wagmiConfig } from '../../../../../wagmi';
+import { wagmiConfig } from '../../config/wagmi';
 
 export const AccountBalance = () => {
   const { data: session } = useSession();

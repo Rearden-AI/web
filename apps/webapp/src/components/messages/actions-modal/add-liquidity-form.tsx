@@ -11,7 +11,7 @@ import BigNumber from 'bignumber.js';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Abi, formatUnits } from 'viem';
 import { useAccount, useSwitchChain } from 'wagmi';
-import { wagmiConfig } from '../../../../../../wagmi';
+import { wagmiConfig } from '../../../config/wagmi';
 import useDebounce from '../../../hooks/debounce';
 import { useValidationResult } from '../../../hooks/validation-result';
 import { toBaseUnitAmount } from '../../../lib/formatter';

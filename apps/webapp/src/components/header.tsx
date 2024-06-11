@@ -7,7 +7,7 @@ import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { formatUnits } from 'viem';
-import { wagmiConfig } from '../../../../wagmi';
+import { wagmiConfig } from '../config/wagmi';
 import { PagePath } from '../constants/nav-routes';
 import { CustomConnectButton } from './custom-connect-button';
 
