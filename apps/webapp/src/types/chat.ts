@@ -1,4 +1,4 @@
-import { Abi, AbiParameter, AbiStateMutability, Hex } from 'viem';
+import { AbiParameter, AbiStateMutability, Hex } from 'viem';
 import { TransactionResult } from './transactions';
 
 export interface AbiFunction {
@@ -115,7 +115,7 @@ export interface ActionData {
       input_id: number;
     };
   };
-  abis: Record<Hex, Abi>;
+  abis: Record<Hex, AbiFunction[]>;
   inputs: ActionDataInput[];
 }
 
@@ -145,3 +145,7 @@ export type ActionDataInput =
       type: 'deadline';
       value: undefined;
     };
+
+export type ActionDataInputWithValue = ActionDataInput & {
+  inputtedValue?: string;
+};

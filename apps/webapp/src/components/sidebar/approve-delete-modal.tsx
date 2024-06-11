@@ -1,6 +1,3 @@
-import { Trash } from 'lucide-react';
-import { useParams, useRouter } from 'next/navigation';
-import { useState } from 'react';
 import { Button } from '@rearden/ui/components/ui/button';
 import {
   Dialog,
@@ -9,12 +6,15 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@rearden/ui/components/ui/dialog';
-import { API_ID, ApiRoutes } from '../../lib/api-routes';
-import { PagePath } from '../../lib/nav-routes';
+import { Trash } from 'lucide-react';
+import { useParams, useRouter } from 'next/navigation';
+import { useState } from 'react';
+import axiosInstance from '../../config/axios';
+import { API_ID, ApiRoutes } from '../../constants/api-routes';
+import { PagePath } from '../../constants/nav-routes';
 import { useStore } from '../../state';
 import { chatsSelector } from '../../state/chats';
 import { ChatSchema } from '../../types/chat';
-import axiosInstance from '../../lib/axios';
 
 export const ApproveDeleteModal = ({ chat }: { chat: ChatSchema }) => {
   const router = useRouter();

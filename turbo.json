@@ -32,6 +32,9 @@
     "format:ts": {
       "cache": false,
       "dependsOn": ["//#format:prettier"]
+    },
+    "test": {
+      "cache": false
     }
   }
 }

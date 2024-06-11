@@ -5,13 +5,11 @@ import { cn } from '@rearden/ui/lib/utils';
 import { Fragment, useEffect, useRef } from 'react';
 import { ExecuteButton } from '../../../components/execute-button';
 import { Markdown } from '../../../components/markdown';
-import { ResultMessage } from '../../../components/messages/result-message';
-import { StrategyMessage } from '../../../components/messages/strategy-message';
-import { API_ID, ApiRoutes } from '../../../lib/api-routes';
+import axiosInstance from '../../../config/axios';
+import { API_ID, ApiRoutes } from '../../../constants/api-routes';
 import { useStore } from '../../../state';
 import { chatsSelector } from '../../../state/chats';
 import { ChatResponse, ExtendedChatSchema, Role } from '../../../types/chat';
-import axiosInstance from '../../../lib/axios';
 import { ActionDataChain } from './action-data-chain';
 
 export default function ChatPage({ params }: { params: { id: string } }) {
@@ -42,7 +40,6 @@ export default function ChatPage({ params }: { params: { id: string } }) {
   if (!selectedChat) return <></>;
 
   console.log(selectedChat);
-  
 
   return (
     <div className='flex flex-1 flex-col-reverse pt-2'>

@@ -1,9 +1,9 @@
 import Image from 'next/image';
 
-import { Networks } from '../../../lib/networks';
+import { Icons } from '@rearden/ui/components/icons';
+import { Networks } from '../../../constants/networks';
 import { Action, ActionType } from '../../../types/chat';
 import { ActionTypeCard } from '../../action-type-card';
-import { Icons } from '@rearden/ui/components/icons';
 import { TokenInfo } from './token-info';
 
 export const ActionDetailCard = ({ action }: { action: Action }) => {

@@ -1,11 +1,5 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
-import { useStore } from '../../../state';
-import { chatsSelector } from '../../../state/chats';
-import { Action, ActionType, HistoryMessage, Role } from '../../../types/chat';
-import { ExecuteButton } from '../../execute-button';
-import { Stepper } from '../../stepper';
 import {
   Dialog,
   DialogContent,
@@ -13,11 +7,17 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@rearden/ui/components/ui/dialog';
-import { AddLiquidityForm } from './add-liquidity-form';
-import { API_ID, ApiRoutes } from '../../../lib/api-routes';
 import { useParams } from 'next/navigation';
+import { useEffect, useMemo, useState } from 'react';
+import axiosInstance from '../../../config/axios';
+import { API_ID, ApiRoutes } from '../../../constants/api-routes';
+import { useStore } from '../../../state';
+import { chatsSelector } from '../../../state/chats';
+import { Action, ActionType, HistoryMessage, Role } from '../../../types/chat';
+import { ExecuteButton } from '../../execute-button';
+import { Stepper } from '../../stepper';
+import { AddLiquidityForm } from './add-liquidity-form';
 import { TransactionForm } from './transaction-form';
-import axiosInstance from '../../../lib/axios';
 
 export const ActionsModal = ({ wallet, strategies }: { wallet: string; strategies: Action[] }) => {
   const { writeToChat } = useStore(chatsSelector);

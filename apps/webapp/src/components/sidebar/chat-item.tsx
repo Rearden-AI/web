@@ -1,18 +1,18 @@
-import { Pencil, Share } from 'lucide-react';
-import Link from 'next/link';
-import { useParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
 import { Icons } from '@rearden/ui/components/icons';
 import { Input } from '@rearden/ui/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@rearden/ui/components/ui/popover';
 import { cn } from '@rearden/ui/lib/utils';
-import { API_ID, ApiRoutes } from '../../lib/api-routes';
-import { ID, PagePath } from '../../lib/nav-routes';
+import { Pencil, Share } from 'lucide-react';
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import axiosInstance from '../../config/axios';
+import { API_ID, ApiRoutes } from '../../constants/api-routes';
+import { ID, PagePath } from '../../constants/nav-routes';
 import { useStore } from '../../state';
 import { chatsSelector } from '../../state/chats';
 import { ChatSchema } from '../../types/chat';
 import { ApproveDeleteModal } from './approve-delete-modal';
-import axiosInstance from '../../lib/axios';
 
 export const ChatItem = ({ chat }: { chat: ChatSchema }) => {
   const params = useParams<{ id?: string }>();

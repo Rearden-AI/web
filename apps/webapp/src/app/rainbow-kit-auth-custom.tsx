@@ -7,8 +7,8 @@ import { Session } from 'next-auth';
 import { signIn, signOut } from 'next-auth/react';
 import React, { useState } from 'react';
 import { SiweMessage } from 'siwe';
-import axiosInstance from '../lib/axios';
-import { ApiRoutes } from '../lib/api-routes';
+import axiosInstance from '../config/axios';
+import { ApiRoutes } from '../constants/api-routes';
 
 export const RainbowKitAuthCustomProvider = ({
   children,

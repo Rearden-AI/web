@@ -13,8 +13,7 @@
     "lint": "turbo lint -- --max-warnings 0",
     "lint:fix": "turbo lint -- --fix",
     "lint:prettier": "prettier --check .",
-    "test": "turbo test",
-    "test:rust": "turbo test:rust"
+    "test": "turbo test"
   },
   "devDependencies": {
     "prettier": "^3.2.5",

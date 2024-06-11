@@ -1,14 +1,14 @@
+import '@rainbow-me/rainbowkit/styles.css';
 import { inter } from '@rearden/ui/lib/fonts';
 import { cn } from '@rearden/ui/lib/utils';
+import '@rearden/ui/styles/globals.css';
 import type { Metadata } from 'next';
 import { getServerSession } from 'next-auth/next';
 import { ChatInput } from '../components/chat-input';
 import { Header } from '../components/header';
 import { Sidebar } from '../components/sidebar';
+import { authOptions } from '../config/auth';
 import { Providers } from './providers';
-import '@rainbow-me/rainbowkit/styles.css';
-import '@rearden/ui/styles/globals.css';
-import { authOptions } from '../lib/auth';
 
 export const metadata: Metadata = {
   title: 'Rearden - Web3 Copilot',

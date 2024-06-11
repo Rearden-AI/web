@@ -3,15 +3,15 @@
 import { useParams, usePathname, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
+import { BorderWrapper } from '@rearden/ui/components/border-wrapper';
 import { Icons } from '@rearden/ui/components/icons';
 import { Input } from '@rearden/ui/components/ui/input';
 import { cn } from '@rearden/ui/lib/utils';
-import { API_ID, ApiRoutes } from '../lib/api-routes';
+import axiosInstance from '../config/axios';
+import { API_ID, ApiRoutes } from '../constants/api-routes';
 import { useStore } from '../state';
 import { chatsSelector } from '../state/chats';
 import { ChatResponse, ChatSchema, Role } from '../types/chat';
-import { BorderWrapper } from '@rearden/ui/components/border-wrapper';
-import axiosInstance from '../lib/axios'
 
 export const ChatInput = () => {
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -38,7 +38,7 @@ export const ChatInput = () => {
         writeToChat({
           role: Role.USER,
           content: input,
-          timestamp, 
+          timestamp,
         });
         void (async () => {
           const { data } = await axiosInstance.post<ChatResponse>(
@@ -52,7 +52,7 @@ export const ChatInput = () => {
             content: data.body,
             contains_strategy_previews: data.contains_strategy_previews,
             timestamp: data.timestamp,
-            action_data: data.action_data
+            action_data: data.action_data,
           });
         })();
       } else {

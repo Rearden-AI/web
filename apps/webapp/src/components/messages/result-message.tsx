@@ -1,8 +1,6 @@
-import Image from 'next/image';
 import moment from 'moment';
+import Image from 'next/image';
 
-import { Networks } from '../../lib/networks';
-import { ActionTypeCard } from '../action-type-card';
 import { Icons } from '@rearden/ui/components/icons';
 import {
   Table,
@@ -12,7 +10,9 @@ import {
   TableHeader,
   TableRow,
 } from '@rearden/ui/components/ui/table';
+import { Networks } from '../../constants/networks';
 import { TransactionResult } from '../../types/transactions';
+import { ActionTypeCard } from '../action-type-card';
 
 export const ResultMessage = ({ result }: { result: TransactionResult[] }) => {
   return (

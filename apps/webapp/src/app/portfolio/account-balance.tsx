@@ -1,8 +1,8 @@
 'use client';
 
+import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import { useSession } from 'next-auth/react';
 
 import { Skeleton } from '@rearden/ui/components/ui/skeleton';
 import {
@@ -14,8 +14,8 @@ import {
   TableRow,
 } from '@rearden/ui/components/ui/table';
 import { getBalance, type GetBalanceReturnType } from '@wagmi/core';
-import { wagmiConfig } from '../../lib/wagmi';
 import { formatUnits } from 'viem';
+import { wagmiConfig } from '../../../../../wagmi';
 
 export const AccountBalance = () => {
   const { data: session } = useSession();

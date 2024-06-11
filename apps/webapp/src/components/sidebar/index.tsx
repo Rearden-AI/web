@@ -1,20 +1,20 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import Link from 'next/link';
-import { PagePath, sidebarLinks } from '../../lib/nav-routes';
-import { useStore } from '../../state';
-import { chatsSelector } from '../../state/chats';
 import { BorderWrapper } from '@rearden/ui/components/border-wrapper';
 import { Icons } from '@rearden/ui/components/icons';
-import { ChatItem } from './chat-item';
 import { useInfiniteQuery } from '@tanstack/react-query';
+import { useSession } from 'next-auth/react';
+import Link from 'next/link';
+import { useEffect, useRef } from 'react';
+import axiosInstance from '../../config/axios';
+import { ApiRoutes } from '../../constants/api-routes';
+import { PagePath, sidebarLinks } from '../../constants/nav-routes';
+import { filterObjectsByProperty } from '../../lib/filter-objectby-property';
+import { useStore } from '../../state';
+import { chatsSelector } from '../../state/chats';
 import { ChatSchema } from '../../types/chat';
 import { PaginatedResponse } from '../../types/generic';
-import { ApiRoutes } from '../../lib/api-routes';
-import { filterObjectsByProperty } from '../../lib/filter-objectby-property';
-import { useSession } from 'next-auth/react';
-import axiosInstance from '../../lib/axios';
+import { ChatItem } from './chat-item';
 
 const getChats = async ({
   pageParam,

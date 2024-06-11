@@ -1,14 +1,14 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import Link from 'next/link';
-import { PagePath } from '../lib/nav-routes';
-import { Icons } from '@rearden/ui/components/icons';
-import { formatUnits } from 'viem';
-import { useSession } from 'next-auth/react';
-import { getBalance } from '@wagmi/core';
 import { BorderWrapper } from '@rearden/ui/components/border-wrapper';
-import { wagmiConfig } from '../lib/wagmi';
+import { Icons } from '@rearden/ui/components/icons';
+import { getBalance } from '@wagmi/core';
+import { useSession } from 'next-auth/react';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { formatUnits } from 'viem';
+import { wagmiConfig } from '../../../../wagmi';
+import { PagePath } from '../constants/nav-routes';
 import { CustomConnectButton } from './custom-connect-button';
 
 export const Header = () => {

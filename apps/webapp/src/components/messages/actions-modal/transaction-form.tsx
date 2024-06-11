@@ -1,3 +1,5 @@
+import { BorderWrapper } from '@rearden/ui/components/border-wrapper';
+import { InputElement } from '@rearden/ui/components/input';
 import { Button } from '@rearden/ui/components/ui/button';
 import {
   getBalance,
@@ -10,15 +12,13 @@ import BigNumber from 'bignumber.js';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Abi, ContractFunctionArgs, Hex, formatUnits, parseEther, parseUnits } from 'viem';
 import { useAccount, useSwitchChain } from 'wagmi';
+import { wagmiConfig } from '../../../../../../wagmi';
 import useDebounce from '../../../hooks/debounce';
 import { useValidationResult } from '../../../hooks/validation-result';
 import { toBaseUnitAmount } from '../../../lib/formatter';
 import { prepareDeposit, prepareSwap } from '../../../lib/prepare-transaction-args';
 import { validateAmount } from '../../../lib/validation';
-import { wagmiConfig } from '../../../lib/wagmi';
 import { Action, ActionType } from '../../../types/chat';
-import { BorderWrapper } from '@rearden/ui/components/border-wrapper';
-import { InputElement } from '@rearden/ui/components/input';
 import { ActionDetailCard } from './action-detail-card';
 import { ModalLoader } from './modal-loader';
 

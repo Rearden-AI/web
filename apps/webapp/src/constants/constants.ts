@@ -1,5 +1,4 @@
 import { ActionData, ActionType, ChatSchemaState, Role } from '../types/chat';
-import { maverickAbi, syncSwapRouterAbi } from './abi';
 
 export const mockChatAirdrop = {
   name: null,

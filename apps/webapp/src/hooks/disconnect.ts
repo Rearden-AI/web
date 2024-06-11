@@ -1,5 +1,5 @@
 import { useRouter } from 'next/navigation';
-import { PagePath } from '../lib/nav-routes';
+import { PagePath } from '../constants/nav-routes';
 
 export const useDisconnect = () => {
   const router = useRouter();

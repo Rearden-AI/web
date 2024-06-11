@@ -1,5 +1,5 @@
 import { AllSlices, SliceCreator } from '.';
-import { mockChatAirdrop } from '../lib/constants'
+import { mockChatAirdrop } from '../constants/constants'
 import { ChatSchema, ExtendedChatSchema, HistoryMessage, Role, SelectedChat } from '../types/chat';
 
 export interface ChatsSlice {

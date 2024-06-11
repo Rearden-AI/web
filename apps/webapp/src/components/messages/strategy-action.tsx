@@ -1,10 +1,10 @@
 import Image from 'next/image';
 
-import { Networks } from '../../lib/networks';
-import { Action, ActionType } from '../../types/chat';
-import { ActionTypeCard } from '../action-type-card';
 import { BorderWrapper } from '@rearden/ui/components/border-wrapper';
 import { Icons } from '@rearden/ui/components/icons';
+import { Networks } from '../../constants/networks';
+import { Action, ActionType } from '../../types/chat';
+import { ActionTypeCard } from '../action-type-card';
 import { TokenInfo } from './actions-modal/token-info';
 
 interface StrategyActionProps {
