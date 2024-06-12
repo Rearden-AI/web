@@ -20,12 +20,15 @@ export const prepareArgs = async (
     }
     case 'method_result': {
       const abi = abis[i.to];
+      console.log({ i, abis });
+
       if (!abi) throw new Error('ABI is not provided');
 
       const args = await Promise.all(
-        i.method_parameters.map(async (param: unknown) => {
+        i.method_params.map(async (param: unknown) => {
           if (checkProperty(param, 'input_id')) {
             const selected = array.find(j => j.id === (param as { input_id: number }).input_id)!;
+
             return await prepareArgs(selected, array, abis);
           }
           return param;

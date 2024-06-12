@@ -80,6 +80,7 @@ export const ChatInput = () => {
               content: data.body,
               contains_strategy_previews: data.contains_strategy_previews,
               timestamp,
+              action_data: data.action_data,
             });
 
             renameChat(chat.uuid, data.body ? data.body.slice(0, 31) : 'New Chat');

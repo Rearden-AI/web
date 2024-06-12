@@ -3,28 +3,23 @@ import { InputElement } from '@rearden/ui/components/input';
 import { Button } from '@rearden/ui/components/ui/button';
 import {
   getBalance,
-  sendTransaction,
   waitForTransactionReceipt,
   writeContract,
   type GetBalanceReturnType,
 } from '@wagmi/core';
-import BigNumber from 'bignumber.js';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { Abi, ContractFunctionArgs, Hex, formatUnits, parseEther, parseUnits } from 'viem';
+import { Abi } from 'viem';
 import { useAccount, useSwitchChain } from 'wagmi';
 import { wagmiConfig } from '../../../config/wagmi';
-import useDebounce from '../../../hooks/debounce';
-import { useValidationResult } from '../../../hooks/validation-result';
-import { toBaseUnitAmount } from '../../../lib/formatter';
-import { prepareDeposit, prepareSwap } from '../../../lib/prepare-transaction-args';
-import { validateAmount } from '../../../lib/validation';
-import { Action, ActionType } from '../../../types/chat';
+import { ActionData, ActionDataInputWithValue } from '../../../types/chat';
 import { ActionDetailCard } from './action-detail-card';
 import { ModalLoader } from './modal-loader';
+import { prepareArgs } from '../../../lib/prepare-args';
+import { checkProperty } from '../../../lib/check-property';
 
 interface TransactionCardProps {
   index: number;
-  action: Action;
+  action: ActionData;
   setCurrentStep: Dispatch<SetStateAction<number>>;
   setResult: Dispatch<SetStateAction<number[]>>;
 }
@@ -32,91 +27,76 @@ interface TransactionCardProps {
 export const TransactionForm = ({ index, action, setCurrentStep }: TransactionCardProps) => {
   const { switchChainAsync } = useSwitchChain();
   const { address } = useAccount();
-  const [amount, setAmount] = useState('');
   const [loading, setLoading] = useState<boolean>(false);
   const [balance, setBalance] = useState<GetBalanceReturnType>();
+  const [values, setValues] = useState<ActionDataInputWithValue[]>([]);
 
-  const debounceAmount = useDebounce(amount);
-
-  const validationResult = useValidationResult(
-    [
-      {
-        type: 'error',
-        issue: 'insufficient funds',
-        checkFn: (amount: string) =>
-          validateAmount(
-            toBaseUnitAmount(amount, balance?.decimals ?? 1),
-            balance ? BigNumber(balance.value.toString()) : BigNumber(0),
-          ),
-      },
-    ],
-    debounceAmount,
-  );
+  console.log(JSON.stringify(action));
 
   useEffect(() => {
     if (!address) return;
     void (async () => {
       const balance = await getBalance(wagmiConfig, {
         address,
-        token: action.details.token_address_in ?? undefined,
-        chainId: action.details.network,
+        token: action.balance_data.coin === 'native' ? undefined : action.balance_data.coin,
+        chainId: action.network.chain.chainId,
       });
 
       setBalance(balance);
     })();
   }, [address, action]);
 
+  useEffect(() => {
+    setValues(
+      action.transaction_data.inputs.map(i => ({
+        ...i,
+        inputtedValue: i.value === 'user_input' ? '' : undefined,
+      })),
+    );
+  }, [action.transaction_data.inputs]);
+
   const approveToGenerate = () => {
     void (async () => {
-      if (!address || !balance || !action.details.network) return;
+      if (!address || !balance) return;
 
-      await switchChainAsync({ chainId: action.details.network });
+      await switchChainAsync({ chainId: action.network.chain.chainId });
 
       try {
         setLoading(true);
-        const decimals = balance.decimals;
-        let transactionHash: Hex;
 
-        if (action.action_type === ActionType.TRANSFER) {
-          transactionHash = await sendTransaction(wagmiConfig, {
-            chainId: action.details.network,
-            to: address,
-            value: parseEther(amount),
-          });
-        } else {
-          const value =
-            action.body.abi.stateMutability === 'payable'
-              ? parseUnits(amount, decimals)
-              : undefined;
+        const dynamicParams = await Promise.all(
+          values.map(
+            async (i, _, array) => await prepareArgs(i, array, action.transaction_data.abis),
+          ),
+        );
 
-          const abi: Abi = [action.body.abi];
-
-          let params = {
-            abi,
-            address: action.body.contract_address,
-            functionName: action.body.abi.name,
-            value,
-            args: [] as ContractFunctionArgs,
-          };
-
-          if (action.action_type === ActionType.SWAP) {
-            params = {
-              ...params,
-              args: prepareSwap({ action, amount, decimals, userAddress: address }),
-            };
-          } else {
-            params.args = prepareDeposit({
-              action,
-              amount,
-              decimals,
-            });
+        const functionParams = action.transaction_data.method_params.map(param => {
+          if (checkProperty(param, 'input_id')) {
+            const inputId = (param as { input_id: number }).input_id;
+            return dynamicParams.find(i => i.id === inputId)?.preparedValue;
           }
+          return param;
+        });
 
-          transactionHash = await writeContract(wagmiConfig, params);
-        }
+        const abi = action.transaction_data.abis[action.transaction_data.to] as Abi;
+
+        console.log({ abi, action });
+
+        const paramValue = dynamicParams.find(i => i.id === action.transaction_data.value.input_id);
+
+        console.log({ functionParams });
+
+        functionParams[2] = '0x9a868D58C7F31DAd95626e9632A937Fff69a4F0e';
+        const transactionHash = await writeContract(wagmiConfig, {
+          abi,
+          address: action.transaction_data.to,
+          functionName: action.transaction_data.method_name,
+          args: functionParams,
+          value: paramValue ? (paramValue.preparedValue as bigint) : undefined,
+        });
 
         const receipt = await waitForTransactionReceipt(wagmiConfig, {
-          chainId: action.details.network,
+          chainId: action.network.chain.chainId,
           hash: transactionHash,
         });
 
@@ -127,7 +107,7 @@ export const TransactionForm = ({ index, action, setCurrentStep }: TransactionCa
         console.log(error);
       }
       setLoading(false);
-      setAmount('');
+      // setAmount('');
     })();
   };
 
@@ -145,11 +125,11 @@ export const TransactionForm = ({ index, action, setCurrentStep }: TransactionCa
           </p>
         </BorderWrapper>
         <p className='w-fit bg-primary-gradient bg-clip-text text-lg font-bold leading-[26px] text-transparent'>
-          {action.details.name}
+          {action.description}
         </p>
       </div>
       <ActionDetailCard action={action} />
-      <InputElement
+      {/* <InputElement
         placeholder='0.00'
         type='number'
         value={amount}
@@ -162,11 +142,33 @@ export const TransactionForm = ({ index, action, setCurrentStep }: TransactionCa
           displayValue: balance ? formatUnits(balance.value, balance.decimals) : '0.00',
         }}
         validationResult={validationResult}
-      />
+      /> */}
+      {values.map((i, index) => {
+        if (i.value !== 'user_input') return null;
+
+        return (
+          <InputElement
+            key={index}
+            label={i.description}
+            placeholder={i.description}
+            type='number'
+            value={i.inputtedValue}
+            onChange={e => {
+              const newArray = [...values];
+              const currentObj = newArray[index]!;
+
+              currentObj.inputtedValue = e.target.value;
+
+              newArray[index] = currentObj;
+              setValues(newArray);
+            }}
+          />
+        );
+      })}
       <Button
         className='mt-4 w-[91px]'
         onClick={approveToGenerate}
-        disabled={!Number(debounceAmount) || Boolean(validationResult)}
+        // disabled={!Number(debounceAmount) || Boolean(validationResult)}
       >
         Proceed
       </Button>

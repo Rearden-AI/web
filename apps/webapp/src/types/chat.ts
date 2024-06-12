@@ -15,12 +15,7 @@ export interface AbiFunction {
 export type SupportNework = 1 | 324 | 17000;
 
 export enum ActionType {
-  TRANSACTION = 'transaction',
-  TRANSFER = 'transfer',
-  DEPOSIT = 'deposit',
-  SWAP = 'swap',
-  ADD_LIQUIDITY = 'add Liquidity',
-  ZKLOGIN = 'zkLogin',
+  SWAP = 'Swap',
 }
 
 export enum ChatSchemaState {
@@ -28,44 +23,8 @@ export enum ChatSchemaState {
   DELETED = 'deleted',
 }
 
-export interface ActionDetails {
-  apy: string;
-  dapp_link: string;
-  name: string;
-  from?: string | string[];
-  to?: string;
-  network?: SupportNework;
-  token_address_in: null | Hex;
-  token_address_out?: Hex;
-}
-
-export interface ActionBody {
-  contract_address: Hex;
-  token_address_in: Hex | null;
-  token_address_out: Hex | null;
-  arguments: {
-    name: string;
-    value?: string;
-  }[];
-  abi: AbiFunction;
-  // add for swap
-  withdraw_mode?: string;
-  token_in?: Hex;
-  callback_data?: Hex;
-  amount_out_min?: bigint;
-  deadline?: bigint;
-  pool_address?: Hex;
-}
-
-export interface Action {
-  action_type: ActionType;
-  details: ActionDetails;
-  body: ActionBody;
-}
-
 export interface ChatResponse {
   body: string;
-  strategies?: Action[];
   contains_strategy_previews?: string[];
   exec_logs?: string;
   timestamp: number;
@@ -83,7 +42,6 @@ export interface ChatSchema {
 export interface HistoryMessage {
   role: Role;
   content?: string;
-  strategies?: Action[];
   contains_strategy_previews?: string[];
   transactions?: TransactionResult[];
   timestamp: number;
@@ -105,18 +63,35 @@ export interface SelectedChat extends ExtendedChatSchema {
 }
 
 export interface ActionData {
-  chain: 'eth';
+  application_data: {
+    contract_address: Hex;
+    contract_address_on_explorer: string;
+    name: string;
+    url: string;
+  };
+  network: {
+    icon: string | null;
+    name: string;
+    chain: { type: string; chainId: SupportNework };
+  };
   description: string;
   transaction_data: {
     to: Hex;
     method_name: string;
-    method_parameters: unknown[];
+    method_params: unknown[];
     value: {
       input_id: number;
     };
+    inputs: ActionDataInput[];
+    abis: Record<Hex, AbiFunction[]>;
   };
-  abis: Record<Hex, AbiFunction[]>;
-  inputs: ActionDataInput[];
+  type: ActionType;
+  balance_data: { coin: 'native' | Hex; symbol: string };
+  parameters_description: {
+    icon: string | null;
+    name: string;
+    value: string;
+  }[];
 }
 
 export interface TokenAmount {
@@ -133,7 +108,7 @@ export interface MethodResult {
   type: 'amount';
   to: Hex;
   method_name: string;
-  method_parameters: unknown[];
+  method_params: unknown[];
   method_result: number;
 }
 

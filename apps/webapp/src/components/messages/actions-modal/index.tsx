@@ -13,13 +13,18 @@ import axiosInstance from '../../../config/axios';
 import { API_ID, ApiRoutes } from '../../../constants/api-routes';
 import { useStore } from '../../../state';
 import { chatsSelector } from '../../../state/chats';
-import { Action, ActionType, HistoryMessage, Role } from '../../../types/chat';
+import { ActionData, HistoryMessage, Role } from '../../../types/chat';
 import { ExecuteButton } from '../../execute-button';
 import { Stepper } from '../../stepper';
-import { AddLiquidityForm } from './add-liquidity-form';
 import { TransactionForm } from './transaction-form';
 
-export const ActionsModal = ({ wallet, strategies }: { wallet: string; strategies: Action[] }) => {
+export const ActionsModal = ({
+  wallet,
+  strategies,
+}: {
+  wallet: string;
+  strategies: ActionData[];
+}) => {
   const { writeToChat } = useStore(chatsSelector);
   const [open, setOpen] = useState<boolean>(false);
   const [currentStep, setCurrentStep] = useState<number>(1);
@@ -55,24 +60,15 @@ export const ActionsModal = ({ wallet, strategies }: { wallet: string; strategie
     return strategies.map((i, index) => {
       return {
         index: index + 1,
-        children:
-          i.action_type === ActionType.ADD_LIQUIDITY ? (
-            <AddLiquidityForm
-              key={index}
-              index={index + 1}
-              action={i}
-              setCurrentStep={setCurrentStep}
-              setResult={setResult}
-            />
-          ) : (
-            <TransactionForm
-              key={index}
-              index={index + 1}
-              action={i}
-              setCurrentStep={setCurrentStep}
-              setResult={setResult}
-            />
-          ),
+        children: (
+          <TransactionForm
+            key={index}
+            index={index + 1}
+            action={i}
+            setCurrentStep={setCurrentStep}
+            setResult={setResult}
+          />
+        ),
       };
     });
   }, [strategies]);

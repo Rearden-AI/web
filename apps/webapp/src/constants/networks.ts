@@ -1,5 +1,5 @@
 export const Networks: Record<
-  number,
+  string,
   {
     name: string;
     explorer: string;
@@ -8,19 +8,19 @@ export const Networks: Record<
     txPathname?: string;
   }
 > = {
-  324: {
-    name: 'zkSync',
-    explorer: 'https://explorer.zksync.io',
-    iconUrl: '/ETH.png',
-  },
-  1: {
+  // 324: {
+  //   name: 'zkSync',
+  //   explorer: 'https://explorer.zksync.io',
+  //   iconUrl: '/ETH.png',
+  // },
+  eth: {
     name: 'Mainnet',
     explorer: 'https://etherscan.io',
     iconUrl: '/ETH.png',
   },
-  17000: {
-    name: 'Holesky',
-    explorer: 'https://holesky.etherscan.io',
-    iconUrl: '/ETH.png',
-  },
+  // 17000: {
+  //   name: 'Holesky',
+  //   explorer: 'https://holesky.etherscan.io',
+  //   iconUrl: '/ETH.png',
+  // },
 };

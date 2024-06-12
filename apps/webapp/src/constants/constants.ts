@@ -1,4 +1,4 @@
-import { ActionData, ActionType, ChatSchemaState, Role } from '../types/chat';
+import { ActionData, ChatSchemaState, Role } from '../types/chat';
 
 export const mockChatAirdrop = {
   name: null,
@@ -15,120 +15,414 @@ export const mockChatAirdrop = {
       role: Role.SYSTEM,
       content: `In a process called Airdrop, early users are rewarded with the protocol's native token for performing actions that benefit the protocol. \n\nA crypto airdrop usually involves the following steps:\n\n1. The project team communicates the details and requirements of the airdrop through their official channels or cryptocurrency communities.\n2. The interested participants register for the airdrop by providing their wallet address and other information or performing the required tasks.\n3. The project team verifies the eligibility and validity of the participants and distributes the tokens to their wallets according to the rules of the airdrop.\n4. The participants receive the tokens in their wallets and can use them according to the terms and conditions of the project.\n\nAre you interested in airdrop hunting?`,
       action_data: {
-        chain: 'eth',
+        network: {
+          name: 'Mainnet',
+          icon: 'https://assets.coingecko.com/coins/images/1060/standard/ICON-symbol-coingecko_latest.png?1706638336',
+          chain: { type: 'evm', chainId: 1 },
+        },
         description: 'Buy USDT',
+        type: 'Swap',
+        application_data: {
+          name: 'Uniswap',
+          url: 'https://app.uniswap.org/',
+          contract_address: '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D',
+          contract_address_on_explorer:
+            'https://etherscan.io/address/0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D',
+        },
+        parameters_description: [
+          {
+            name: 'From',
+            value: 'ETH',
+            icon: 'https://assets.coingecko.com/coins/images/1060/standard/ICON-symbol-coingecko_latest.png?1706638336',
+          },
+          {
+            name: 'To',
+            value: 'USDT',
+            icon: 'https://assets.coingecko.com/coins/images/1060/standard/ICON-symbol-coingecko_latest.png?1706638336',
+          },
+        ],
         transaction_data: {
           to: '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D',
           method_name: 'swapETHForExactTokens',
-          method_parameters: [
-            {
-              input_id: 0,
-            },
+          method_params: [
+            { input_id: 0 },
             [
               '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
-              '0xdAC17F958D2ee523a2206206994597C13D831ec7',
+              '0xdac17f958d2ee523a2206206994597c13d831ec7',
             ],
-            '0x9a868D58C7F31DAd95626e9632A937Fff69a4F0e',
-            {
-              input_id: 1,
-            },
+            '0xF2B016466A8e9CFEFA7854b218535017192008E9',
+            { input_id: 1 },
           ],
-          value: {
-            input_id: 2,
-          },
-        },
-        abis: {
-          '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D': [
-            {
-              inputs: [
-                {
-                  internalType: 'uint256',
-                  name: 'amountOut',
-                  type: 'uint256',
-                },
-                {
-                  internalType: 'address[]',
-                  name: 'path',
-                  type: 'address[]',
-                },
-              ],
-              name: 'getAmountsIn',
-              outputs: [
-                {
-                  internalType: 'uint256[]',
-                  name: 'amounts',
-                  type: 'uint256[]',
-                },
-              ],
-              stateMutability: 'view',
-              type: 'function',
-            },
-            {
-              inputs: [
-                {
-                  internalType: 'uint256',
-                  name: 'amountOut',
-                  type: 'uint256',
-                },
-                {
-                  internalType: 'address[]',
-                  name: 'path',
-                  type: 'address[]',
-                },
-                {
-                  internalType: 'address',
-                  name: 'to',
-                  type: 'address',
-                },
-                {
-                  internalType: 'uint256',
-                  name: 'deadline',
-                  type: 'uint256',
-                },
-              ],
-              name: 'swapETHForExactTokens',
-              outputs: [
-                {
-                  internalType: 'uint256[]',
-                  name: 'amounts',
-                  type: 'uint256[]',
-                },
-              ],
-              stateMutability: 'payable',
-              type: 'function',
-            },
-          ],
-        },
-        inputs: [
-          {
-            id: 0,
-            value: 'user_input',
-            description: 'Enter USDT amount',
-            type: 'token_amount',
-            decimals: 6,
-          },
-          {
-            id: 1,
-            type: 'deadline',
-          },
-          {
-            id: 2,
-            value: 'method_result',
-            type: 'amount',
-            to: '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D',
-            method_name: 'getAmountsIn',
-            method_parameters: [
+          value: { input_id: 2 },
+          abis: {
+            '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D': [
               {
-                input_id: 0,
+                inputs: [
+                  { internalType: 'address', name: '_factory', type: 'address' },
+                  { internalType: 'address', name: '_WETH', type: 'address' },
+                ],
+                stateMutability: 'nonpayable',
+                type: 'constructor',
               },
-              [
-                '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
-                '0xdAC17F958D2ee523a2206206994597C13D831ec7',
-              ],
+              {
+                inputs: [],
+                name: 'WETH',
+                outputs: [{ internalType: 'address', name: '', type: 'address' }],
+                stateMutability: 'view',
+                type: 'function',
+              },
+              {
+                inputs: [
+                  { internalType: 'address', name: 'tokenA', type: 'address' },
+                  { internalType: 'address', name: 'tokenB', type: 'address' },
+                  { internalType: 'uint256', name: 'amountADesired', type: 'uint256' },
+                  { internalType: 'uint256', name: 'amountBDesired', type: 'uint256' },
+                  { internalType: 'uint256', name: 'amountAMin', type: 'uint256' },
+                  { internalType: 'uint256', name: 'amountBMin', type: 'uint256' },
+                  { internalType: 'address', name: 'to', type: 'address' },
+                  { internalType: 'uint256', name: 'deadline', type: 'uint256' },
+                ],
+                name: 'addLiquidity',
+                outputs: [
+                  { internalType: 'uint256', name: 'amountA', type: 'uint256' },
+                  { internalType: 'uint256', name: 'amountB', type: 'uint256' },
+                  { internalType: 'uint256', name: 'liquidity', type: 'uint256' },
+                ],
+                stateMutability: 'nonpayable',
+                type: 'function',
+              },
+              {
+                inputs: [
+                  { internalType: 'address', name: 'token', type: 'address' },
+                  { internalType: 'uint256', name: 'amountTokenDesired', type: 'uint256' },
+                  { internalType: 'uint256', name: 'amountTokenMin', type: 'uint256' },
+                  { internalType: 'uint256', name: 'amountETHMin', type: 'uint256' },
+                  { internalType: 'address', name: 'to', type: 'address' },
+                  { internalType: 'uint256', name: 'deadline', type: 'uint256' },
+                ],
+                name: 'addLiquidityETH',
+                outputs: [
+                  { internalType: 'uint256', name: 'amountToken', type: 'uint256' },
+                  { internalType: 'uint256', name: 'amountETH', type: 'uint256' },
+                  { internalType: 'uint256', name: 'liquidity', type: 'uint256' },
+                ],
+                stateMutability: 'payable',
+                type: 'function',
+              },
+              {
+                inputs: [],
+                name: 'factory',
+                outputs: [{ internalType: 'address', name: '', type: 'address' }],
+                stateMutability: 'view',
+                type: 'function',
+              },
+              {
+                inputs: [
+                  { internalType: 'uint256', name: 'amountOut', type: 'uint256' },
+                  { internalType: 'uint256', name: 'reserveIn', type: 'uint256' },
+                  { internalType: 'uint256', name: 'reserveOut', type: 'uint256' },
+                ],
+                name: 'getAmountIn',
+                outputs: [{ internalType: 'uint256', name: 'amountIn', type: 'uint256' }],
+                stateMutability: 'pure',
+                type: 'function',
+              },
+              {
+                inputs: [
+                  { internalType: 'uint256', name: 'amountIn', type: 'uint256' },
+                  { internalType: 'uint256', name: 'reserveIn', type: 'uint256' },
+                  { internalType: 'uint256', name: 'reserveOut', type: 'uint256' },
+                ],
+                name: 'getAmountOut',
+                outputs: [{ internalType: 'uint256', name: 'amountOut', type: 'uint256' }],
+                stateMutability: 'pure',
+                type: 'function',
+              },
+              {
+                inputs: [
+                  { internalType: 'uint256', name: 'amountOut', type: 'uint256' },
+                  { internalType: 'address[]', name: 'path', type: 'address[]' },
+                ],
+                name: 'getAmountsIn',
+                outputs: [{ internalType: 'uint256[]', name: 'amounts', type: 'uint256[]' }],
+                stateMutability: 'view',
+                type: 'function',
+              },
+              {
+                inputs: [
+                  { internalType: 'uint256', name: 'amountIn', type: 'uint256' },
+                  { internalType: 'address[]', name: 'path', type: 'address[]' },
+                ],
+                name: 'getAmountsOut',
+                outputs: [{ internalType: 'uint256[]', name: 'amounts', type: 'uint256[]' }],
+                stateMutability: 'view',
+                type: 'function',
+              },
+              {
+                inputs: [
+                  { internalType: 'uint256', name: 'amountA', type: 'uint256' },
+                  { internalType: 'uint256', name: 'reserveA', type: 'uint256' },
+                  { internalType: 'uint256', name: 'reserveB', type: 'uint256' },
+                ],
+                name: 'quote',
+                outputs: [{ internalType: 'uint256', name: 'amountB', type: 'uint256' }],
+                stateMutability: 'pure',
+                type: 'function',
+              },
+              {
+                inputs: [
+                  { internalType: 'address', name: 'tokenA', type: 'address' },
+                  { internalType: 'address', name: 'tokenB', type: 'address' },
+                  { internalType: 'uint256', name: 'liquidity', type: 'uint256' },
+                  { internalType: 'uint256', name: 'amountAMin', type: 'uint256' },
+                  { internalType: 'uint256', name: 'amountBMin', type: 'uint256' },
+                  { internalType: 'address', name: 'to', type: 'address' },
+                  { internalType: 'uint256', name: 'deadline', type: 'uint256' },
+                ],
+                name: 'removeLiquidity',
+                outputs: [
+                  { internalType: 'uint256', name: 'amountA', type: 'uint256' },
+                  { internalType: 'uint256', name: 'amountB', type: 'uint256' },
+                ],
+                stateMutability: 'nonpayable',
+                type: 'function',
+              },
+              {
+                inputs: [
+                  { internalType: 'address', name: 'token', type: 'address' },
+                  { internalType: 'uint256', name: 'liquidity', type: 'uint256' },
+                  { internalType: 'uint256', name: 'amountTokenMin', type: 'uint256' },
+                  { internalType: 'uint256', name: 'amountETHMin', type: 'uint256' },
+                  { internalType: 'address', name: 'to', type: 'address' },
+                  { internalType: 'uint256', name: 'deadline', type: 'uint256' },
+                ],
+                name: 'removeLiquidityETH',
+                outputs: [
+                  { internalType: 'uint256', name: 'amountToken', type: 'uint256' },
+                  { internalType: 'uint256', name: 'amountETH', type: 'uint256' },
+                ],
+                stateMutability: 'nonpayable',
+                type: 'function',
+              },
+              {
+                inputs: [
+                  { internalType: 'address', name: 'token', type: 'address' },
+                  { internalType: 'uint256', name: 'liquidity', type: 'uint256' },
+                  { internalType: 'uint256', name: 'amountTokenMin', type: 'uint256' },
+                  { internalType: 'uint256', name: 'amountETHMin', type: 'uint256' },
+                  { internalType: 'address', name: 'to', type: 'address' },
+                  { internalType: 'uint256', name: 'deadline', type: 'uint256' },
+                ],
+                name: 'removeLiquidityETHSupportingFeeOnTransferTokens',
+                outputs: [{ internalType: 'uint256', name: 'amountETH', type: 'uint256' }],
+                stateMutability: 'nonpayable',
+                type: 'function',
+              },
+              {
+                inputs: [
+                  { internalType: 'address', name: 'token', type: 'address' },
+                  { internalType: 'uint256', name: 'liquidity', type: 'uint256' },
+                  { internalType: 'uint256', name: 'amountTokenMin', type: 'uint256' },
+                  { internalType: 'uint256', name: 'amountETHMin', type: 'uint256' },
+                  { internalType: 'address', name: 'to', type: 'address' },
+                  { internalType: 'uint256', name: 'deadline', type: 'uint256' },
+                  { internalType: 'bool', name: 'approveMax', type: 'bool' },
+                  { internalType: 'uint8', name: 'v', type: 'uint8' },
+                  { internalType: 'bytes32', name: 'r', type: 'bytes32' },
+                  { internalType: 'bytes32', name: 's', type: 'bytes32' },
+                ],
+                name: 'removeLiquidityETHWithPermit',
+                outputs: [
+                  { internalType: 'uint256', name: 'amountToken', type: 'uint256' },
+                  { internalType: 'uint256', name: 'amountETH', type: 'uint256' },
+                ],
+                stateMutability: 'nonpayable',
+                type: 'function',
+              },
+              {
+                inputs: [
+                  { internalType: 'address', name: 'token', type: 'address' },
+                  { internalType: 'uint256', name: 'liquidity', type: 'uint256' },
+                  { internalType: 'uint256', name: 'amountTokenMin', type: 'uint256' },
+                  { internalType: 'uint256', name: 'amountETHMin', type: 'uint256' },
+                  { internalType: 'address', name: 'to', type: 'address' },
+                  { internalType: 'uint256', name: 'deadline', type: 'uint256' },
+                  { internalType: 'bool', name: 'approveMax', type: 'bool' },
+                  { internalType: 'uint8', name: 'v', type: 'uint8' },
+                  { internalType: 'bytes32', name: 'r', type: 'bytes32' },
+                  { internalType: 'bytes32', name: 's', type: 'bytes32' },
+                ],
+                name: 'removeLiquidityETHWithPermitSupportingFeeOnTransferTokens',
+                outputs: [{ internalType: 'uint256', name: 'amountETH', type: 'uint256' }],
+                stateMutability: 'nonpayable',
+                type: 'function',
+              },
+              {
+                inputs: [
+                  { internalType: 'address', name: 'tokenA', type: 'address' },
+                  { internalType: 'address', name: 'tokenB', type: 'address' },
+                  { internalType: 'uint256', name: 'liquidity', type: 'uint256' },
+                  { internalType: 'uint256', name: 'amountAMin', type: 'uint256' },
+                  { internalType: 'uint256', name: 'amountBMin', type: 'uint256' },
+                  { internalType: 'address', name: 'to', type: 'address' },
+                  { internalType: 'uint256', name: 'deadline', type: 'uint256' },
+                  { internalType: 'bool', name: 'approveMax', type: 'bool' },
+                  { internalType: 'uint8', name: 'v', type: 'uint8' },
+                  { internalType: 'bytes32', name: 'r', type: 'bytes32' },
+                  { internalType: 'bytes32', name: 's', type: 'bytes32' },
+                ],
+                name: 'removeLiquidityWithPermit',
+                outputs: [
+                  { internalType: 'uint256', name: 'amountA', type: 'uint256' },
+                  { internalType: 'uint256', name: 'amountB', type: 'uint256' },
+                ],
+                stateMutability: 'nonpayable',
+                type: 'function',
+              },
+              {
+                inputs: [
+                  { internalType: 'uint256', name: 'amountOut', type: 'uint256' },
+                  { internalType: 'address[]', name: 'path', type: 'address[]' },
+                  { internalType: 'address', name: 'to', type: 'address' },
+                  { internalType: 'uint256', name: 'deadline', type: 'uint256' },
+                ],
+                name: 'swapETHForExactTokens',
+                outputs: [{ internalType: 'uint256[]', name: 'amounts', type: 'uint256[]' }],
+                stateMutability: 'payable',
+                type: 'function',
+              },
+              {
+                inputs: [
+                  { internalType: 'uint256', name: 'amountOutMin', type: 'uint256' },
+                  { internalType: 'address[]', name: 'path', type: 'address[]' },
+                  { internalType: 'address', name: 'to', type: 'address' },
+                  { internalType: 'uint256', name: 'deadline', type: 'uint256' },
+                ],
+                name: 'swapExactETHForTokens',
+                outputs: [{ internalType: 'uint256[]', name: 'amounts', type: 'uint256[]' }],
+                stateMutability: 'payable',
+                type: 'function',
+              },
+              {
+                inputs: [
+                  { internalType: 'uint256', name: 'amountOutMin', type: 'uint256' },
+                  { internalType: 'address[]', name: 'path', type: 'address[]' },
+                  { internalType: 'address', name: 'to', type: 'address' },
+                  { internalType: 'uint256', name: 'deadline', type: 'uint256' },
+                ],
+                name: 'swapExactETHForTokensSupportingFeeOnTransferTokens',
+                outputs: [],
+                stateMutability: 'payable',
+                type: 'function',
+              },
+              {
+                inputs: [
+                  { internalType: 'uint256', name: 'amountIn', type: 'uint256' },
+                  { internalType: 'uint256', name: 'amountOutMin', type: 'uint256' },
+                  { internalType: 'address[]', name: 'path', type: 'address[]' },
+                  { internalType: 'address', name: 'to', type: 'address' },
+                  { internalType: 'uint256', name: 'deadline', type: 'uint256' },
+                ],
+                name: 'swapExactTokensForETH',
+                outputs: [{ internalType: 'uint256[]', name: 'amounts', type: 'uint256[]' }],
+                stateMutability: 'nonpayable',
+                type: 'function',
+              },
+              {
+                inputs: [
+                  { internalType: 'uint256', name: 'amountIn', type: 'uint256' },
+                  { internalType: 'uint256', name: 'amountOutMin', type: 'uint256' },
+                  { internalType: 'address[]', name: 'path', type: 'address[]' },
+                  { internalType: 'address', name: 'to', type: 'address' },
+                  { internalType: 'uint256', name: 'deadline', type: 'uint256' },
+                ],
+                name: 'swapExactTokensForETHSupportingFeeOnTransferTokens',
+                outputs: [],
+                stateMutability: 'nonpayable',
+                type: 'function',
+              },
+              {
+                inputs: [
+                  { internalType: 'uint256', name: 'amountIn', type: 'uint256' },
+                  { internalType: 'uint256', name: 'amountOutMin', type: 'uint256' },
+                  { internalType: 'address[]', name: 'path', type: 'address[]' },
+                  { internalType: 'address', name: 'to', type: 'address' },
+                  { internalType: 'uint256', name: 'deadline', type: 'uint256' },
+                ],
+                name: 'swapExactTokensForTokens',
+                outputs: [{ internalType: 'uint256[]', name: 'amounts', type: 'uint256[]' }],
+                stateMutability: 'nonpayable',
+                type: 'function',
+              },
+              {
+                inputs: [
+                  { internalType: 'uint256', name: 'amountIn', type: 'uint256' },
+                  { internalType: 'uint256', name: 'amountOutMin', type: 'uint256' },
+                  { internalType: 'address[]', name: 'path', type: 'address[]' },
+                  { internalType: 'address', name: 'to', type: 'address' },
+                  { internalType: 'uint256', name: 'deadline', type: 'uint256' },
+                ],
+                name: 'swapExactTokensForTokensSupportingFeeOnTransferTokens',
+                outputs: [],
+                stateMutability: 'nonpayable',
+                type: 'function',
+              },
+              {
+                inputs: [
+                  { internalType: 'uint256', name: 'amountOut', type: 'uint256' },
+                  { internalType: 'uint256', name: 'amountInMax', type: 'uint256' },
+                  { internalType: 'address[]', name: 'path', type: 'address[]' },
+                  { internalType: 'address', name: 'to', type: 'address' },
+                  { internalType: 'uint256', name: 'deadline', type: 'uint256' },
+                ],
+                name: 'swapTokensForExactETH',
+                outputs: [{ internalType: 'uint256[]', name: 'amounts', type: 'uint256[]' }],
+                stateMutability: 'nonpayable',
+                type: 'function',
+              },
+              {
+                inputs: [
+                  { internalType: 'uint256', name: 'amountOut', type: 'uint256' },
+                  { internalType: 'uint256', name: 'amountInMax', type: 'uint256' },
+                  { internalType: 'address[]', name: 'path', type: 'address[]' },
+                  { internalType: 'address', name: 'to', type: 'address' },
+                  { internalType: 'uint256', name: 'deadline', type: 'uint256' },
+                ],
+                name: 'swapTokensForExactTokens',
+                outputs: [{ internalType: 'uint256[]', name: 'amounts', type: 'uint256[]' }],
+                stateMutability: 'nonpayable',
+                type: 'function',
+              },
+              { stateMutability: 'payable', type: 'receive' },
             ],
-            method_result: 0,
           },
-        ],
+          inputs: [
+            {
+              id: 0,
+              value: 'user_input',
+              description: 'Enter USDT amount',
+              type: 'token_amount',
+              decimals: 6,
+            },
+            { id: 1, type: 'deadline' },
+            {
+              id: 2,
+              value: 'method_result',
+              type: 'amount',
+              to: '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D',
+              method_name: 'getAmountsIn',
+              method_params: [
+                { input_id: 0 },
+                [
+                  '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
+                  '0xdac17f958d2ee523a2206206994597c13d831ec7',
+                ],
+              ],
+              method_result: 0,
+            },
+          ],
+        },
+        balance_data: { coin: 'native', symbol: 'ETH' },
       } as ActionData,
     },
     // {
@@ -328,7 +622,7 @@ export const mockChat = {
       content: '',
       strategies: [
         {
-          action_type: ActionType.DEPOSIT,
+          // action_type: ActionType.DEPOSIT,
           details: {
             name: 'Deposit ETH to Lido',
             dapp_link: 'https://lido.fi/',
@@ -365,7 +659,7 @@ export const mockChat = {
           },
         },
         {
-          action_type: ActionType.TRANSACTION,
+          // action_type: ActionType.TRANSACTION,
           details: {
             name: 'Approve stETH on Eigenlayer',
             dapp_link: 'https://eigenlayer.xyz/',
@@ -398,7 +692,7 @@ export const mockChat = {
           },
         },
         {
-          action_type: ActionType.DEPOSIT,
+          // action_type: ActionType.DEPOSIT,
           details: {
             name: 'stETH restaking in Eigenlayer', // need to add API
             dapp_link: 'https://eigenlayer.xyz/',
