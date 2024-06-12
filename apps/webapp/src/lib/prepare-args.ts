@@ -46,7 +46,7 @@ export const prepareArgs = async (
 
       return {
         ...i,
-        preparedValue: result[i.method_result] as unknown,
+        preparedValue: result[i.method_result],
       };
     }
     case undefined: {

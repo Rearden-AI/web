@@ -22,7 +22,11 @@ describe('filterUniqueByKey()', () => {
   });
 
   test('should return an empty array if all items in array1 have matching keys in array2', () => {
-    const result = filterUniqueByKey(array1, array2.concat({ id: 1, name: 'Alice' }, { id: 3, name: 'Charlie' }), 'id');
+    const result = filterUniqueByKey(
+      array1,
+      array2.concat({ id: 1, name: 'Alice' }, { id: 3, name: 'Charlie' }),
+      'id',
+    );
     expect(result).toEqual([]);
   });
 

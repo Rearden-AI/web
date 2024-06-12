@@ -18,7 +18,7 @@ export const ActionDataChain = ({ actionData }: { actionData: ActionData }) => {
         inputtedValue: i.value === 'user_input' ? '0.0001' : undefined,
       })),
     );
-  }, []);
+  }, [actionData.inputs]);
 
   const handleClick = () => {
     void (async () => {
@@ -36,8 +36,6 @@ export const ActionDataChain = ({ actionData }: { actionData: ActionData }) => {
         });
 
         const abi = actionData.abis[actionData.transaction_data.to] as Abi;
-
-        if (!abi) throw new Error('ABI is not provided');
 
         const paramValue = dynamicParams.find(
           i => i.id === actionData.transaction_data.value.input_id,
@@ -57,7 +55,9 @@ export const ActionDataChain = ({ actionData }: { actionData: ActionData }) => {
           hash: transactionHash,
         });
         console.log({ receipt });
-      } catch (error) {}
+      } catch (error) {
+        //
+      }
     })();
   };
 
