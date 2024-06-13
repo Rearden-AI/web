@@ -16,14 +16,14 @@
     "test": "turbo test"
   },
   "devDependencies": {
+    "@rearden/eslint-config": "workspace:*",
+    "@rearden/tailwind-config": "workspace:*",
     "prettier": "^3.2.5",
     "react": "^18.3.1",
     "tailwindcss": "^3.4.3",
     "tsconfig": "workspace:*",
-    "turbo": "^1.13.3",
+    "turbo": "^2.0.3",
     "typescript": "^5.4.5",
-    "vitest": "^1.6.0",
-    "@rearden/eslint-config": "workspace:*",
-    "@rearden/tailwind-config": "workspace:*"
+    "vitest": "^1.6.0"
   }
 }
