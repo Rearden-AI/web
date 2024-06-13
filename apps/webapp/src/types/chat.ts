@@ -62,31 +62,48 @@ export interface SelectedChat extends ExtendedChatSchema {
   isNew?: boolean;
 }
 
+export interface ApplicationData {
+  contract_address: Hex;
+  contract_address_on_explorer: string;
+  name: string;
+  url: string;
+}
+
+export interface Network {
+  icon: string | null;
+  name: string;
+  chain: { type: string; chainId: SupportNework };
+}
+
+export interface TransactionData {
+  to: Hex;
+  method_name: string;
+  method_params: unknown[];
+  value: {
+    input_id: number;
+  };
+  inputs: ActionDataInput[];
+  abis: Record<Hex, AbiFunction[]>;
+}
+
+export interface BalanceData {
+  coin: 'native' | Hex;
+  symbol: string;
+}
+
+export interface ParametersDescription {
+  icon: string | null;
+  name: string;
+  value: string;
+}
+
 export interface ActionData {
-  application_data: {
-    contract_address: Hex;
-    contract_address_on_explorer: string;
-    name: string;
-    url: string;
-  };
-  network: {
-    icon: string | null;
-    name: string;
-    chain: { type: string; chainId: SupportNework };
-  };
+  application_data: ApplicationData;
+  network: Network;
   description: string;
-  transaction_data: {
-    to: Hex;
-    method_name: string;
-    method_params: unknown[];
-    value: {
-      input_id: number;
-    };
-    inputs: ActionDataInput[];
-    abis: Record<Hex, AbiFunction[]>;
-  };
+  transaction_data: TransactionData;
   type: ActionType;
-  balance_data: { coin: 'native' | Hex; symbol: string };
+  balance_data: BalanceData;
   parameters_description: {
     icon: string | null;
     name: string;

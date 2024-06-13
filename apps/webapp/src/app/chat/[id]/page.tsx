@@ -11,6 +11,7 @@ import { useStore } from '../../../state';
 import { chatsSelector } from '../../../state/chats';
 import { ChatResponse, ExtendedChatSchema, Role } from '../../../types/chat';
 import { StrategyMessage } from '../../../components/messages/strategy-message';
+import { ResultMessage } from '../../../components/messages/result-message';
 
 export default function ChatPage({ params }: { params: { id: string } }) {
   const { selectedChat, writeToChat, selectChat } = useStore(chatsSelector);
@@ -96,6 +97,7 @@ export default function ChatPage({ params }: { params: { id: string } }) {
                                 content: data.body,
                                 timestamp: data.timestamp,
                                 action_data: data.action_data,
+                                contains_strategy_previews: data.contains_strategy_previews,
                               });
                             } catch (error) {
                               //
@@ -112,11 +114,11 @@ export default function ChatPage({ params }: { params: { id: string } }) {
                   ) : (
                     <Fragment />
                   )}
-                  {/*{message.transactions?.length ? (
+                  {message.transactions?.length ? (
                     <ResultMessage result={message.transactions} />
                   ) : (
                     <Fragment />
-                  )} */}
+                  )}
                 </div>
               </div>
             </div>

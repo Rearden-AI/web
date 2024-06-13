@@ -1,7 +1,7 @@
 import { Icons } from '@rearden/ui/components/icons';
 import { ActionData } from '../../../types/chat';
 import { ActionTypeCard } from '../../action-type-card';
-import { TokenInfo } from './token-info';
+import { ParamCard } from './param-card';
 
 export const ActionDetailCard = ({ action }: { action: ActionData }) => {
   return (
@@ -17,7 +17,7 @@ export const ActionDetailCard = ({ action }: { action: ActionData }) => {
               rel='noreferrer noopener'
               className='w-fit break-all bg-primary-gradient bg-clip-text text-base font-semibold text-transparent group-hover:opacity-50'
             >
-              {action.application_data.url}
+              {action.application_data.name}
             </a>
             <div>
               <Icons.link className='group-hover:opacity-50' />
@@ -41,7 +41,7 @@ export const ActionDetailCard = ({ action }: { action: ActionData }) => {
           </div>
         </div>
         {action.parameters_description.map(i => (
-          <TokenInfo params={i} key={i.name} />
+          <ParamCard params={i} key={i.name} />
         ))}
         <div className='flex flex-col'>
           <p className='text-sm font-bold'>Network</p>

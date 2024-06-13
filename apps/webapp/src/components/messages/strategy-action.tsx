@@ -2,7 +2,8 @@ import { BorderWrapper } from '@rearden/ui/components/border-wrapper';
 import { Icons } from '@rearden/ui/components/icons';
 import { ActionData } from '../../types/chat';
 import { ActionTypeCard } from '../action-type-card';
-import { TokenInfo } from './actions-modal/token-info';
+import { ParamCard } from './actions-modal/param-card';
+import Image from 'next/image';
 
 interface StrategyActionProps {
   action: ActionData;
@@ -29,12 +30,9 @@ export const StrategyAction = ({ action, index }: StrategyActionProps) => {
           <div className='absolute right-0 top-0 flex flex-col gap-1 rounded-sm bg-card px-3 py-1'>
             <p className='text-sm font-bold'>Network</p>
             <div className='flex items-center gap-1'>
-              {/* <Image
-                src={Networks[action.chain]!.iconUrl}
-                width={18}
-                height={18}
-                alt={action.chain}
-              /> */}
+              {action.network.icon && (
+                <Image src={action.network.icon} width={18} height={18} alt={action.network.icon} />
+              )}
               <p className='w-fit bg-primary-gradient bg-clip-text text-base font-semibold text-transparent'>
                 {action.network.name}
               </p>
@@ -53,7 +51,7 @@ export const StrategyAction = ({ action, index }: StrategyActionProps) => {
                   rel='noreferrer noopener'
                   className='w-fit bg-primary-gradient bg-clip-text text-base font-semibold text-transparent group-hover:opacity-50'
                 >
-                  {action.application_data.url}
+                  {action.application_data.name}
                 </a>
                 <div>
                   <Icons.link className='group-hover:opacity-50' />
@@ -78,7 +76,7 @@ export const StrategyAction = ({ action, index }: StrategyActionProps) => {
             </div>
           </div>
           {action.parameters_description.map(i => (
-            <TokenInfo key={i.name} params={i} />
+            <ParamCard key={i.name} params={i} />
           ))}
         </div>
       </div>

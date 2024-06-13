@@ -1,6 +1,5 @@
 import moment from 'moment';
 import Image from 'next/image';
-
 import { Icons } from '@rearden/ui/components/icons';
 import {
   Table,
@@ -96,7 +95,7 @@ export const ResultMessage = ({ result }: { result: TransactionResult[] }) => {
               </TableCell>
             </TableRow>
           ))}
-          <TableRow></TableRow>
+          <TableRow />
         </TableBody>
       </Table>
     </div>

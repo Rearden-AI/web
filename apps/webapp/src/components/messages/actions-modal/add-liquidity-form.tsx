@@ -156,7 +156,6 @@
 //           setCurrentStep(state => state + 1);
 //         }
 //       } catch (error) {
-//         console.log(error);
 //       }
 //       setLoading(false);
 //       setAmounts({

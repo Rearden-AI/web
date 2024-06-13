@@ -31,8 +31,6 @@ export const TransactionForm = ({ index, action, setCurrentStep }: TransactionCa
   const [balance, setBalance] = useState<GetBalanceReturnType>();
   const [values, setValues] = useState<ActionDataInputWithValue[]>([]);
 
-  console.log(JSON.stringify(action));
-
   useEffect(() => {
     if (!address) return;
     void (async () => {
@@ -80,13 +78,8 @@ export const TransactionForm = ({ index, action, setCurrentStep }: TransactionCa
 
         const abi = action.transaction_data.abis[action.transaction_data.to] as Abi;
 
-        console.log({ abi, action });
-
         const paramValue = dynamicParams.find(i => i.id === action.transaction_data.value.input_id);
 
-        console.log({ functionParams });
-
-        functionParams[2] = '0x9a868D58C7F31DAd95626e9632A937Fff69a4F0e';
         const transactionHash = await writeContract(wagmiConfig, {
           abi,
           address: action.transaction_data.to,

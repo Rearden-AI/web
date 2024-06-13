@@ -20,7 +20,6 @@ export const prepareArgs = async (
     }
     case 'method_result': {
       const abi = abis[i.to];
-      console.log({ i, abis });
 
       if (!abi) throw new Error('ABI is not provided');
 
