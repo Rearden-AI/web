@@ -1,9 +1,9 @@
-import { describe, expect, test } from 'vitest';
-import { prepareArgs } from './prepare-args';
-import { AbiFunction, ActionDataInputWithValue } from '../types/chat';
 import { Hex } from 'viem';
+import { describe, expect, test } from 'vitest';
+import { AbiFunction, ActionDataInputWithValue } from '../types/chat';
+import { prepareParams } from './prepare-send-data';
 
-describe('prepareArgs()', () => {
+describe('prepareParams()', () => {
   describe('token_amount type', () => {
     test('if value equal user_input than preparedValue equal 2000000', async () => {
       const obj = {
@@ -14,7 +14,7 @@ describe('prepareArgs()', () => {
         decimals: 6,
         inputtedValue: '2',
       } as ActionDataInputWithValue;
-      const value = await prepareArgs(obj, [obj], {});
+      const value = await prepareParams(obj, [obj], {});
 
       expect(value.preparedValue).toBe(2000000n);
     });
@@ -26,7 +26,7 @@ describe('prepareArgs()', () => {
         id: 1,
         type: 'deadline',
       } as ActionDataInputWithValue;
-      const value = await prepareArgs(obj, [obj], {});
+      const value = await prepareParams(obj, [obj], {});
 
       expect(value.preparedValue).toBe(Date.now() + 900000);
     });
@@ -113,7 +113,7 @@ describe('prepareArgs()', () => {
         },
       ] as ActionDataInputWithValue[];
 
-      const value = await prepareArgs(obj, array, abi);
+      const value = await prepareParams(obj, array, abi);
       expect(value.preparedValue).toBeDefined();
     });
   });

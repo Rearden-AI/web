@@ -41,7 +41,7 @@ export const StrategyAction = ({ action, index }: StrategyActionProps) => {
         </div>
         <ActionTypeCard type={action.type} />
         <div className='mt-1 grid grid-cols-2 gap-y-3'>
-          {action.application_data.url && (
+          {action.application_data?.url && (
             <div className='flex flex-col'>
               <p className='text-sm font-bold'>dApp</p>
               <div className='group flex items-center gap-[2px]'>
@@ -63,7 +63,7 @@ export const StrategyAction = ({ action, index }: StrategyActionProps) => {
             <p className='text-sm font-bold'>Smart contract address</p>
             <div className='group flex items-center gap-[2px]'>
               <a
-                href={action.application_data.contract_address_on_explorer}
+                href={action.application_data?.contract_address_on_explorer}
                 target='_blank'
                 rel='noreferrer noopener'
                 className='w-fit bg-primary-gradient bg-clip-text text-base font-semibold text-transparent group-hover:opacity-50'

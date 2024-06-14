@@ -3,19 +3,17 @@ import { InputElement } from '@rearden/ui/components/input';
 import { Button } from '@rearden/ui/components/ui/button';
 import {
   getBalance,
+  sendTransaction,
   waitForTransactionReceipt,
-  writeContract,
   type GetBalanceReturnType,
 } from '@wagmi/core';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { Abi } from 'viem';
 import { useAccount, useSwitchChain } from 'wagmi';
 import { wagmiConfig } from '../../../config/wagmi';
+import { getSendParams, prepareParams } from '../../../lib/prepare-send-data';
 import { ActionData, ActionDataInputWithValue } from '../../../types/chat';
 import { ActionDetailCard } from './action-detail-card';
 import { ModalLoader } from './modal-loader';
-import { prepareArgs } from '../../../lib/prepare-args';
-import { checkProperty } from '../../../lib/check-property';
 
 interface TransactionCardProps {
   index: number;
@@ -62,31 +60,15 @@ export const TransactionForm = ({ index, action, setCurrentStep }: TransactionCa
       try {
         setLoading(true);
 
-        const dynamicParams = await Promise.all(
+        const preparedParams = await Promise.all(
           values.map(
-            async (i, _, array) => await prepareArgs(i, array, action.transaction_data.abis),
+            async (i, _, array) => await prepareParams(i, array, action.transaction_data.abis),
           ),
         );
 
-        const functionParams = action.transaction_data.method_params.map(param => {
-          if (checkProperty(param, 'input_id')) {
-            const inputId = (param as { input_id: number }).input_id;
-            return dynamicParams.find(i => i.id === inputId)?.preparedValue;
-          }
-          return param;
-        });
+        const sendParams = getSendParams(action.transaction_data, preparedParams);
 
-        const abi = action.transaction_data.abis[action.transaction_data.to] as Abi;
-
-        const paramValue = dynamicParams.find(i => i.id === action.transaction_data.value.input_id);
-
-        const transactionHash = await writeContract(wagmiConfig, {
-          abi,
-          address: action.transaction_data.to,
-          functionName: action.transaction_data.method_name,
-          args: functionParams,
-          value: paramValue ? (paramValue.preparedValue as bigint) : undefined,
-        });
+        const transactionHash = await sendTransaction(wagmiConfig, sendParams);
 
         const receipt = await waitForTransactionReceipt(wagmiConfig, {
           chainId: action.network.chain.chainId,
@@ -100,7 +82,6 @@ export const TransactionForm = ({ index, action, setCurrentStep }: TransactionCa
         console.log(error);
       }
       setLoading(false);
-      // setAmount('');
     })();
   };
 
@@ -122,20 +103,7 @@ export const TransactionForm = ({ index, action, setCurrentStep }: TransactionCa
         </p>
       </div>
       <ActionDetailCard action={action} />
-      {/* <InputElement
-        placeholder='0.00'
-        type='number'
-        value={amount}
-        onChange={e => {
-          setAmount(e.target.value);
-        }}
-        label={`${balance?.symbol} amount`}
-        balance={{
-          symbol: balance?.symbol ?? '',
-          displayValue: balance ? formatUnits(balance.value, balance.decimals) : '0.00',
-        }}
-        validationResult={validationResult}
-      /> */}
+
       {values.map((i, index) => {
         if (i.value !== 'user_input') return null;
 
@@ -144,7 +112,7 @@ export const TransactionForm = ({ index, action, setCurrentStep }: TransactionCa
             key={index}
             label={i.description}
             placeholder={i.description}
-            type='number'
+            type={i.type === 'token_amount' || i.type === 'amount' ? 'number' : 'text'}
             value={i.inputtedValue}
             onChange={e => {
               const newArray = [...values];

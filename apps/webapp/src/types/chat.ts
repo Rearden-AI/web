@@ -16,6 +16,7 @@ export type SupportNework = 1 | 324 | 17000;
 
 export enum ActionType {
   SWAP = 'Swap',
+  TRANSFER = 'Transfer',
 }
 
 export enum ChatSchemaState {
@@ -76,14 +77,12 @@ export interface Network {
 }
 
 export interface TransactionData {
-  to: Hex;
-  method_name: string;
+  to: Hex | InputId;
+  method_name?: string;
   method_params: unknown[];
-  value: {
-    input_id: number;
-  };
+  value: InputId | string;
   inputs: ActionDataInput[];
-  abis: Record<Hex, AbiFunction[]>;
+  abis?: Record<Hex, AbiFunction[] | string>;
 }
 
 export interface BalanceData {
@@ -98,7 +97,7 @@ export interface ParametersDescription {
 }
 
 export interface ActionData {
-  application_data: ApplicationData;
+  application_data?: ApplicationData;
   network: Network;
   description: string;
   transaction_data: TransactionData;
@@ -115,7 +114,7 @@ export interface TokenAmount {
   id: number;
   value: 'user_input';
   description: string;
-  type: 'token_amount';
+  type: 'token_amount' | 'amount' | 'address';
   decimals: number;
 }
 
@@ -141,3 +140,7 @@ export type ActionDataInput =
 export type ActionDataInputWithValue = ActionDataInput & {
   inputtedValue?: string;
 };
+
+export interface InputId {
+  input_id: number;
+}
