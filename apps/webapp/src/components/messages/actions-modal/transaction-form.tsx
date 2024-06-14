@@ -46,7 +46,7 @@ export const TransactionForm = ({ index, action, setCurrentStep }: TransactionCa
     setValues(
       action.transaction_data.inputs.map(i => ({
         ...i,
-        inputtedValue: i.value === 'user_input' ? '' : undefined,
+        inputtedValue: i.value_source === 'user_input' ? '' : undefined,
       })),
     );
   }, [action.transaction_data.inputs]);
@@ -105,14 +105,14 @@ export const TransactionForm = ({ index, action, setCurrentStep }: TransactionCa
       <ActionDetailCard action={action} />
 
       {values.map((i, index) => {
-        if (i.value !== 'user_input') return null;
+        if (i.value_source !== 'user_input') return null;
 
         return (
           <InputElement
             key={index}
             label={i.description}
             placeholder={i.description}
-            type={i.type === 'token_amount' || i.type === 'amount' ? 'number' : 'text'}
+            type={i.type === 'token_amount' ? 'number' : 'text'}
             value={i.inputtedValue}
             onChange={e => {
               const newArray = [...values];

@@ -9,15 +9,13 @@ export const prepareParams = async (
   array: ActionDataInputWithValue[],
   abis?: Record<Hex, AbiFunction[] | string>,
 ): Promise<ActionDataInputWithValue & { preparedValue: unknown }> => {
-  switch (i.value) {
+  switch (i.value_source) {
     case 'user_input': {
       switch (i.type) {
         case 'token_amount':
           return { ...i, preparedValue: parseUnits(i.inputtedValue ?? '0', i.decimals) };
         case 'address':
           return { ...i, preparedValue: i.inputtedValue };
-        case 'amount':
-          return { ...i, preparedValue: parseUnits(i.inputtedValue ?? '0', i.decimals) };
         default:
           throw Error('Unknown input type');
       }
@@ -54,16 +52,11 @@ export const prepareParams = async (
         preparedValue: result[i.method_result],
       };
     }
-    case undefined: {
-      switch (i.type) {
-        case 'deadline':
-          return {
-            ...i,
-            preparedValue: Date.now() + 900000,
-          };
-        default:
-          throw Error('Unknown input type');
-      }
+    case 'deadline': {
+      return {
+        ...i,
+        preparedValue: Date.now() + 900000,
+      };
     }
     default:
       throw Error('Unknown value type');

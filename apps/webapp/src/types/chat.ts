@@ -110,31 +110,30 @@ export interface ActionData {
   }[];
 }
 
-export interface TokenAmount {
+export interface UserInput {
   id: number;
-  value: 'user_input';
   description: string;
-  type: 'token_amount' | 'amount' | 'address';
   decimals: number;
+  type: 'token_amount' | 'address';
+  value_source: 'user_input';
 }
 
 export interface MethodResult {
   id: number;
-  value: 'method_result';
-  type: 'amount';
-  to: Hex;
   method_name: string;
-  method_params: unknown[];
   method_result: number;
+  method_params: (unknown | InputId)[];
+  to: Hex;
+  type: 'amount';
+  value_source: 'method_result';
 }
 
 export type ActionDataInput =
-  | TokenAmount
+  | UserInput
   | MethodResult
   | {
       id: number;
-      type: 'deadline';
-      value: undefined;
+      value_source: 'deadline';
     };
 
 export type ActionDataInputWithValue = ActionDataInput & {

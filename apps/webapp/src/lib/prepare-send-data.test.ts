@@ -8,7 +8,7 @@ describe('prepareParams()', () => {
     test('if value equal user_input than preparedValue equal 2000000', async () => {
       const obj = {
         id: 1,
-        value: 'user_input',
+        value_source: 'user_input',
         description: 'test',
         type: 'token_amount',
         decimals: 6,
@@ -24,7 +24,7 @@ describe('prepareParams()', () => {
     test('return now date plus 900000ms', async () => {
       const obj = {
         id: 1,
-        type: 'deadline',
+        value_source: 'deadline',
       } as ActionDataInputWithValue;
       const value = await prepareParams(obj, [obj], {});
 
@@ -36,7 +36,7 @@ describe('prepareParams()', () => {
     test('uniswap swap args', async () => {
       const obj = {
         id: 2,
-        value: 'method_result',
+        value_source: 'method_result',
         type: 'amount',
         to: '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D',
         method_name: 'getAmountsIn',
@@ -84,7 +84,7 @@ describe('prepareParams()', () => {
       const array = [
         {
           id: 0,
-          value: 'user_input',
+          value_source: 'user_input',
           description: 'Enter USDT amount',
           type: 'token_amount',
           decimals: 6,
@@ -92,11 +92,11 @@ describe('prepareParams()', () => {
         },
         {
           id: 1,
-          type: 'deadline',
+          value_source: 'deadline',
         },
         {
           id: 2,
-          value: 'method_result',
+          value_source: 'method_result',
           type: 'amount',
           to: '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D',
           method_name: 'getAmountsIn',
