@@ -11,7 +11,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useAccount, useSwitchChain } from 'wagmi';
 import { wagmiConfig } from '../../../config/wagmi';
 import { getSendParams, prepareParams } from '../../../lib/prepare-send-data';
-import { ActionData, ActionDataInputWithValue } from '../../../types/chat';
+import { ActionData, ActionDataInput } from '../../../types/chat';
 import { ActionDetailCard } from './action-detail-card';
 import { ModalLoader } from './modal-loader';
 
@@ -27,7 +27,7 @@ export const TransactionForm = ({ index, action, setCurrentStep }: TransactionCa
   const { address } = useAccount();
   const [loading, setLoading] = useState<boolean>(false);
   const [balance, setBalance] = useState<GetBalanceReturnType>();
-  const [values, setValues] = useState<ActionDataInputWithValue[]>([]);
+  const [values, setValues] = useState<ActionDataInput[]>([]);
 
   useEffect(() => {
     if (!address) return;
@@ -46,7 +46,7 @@ export const TransactionForm = ({ index, action, setCurrentStep }: TransactionCa
     setValues(
       action.transaction_data.inputs.map(i => ({
         ...i,
-        inputtedValue: i.value_source === 'user_input' ? '' : undefined,
+        value: i.value_source === 'user_input' ? (i.value ? `${i.value}` : '') : undefined,
       })),
     );
   }, [action.transaction_data.inputs]);
@@ -104,24 +104,21 @@ export const TransactionForm = ({ index, action, setCurrentStep }: TransactionCa
       </div>
       <ActionDetailCard action={action} />
 
-      {values.map((i, index) => {
+      {values.map((i, index, array) => {
         if (i.value_source !== 'user_input') return null;
-
         return (
           <InputElement
             key={index}
             label={i.description}
             placeholder={i.description}
-            type={i.type === 'token_amount' ? 'number' : 'text'}
-            value={i.inputtedValue}
+            type={i.type === 'amount' ? 'number' : 'text'}
+            value={i.value}
             onChange={e => {
-              const newArray = [...values];
-              const currentObj = newArray[index]!;
+              const updatedValue = array.map((j, ind) =>
+                index === ind ? { ...j, value: e.target.value } : j,
+              );
 
-              currentObj.inputtedValue = e.target.value;
-
-              newArray[index] = currentObj;
-              setValues(newArray);
+              setValues(updatedValue);
             }}
           />
         );

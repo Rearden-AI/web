@@ -1,21 +1,21 @@
 import { readContract } from '@wagmi/core';
 import { Abi, Hex, encodeFunctionData, parseUnits } from 'viem';
 import { wagmiConfig } from '../config/wagmi';
-import { AbiFunction, ActionDataInputWithValue, InputId, TransactionData } from '../types/chat';
+import { AbiFunction, ActionDataInput, InputId, TransactionData } from '../types/chat';
 import { checkProperty } from './check-property';
 
 export const prepareParams = async (
-  i: ActionDataInputWithValue,
-  array: ActionDataInputWithValue[],
+  i: ActionDataInput,
+  array: ActionDataInput[],
   abis?: Record<Hex, AbiFunction[] | string>,
-): Promise<ActionDataInputWithValue & { preparedValue: unknown }> => {
+): Promise<ActionDataInput & { preparedValue: unknown }> => {
   switch (i.value_source) {
     case 'user_input': {
       switch (i.type) {
-        case 'token_amount':
-          return { ...i, preparedValue: parseUnits(i.inputtedValue ?? '0', i.decimals) };
         case 'address':
-          return { ...i, preparedValue: i.inputtedValue };
+          return { ...i, preparedValue: i.value };
+        case 'amount':
+          return { ...i, preparedValue: parseUnits(i.value ?? '0', i.decimals) };
         default:
           throw Error('Unknown input type');
       }
@@ -65,7 +65,7 @@ export const prepareParams = async (
 
 export function getGenericValue<T>(
   value: T | InputId,
-  dynamicParams: (ActionDataInputWithValue & { preparedValue: unknown })[],
+  dynamicParams: (ActionDataInput & { preparedValue: unknown })[],
 ): T {
   if (checkProperty<InputId>(value, 'input_id'))
     return dynamicParams.find(i => i.id === value.input_id)?.preparedValue as T;
@@ -90,13 +90,13 @@ export const getContractAbi = (
 
 export const getSendParams = (
   transactionData: TransactionData,
-  preparedParams: (ActionDataInputWithValue & {
+  preparedParams: (ActionDataInput & {
     preparedValue: unknown;
   })[],
 ) => {
-  const sortedParams = transactionData.method_params.map(param =>
-    getGenericValue<unknown>(param, preparedParams),
-  );
+  const sortedParams = transactionData.method_params
+    ? transactionData.method_params.map(param => getGenericValue<unknown>(param, preparedParams))
+    : [];
   const to = getGenericValue<Hex>(transactionData.to, preparedParams);
 
   const abi = getContractAbi(to, transactionData.abis);

@@ -1,4 +1,4 @@
-import { ActionData, ChatSchemaState, Role } from '../types/chat';
+import { ChatSchemaState, Role } from '../types/chat';
 
 export const mockChatAirdrop = {
   name: null,
@@ -423,7 +423,7 @@ export const mockChatAirdrop = {
           ],
         },
         balance_data: { coin: 'native', symbol: 'ETH' },
-      } as ActionData,
+      },
     },
     // {
     //   role: Role.USER,

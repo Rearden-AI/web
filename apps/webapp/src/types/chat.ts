@@ -79,7 +79,7 @@ export interface Network {
 export interface TransactionData {
   to: Hex | InputId;
   method_name?: string;
-  method_params: unknown[];
+  method_params?: unknown[];
   value: InputId | string;
   inputs: ActionDataInput[];
   abis?: Record<Hex, AbiFunction[] | string>;
@@ -114,8 +114,9 @@ export interface UserInput {
   id: number;
   description: string;
   decimals: number;
-  type: 'token_amount' | 'address';
+  type: 'address' | 'amount';
   value_source: 'user_input';
+  value?: string;
 }
 
 export interface MethodResult {
@@ -135,10 +136,6 @@ export type ActionDataInput =
       id: number;
       value_source: 'deadline';
     };
-
-export type ActionDataInputWithValue = ActionDataInput & {
-  inputtedValue?: string;
-};
 
 export interface InputId {
   input_id: number;

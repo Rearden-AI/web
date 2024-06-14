@@ -1,19 +1,19 @@
 import { Hex } from 'viem';
 import { describe, expect, test } from 'vitest';
-import { AbiFunction, ActionDataInputWithValue } from '../types/chat';
+import { AbiFunction, ActionDataInput } from '../types/chat';
 import { prepareParams } from './prepare-send-data';
 
 describe('prepareParams()', () => {
-  describe('token_amount type', () => {
+  describe('amount type', () => {
     test('if value equal user_input than preparedValue equal 2000000', async () => {
       const obj = {
         id: 1,
         value_source: 'user_input',
         description: 'test',
-        type: 'token_amount',
+        type: 'amount',
         decimals: 6,
-        inputtedValue: '2',
-      } as ActionDataInputWithValue;
+        value: '2',
+      } as ActionDataInput;
       const value = await prepareParams(obj, [obj], {});
 
       expect(value.preparedValue).toBe(2000000n);
@@ -25,7 +25,7 @@ describe('prepareParams()', () => {
       const obj = {
         id: 1,
         value_source: 'deadline',
-      } as ActionDataInputWithValue;
+      } as ActionDataInput;
       const value = await prepareParams(obj, [obj], {});
 
       expect(value.preparedValue).toBe(Date.now() + 900000);
@@ -50,7 +50,7 @@ describe('prepareParams()', () => {
           ],
         ],
         method_result: 0,
-      } as ActionDataInputWithValue;
+      } as ActionDataInput;
 
       const abi = {
         '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D': [
@@ -86,9 +86,9 @@ describe('prepareParams()', () => {
           id: 0,
           value_source: 'user_input',
           description: 'Enter USDT amount',
-          type: 'token_amount',
+          type: 'amount',
           decimals: 6,
-          inputtedValue: '2',
+          value: '2',
         },
         {
           id: 1,
@@ -111,7 +111,7 @@ describe('prepareParams()', () => {
           ],
           method_result: 0,
         },
-      ] as ActionDataInputWithValue[];
+      ] as ActionDataInput[];
 
       const value = await prepareParams(obj, array, abi);
       expect(value.preparedValue).toBeDefined();
