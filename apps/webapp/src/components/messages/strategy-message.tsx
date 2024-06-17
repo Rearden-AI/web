@@ -2,7 +2,7 @@ import { Action } from '../../types/chat';
 import { SelectAccount } from './select-account';
 import { StrategyAction } from './strategy-action';
 
-export const StrategyMessage = ({ strategies }: { strategies: Action[] }) => {
+export const StrategyMessage = ({ actions }: { actions: Action[] }) => {
   return (
     <div className='flex flex-col gap-6'>
       <p className='text-lg font-medium leading-[26px]'>
@@ -10,14 +10,14 @@ export const StrategyMessage = ({ strategies }: { strategies: Action[] }) => {
         wallet you want to supply with (or add new one).
       </p>
       <div className='flex flex-col gap-4'>
-        {strategies.map((i, index) => {
+        {actions.map((i, index) => {
           return <StrategyAction action={i.action_data} key={index} index={index} />;
         })}
       </div>
       {/* <p className='text-lg font-medium leading-[26px]'>
         Please choose a wallet you want to supply with (or add new one).
       </p> */}
-      <SelectAccount strategies={strategies} />
+      <SelectAccount actions={actions} />
     </div>
   );
 };

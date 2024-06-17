@@ -17,16 +17,18 @@ import { Action, HistoryMessage, Role } from '../../../types/chat';
 import { ExecuteButton } from '../../execute-button';
 import { Stepper } from '../../stepper';
 import { TransactionForm } from './transaction-form';
+import { ObjectInObject } from '../../../types/generic';
 
-export const ActionsModal = ({ wallet, strategies }: { wallet: string; strategies: Action[] }) => {
+export const ActionsModal = ({ wallet, actions }: { wallet: string; actions: Action[] }) => {
   const { writeToChat } = useStore(chatsSelector);
   const [open, setOpen] = useState<boolean>(false);
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [result, setResult] = useState<number[]>([]);
+  const [returnValues, setReturnValues] = useState<ObjectInObject>({});
   const params = useParams<{ id?: string }>();
 
   useEffect(() => {
-    if (result.length !== strategies.length) return;
+    if (!actions.length || result.length !== actions.length) return;
     void (async () => {
       const { data } = await axiosInstance.post<HistoryMessage>(
         ApiRoutes.CHAT_BY_ID.replace(API_ID, params.id!),
@@ -48,10 +50,10 @@ export const ActionsModal = ({ wallet, strategies }: { wallet: string; strategie
       setCurrentStep(1);
       setResult([]);
     })();
-  }, [result, strategies, writeToChat, params]);
+  }, [result, actions, writeToChat, params]);
 
   const steps = useMemo(() => {
-    return strategies.map((i, index) => {
+    return actions.map((i, index) => {
       return {
         index: index + 1,
         children: (
@@ -59,13 +61,15 @@ export const ActionsModal = ({ wallet, strategies }: { wallet: string; strategie
             key={index}
             index={index + 1}
             action={i}
+            returnValues={returnValues}
             setCurrentStep={setCurrentStep}
             setResult={setResult}
+            setReturnValues={setReturnValues}
           />
         ),
       };
     });
-  }, [strategies]);
+  }, [actions]);
 
   return (
     <Dialog

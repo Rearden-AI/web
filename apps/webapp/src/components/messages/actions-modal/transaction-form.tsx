@@ -14,15 +14,24 @@ import { getSendParams, prepareParams } from '../../../lib/prepare-send-data';
 import { Action, ActionDataInput } from '../../../types/chat';
 import { ActionDetailCard } from './action-detail-card';
 import { ModalLoader } from './modal-loader';
+import { ObjectInObject } from '../../../types/generic';
 
 interface TransactionCardProps {
   index: number;
   action: Action;
+  returnValues: ObjectInObject;
   setCurrentStep: Dispatch<SetStateAction<number>>;
   setResult: Dispatch<SetStateAction<number[]>>;
+  setReturnValues: Dispatch<SetStateAction<ObjectInObject>>;
 }
 
-export const TransactionForm = ({ index, action, setCurrentStep }: TransactionCardProps) => {
+export const TransactionForm = ({
+  index,
+  action,
+  returnValues,
+  setCurrentStep,
+  setReturnValues,
+}: TransactionCardProps) => {
   const { switchChainAsync } = useSwitchChain();
   const { address } = useAccount();
   const [loading, setLoading] = useState<boolean>(false);
@@ -66,7 +75,7 @@ export const TransactionForm = ({ index, action, setCurrentStep }: TransactionCa
         const preparedParams = await Promise.all(
           values.map(
             async (i, _, array) =>
-              await prepareParams(i, array, action.action_data.transaction_data.abis),
+              await prepareParams(i, array, returnValues, action.action_data.transaction_data.abis),
           ),
         );
 
@@ -123,6 +132,9 @@ export const TransactionForm = ({ index, action, setCurrentStep }: TransactionCa
               );
 
               setValues(updatedValue);
+              if (action.action_data.transaction_data.returns?.length) {
+                setReturnValues(state => ({ ...state, [action.id]: { [i.id]: e.target.value } }));
+              }
             }}
           />
         );

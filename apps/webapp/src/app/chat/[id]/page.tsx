@@ -76,7 +76,7 @@ export default function ChatPage({ params }: { params: { id: string } }) {
                     <Markdown markdown={message.body ?? ''} />
                   </div>
                   {message.actions ? (
-                    <StrategyMessage strategies={message.actions} />
+                    <StrategyMessage actions={message.actions} />
                   ) : (
                     <Fragment />
                   )}

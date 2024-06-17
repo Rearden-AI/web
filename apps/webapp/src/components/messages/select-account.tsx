@@ -16,10 +16,10 @@ import { ActionsModal } from './actions-modal';
 import { useSession } from 'next-auth/react';
 
 interface SelectAccountProps {
-  strategies: Action[];
+  actions: Action[];
 }
 
-export const SelectAccount = ({ strategies }: SelectAccountProps) => {
+export const SelectAccount = ({ actions }: SelectAccountProps) => {
   const { data: session } = useSession();
   const [wallet, setWallet] = useState('');
 
@@ -65,7 +65,7 @@ export const SelectAccount = ({ strategies }: SelectAccountProps) => {
           </Select>
         </BorderWrapper>
       </div>
-      <ActionsModal wallet={wallet} strategies={strategies} />
+      <ActionsModal wallet={wallet} actions={actions} />
     </div>
   );
 };

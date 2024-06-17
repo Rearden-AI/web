@@ -3,10 +3,12 @@ import { Abi, Hex, encodeFunctionData, parseUnits } from 'viem';
 import { wagmiConfig } from '../config/wagmi';
 import { AbiFunction, ActionDataInput, InputId, TransactionData } from '../types/chat';
 import { checkProperty } from './check-property';
+import { ObjectInObject } from '../types/generic';
 
 export const prepareParams = async (
   i: ActionDataInput,
   array: ActionDataInput[],
+  returnValues: ObjectInObject,
   abis?: Record<Hex, AbiFunction[] | string>,
 ): Promise<ActionDataInput & { preparedValue: unknown }> => {
   switch (i.value_source) {
@@ -30,7 +32,7 @@ export const prepareParams = async (
           if (checkProperty(param, 'input_id')) {
             const selected = array.find(j => j.id === (param as InputId).input_id)!;
 
-            return await prepareParams(selected, array, abis);
+            return await prepareParams(selected, array, returnValues, abis);
           }
           return param;
         }),
@@ -59,8 +61,12 @@ export const prepareParams = async (
         preparedValue: Date.now() + 900000,
       };
     }
-    // case 'action_result': {
-    // }
+    case 'action_result': {
+      return {
+        ...i,
+        preparedValue: returnValues[i.action_id]![i.return_id],
+      };
+    }
     default:
       throw Error('Unknown value type');
   }
