@@ -13,9 +13,11 @@ import { useStore } from '../../state';
 import { chatsSelector } from '../../state/chats';
 import { ChatSchema } from '../../types/chat';
 import { ApproveDeleteModal } from './approve-delete-modal';
+import { useChainId } from 'wagmi';
 
 export const ChatItem = ({ chat }: { chat: ChatSchema }) => {
   const params = useParams<{ id?: string }>();
+  const chain = useChainId();
 
   const [open, setOpen] = useState<boolean>(false);
   const [editMode, setEditMode] = useState<boolean>(false);
@@ -32,6 +34,7 @@ export const ChatItem = ({ chat }: { chat: ChatSchema }) => {
         ApiRoutes.CHAT_BY_ID.replace(API_ID, chat.uuid),
         {
           name: name || null,
+          chain_id: chain,
         },
         { withCredentials: true },
       );

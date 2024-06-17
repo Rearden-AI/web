@@ -12,10 +12,12 @@ import { API_ID, ApiRoutes } from '../constants/api-routes';
 import { useStore } from '../state';
 import { chatsSelector } from '../state/chats';
 import { ChatResponse, ChatSchema, Role } from '../types/chat';
+import { useChainId } from 'wagmi';
 
 export const ChatInput = () => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const router = useRouter();
+  const chain = useChainId();
   const { writeToChat, addChat, renameChat } = useStore(chatsSelector);
   const pathname = usePathname();
   const params = useParams<{ id?: string }>();
@@ -43,7 +45,7 @@ export const ChatInput = () => {
         void (async () => {
           const { data } = await axiosInstance.post<ChatResponse>(
             ApiRoutes.CHAT_BY_ID.replace(API_ID, chatId),
-            { message: input, timestamp: timestamp },
+            { message: input, timestamp: timestamp, chain_id: chain },
             { withCredentials: true },
           );
 
@@ -57,7 +59,7 @@ export const ChatInput = () => {
           try {
             const { data: chat } = await axiosInstance.post<ChatSchema>(
               ApiRoutes.CHATS,
-              undefined,
+              { chain_id: chain },
               { withCredentials: true },
             );
 
@@ -68,7 +70,7 @@ export const ChatInput = () => {
 
             const { data } = await axiosInstance.post<ChatResponse>(
               ApiRoutes.CHAT_BY_ID.replace(API_ID, chat.uuid),
-              { message: input, timestamp },
+              { message: input, timestamp, chain_id: chain },
               { withCredentials: true },
             );
 

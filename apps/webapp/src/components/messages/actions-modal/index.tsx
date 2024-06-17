@@ -18,9 +18,11 @@ import { ExecuteButton } from '../../execute-button';
 import { Stepper } from '../../stepper';
 import { TransactionForm } from './transaction-form';
 import { ObjectInObject } from '../../../types/generic';
+import { useChainId } from 'wagmi';
 
 export const ActionsModal = ({ wallet, actions }: { wallet: string; actions: Action[] }) => {
   const { writeToChat } = useStore(chatsSelector);
+  const chain = useChainId();
   const [open, setOpen] = useState<boolean>(false);
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [result, setResult] = useState<number[]>([]);
@@ -36,6 +38,7 @@ export const ActionsModal = ({ wallet, actions }: { wallet: string; actions: Act
           timestamp: Date.now(),
           transaction_ids: result,
           message: '',
+          chain_id: chain,
         },
         { withCredentials: true },
       );
@@ -50,7 +53,7 @@ export const ActionsModal = ({ wallet, actions }: { wallet: string; actions: Act
       setCurrentStep(1);
       setResult([]);
     })();
-  }, [result, actions, writeToChat, params]);
+  }, [result, actions, writeToChat, params, chain]);
 
   const steps = useMemo(() => {
     return actions.map((i, index) => {

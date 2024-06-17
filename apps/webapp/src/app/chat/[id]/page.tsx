@@ -12,9 +12,11 @@ import { ChatResponse, ExtendedChatSchema, Role } from '../../../types/chat';
 import { StrategyMessage } from '../../../components/messages/strategy-message';
 import { ResultMessage } from '../../../components/messages/result-message';
 import { Button } from '@rearden/ui/components/ui/button';
+import { useChainId } from 'wagmi';
 
 export default function ChatPage({ params }: { params: { id: string } }) {
   const { selectedChat, writeToChat, selectChat } = useStore(chatsSelector);
+  const chain = useChainId();
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
 
   useEffect(() => {
@@ -95,6 +97,7 @@ export default function ChatPage({ params }: { params: { id: string } }) {
                                   chosen_action_key: i.key,
                                   message: '',
                                   timestamp: Date.now(),
+                                  chain_id: chain,
                                 },
                               );
 
