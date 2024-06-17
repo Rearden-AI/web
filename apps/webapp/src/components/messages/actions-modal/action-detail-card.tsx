@@ -45,9 +45,7 @@ export const ActionDetailCard = ({ action }: { action: ActionData }) => {
             </div>
           </div>
         )}
-        {action.parameters_description?.map(i => (
-          <ParamCard params={i} key={i.name} />
-        ))}
+        {action.parameters_description?.map(i => <ParamCard params={i} key={i.name} />)}
         <div className='flex flex-col'>
           <p className='text-sm font-bold'>Network</p>
           <p className='w-fit bg-primary-gradient bg-clip-text text-base font-semibold text-transparent'>

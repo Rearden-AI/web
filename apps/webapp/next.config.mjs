@@ -15,8 +15,8 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'cdn.coinranking.com'
-      }
+        hostname: 'cdn.coinranking.com',
+      },
     ],
   },
 };

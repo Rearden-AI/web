@@ -77,9 +77,7 @@ export const StrategyAction = ({ action, index }: StrategyActionProps) => {
               </div>
             </div>
           </div>
-          {action.parameters_description?.map(i => (
-            <ParamCard key={i.name} params={i} />
-          ))}
+          {action.parameters_description?.map(i => <ParamCard key={i.name} params={i} />)}
         </div>
       </div>
     </div>

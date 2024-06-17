@@ -24,8 +24,8 @@ describe('prepare send data', () => {
         },
       ] as ActionDataInput[];
 
-      const address = await prepareParams(inputs[0] as ActionDataInput, inputs);
-      const amount = await prepareParams(inputs[1] as ActionDataInput, inputs);
+      const address = await prepareParams(inputs[0] as ActionDataInput, inputs, {});
+      const amount = await prepareParams(inputs[1] as ActionDataInput, inputs, {});
       expect(address.preparedValue).toBe('0x9a868D58C7F21DAd9562ge9638A957Fff69a4a0e');
       expect(amount.preparedValue).toBe(1000000000000000000n);
     });
@@ -40,7 +40,7 @@ describe('prepare send data', () => {
           decimals: 6,
           value: '2',
         } as ActionDataInput;
-        const value = await prepareParams(obj, [obj], {});
+        const value = await prepareParams(obj, [obj], {}, {});
 
         expect(value.preparedValue).toBe(2000000n);
       });
@@ -52,7 +52,7 @@ describe('prepare send data', () => {
           id: 1,
           value_source: 'deadline',
         } as ActionDataInput;
-        const value = await prepareParams(obj, [obj], {});
+        const value = await prepareParams(obj, [obj], {}, {});
 
         expect(value.preparedValue).toBe(Date.now() + 900000);
       });
@@ -139,7 +139,7 @@ describe('prepare send data', () => {
           },
         ] as ActionDataInput[];
 
-        const value = await prepareParams(obj, array, abi);
+        const value = await prepareParams(obj, array, {}, abi);
         expect(value.preparedValue).toBeDefined();
       });
     });
@@ -287,6 +287,6 @@ describe('prepare send data', () => {
       });
     });
 
-    describe('send other tokens', () => {});
+    // describe('send other tokens', () => {});
   });
 });
