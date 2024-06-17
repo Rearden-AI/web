@@ -59,8 +59,8 @@ export const prepareParams = async (
         preparedValue: Date.now() + 900000,
       };
     }
-    case 'action_result': {
-    }
+    // case 'action_result': {
+    // }
     default:
       throw Error('Unknown value type');
   }

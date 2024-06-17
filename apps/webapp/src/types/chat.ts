@@ -28,7 +28,6 @@ export interface Action {
   action_data: ActionData;
   id: number;
 }
-[];
 
 export interface ChooseableAction {
   approxApy: number;

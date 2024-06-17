@@ -70,7 +70,7 @@ export const TransactionForm = ({ index, action, setCurrentStep }: TransactionCa
           ),
         );
 
-        const sendParams = getSendParams(action.transaction_data, preparedParams);
+        const sendParams = getSendParams(action.action_data.transaction_data, preparedParams);
 
         const transactionHash = await sendTransaction(wagmiConfig, sendParams);
 

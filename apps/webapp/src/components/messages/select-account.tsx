@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react';
 
-import { Action, ActionData } from '../../types/chat';
+import { Action } from '../../types/chat';
 import { BorderWrapper } from '@rearden/ui/components/border-wrapper';
 import { Icons } from '@rearden/ui/components/icons';
 import {

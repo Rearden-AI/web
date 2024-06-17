@@ -58,7 +58,7 @@ export const ActionsModal = ({ wallet, strategies }: { wallet: string; strategie
           <TransactionForm
             key={index}
             index={index + 1}
-            action={i.action_data}
+            action={i}
             setCurrentStep={setCurrentStep}
             setResult={setResult}
           />

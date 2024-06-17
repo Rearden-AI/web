@@ -3,7 +3,6 @@
 import { Icons } from '@rearden/ui/components/icons';
 import { cn } from '@rearden/ui/lib/utils';
 import { Fragment, useEffect, useRef } from 'react';
-import { ExecuteButton } from '../../../components/execute-button';
 import { Markdown } from '../../../components/markdown';
 import axiosInstance from '../../../config/axios';
 import { API_ID, ApiRoutes } from '../../../constants/api-routes';
@@ -94,7 +93,7 @@ export default function ChatPage({ params }: { params: { id: string } }) {
                         <Button
                           onClick={() => {
                             void (async () => {
-                              const { data } = await axiosInstance.post(
+                              const { data } = await axiosInstance.post<ChatResponse>(
                                 ApiRoutes.CHAT_BY_ID.replace(API_ID, params.id),
                                 {
                                   chosen_action_key: i.key,
