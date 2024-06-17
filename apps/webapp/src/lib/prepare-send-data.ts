@@ -63,7 +63,7 @@ export const prepareParams = async (
   }
 };
 
-export function getGenericValue<T>(
+export function getValueFromDynamicParams<T>(
   value: T | InputId,
   dynamicParams: (ActionDataInput & { preparedValue: unknown })[],
 ): T {
@@ -95,9 +95,9 @@ export const getSendParams = (
   })[],
 ) => {
   const sortedParams = transactionData.method_params
-    ? transactionData.method_params.map(param => getGenericValue<unknown>(param, preparedParams))
+    ? transactionData.method_params.map(param => getValueFromDynamicParams<unknown>(param, preparedParams))
     : [];
-  const to = getGenericValue<Hex>(transactionData.to, preparedParams);
+  const to = getValueFromDynamicParams<Hex>(transactionData.to, preparedParams);
 
   const abi = getContractAbi(to, transactionData.abis);
 
@@ -112,7 +112,7 @@ export const getSendParams = (
 
   const value = !transactionData.value
     ? undefined
-    : getGenericValue<string | bigint>(transactionData.value, preparedParams);
+    : getValueFromDynamicParams<string | bigint>(transactionData.value, preparedParams);
 
   return {
     to,
