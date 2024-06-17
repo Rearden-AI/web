@@ -24,12 +24,24 @@ export enum ChatSchemaState {
   DELETED = 'deleted',
 }
 
+export interface Action {
+  action_data: ActionData;
+  id: number;
+}
+[];
+
+export interface ChooseableAction {
+  approxApy: number;
+  key: string;
+  name: string;
+}
+
 export interface ChatResponse {
   body: string;
-  contains_strategy_previews?: string[];
   exec_logs?: string;
   timestamp: number;
-  action_data: ActionData;
+  actions: Action[];
+  chooseable_actions?: ChooseableAction[];
 }
 
 export interface ChatSchema {
@@ -42,11 +54,11 @@ export interface ChatSchema {
 
 export interface HistoryMessage {
   role: Role;
-  content?: string;
-  contains_strategy_previews?: string[];
+  body?: string;
   transactions?: TransactionResult[];
   timestamp: number;
-  action_data?: ActionData;
+  actions?: Action[];
+  chooseable_actions?: ChooseableAction[];
 }
 
 export interface ExtendedChatSchema extends ChatSchema {
@@ -80,9 +92,10 @@ export interface TransactionData {
   to: Hex | InputId;
   method_name?: string;
   method_params?: unknown[];
-  value: InputId | string;
+  value: InputId | string | null;
   inputs: ActionDataInput[];
   abis?: Record<Hex, AbiFunction[] | string>;
+  returns?: { id: number; value: InputId }[];
 }
 
 export interface BalanceData {
@@ -103,7 +116,7 @@ export interface ActionData {
   transaction_data: TransactionData;
   type: ActionType;
   balance_data: BalanceData;
-  parameters_description: {
+  parameters_description?: {
     icon: string | null;
     name: string;
     value: string;
@@ -129,9 +142,18 @@ export interface MethodResult {
   value_source: 'method_result';
 }
 
+export interface ActionResult {
+  action_id: number;
+  description: string;
+  id: number;
+  return_id: number;
+  value_source: 'action_result';
+}
+
 export type ActionDataInput =
   | UserInput
   | MethodResult
+  | ActionResult
   | {
       id: number;
       value_source: 'deadline';

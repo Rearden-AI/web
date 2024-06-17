@@ -13,18 +13,12 @@ import axiosInstance from '../../../config/axios';
 import { API_ID, ApiRoutes } from '../../../constants/api-routes';
 import { useStore } from '../../../state';
 import { chatsSelector } from '../../../state/chats';
-import { ActionData, HistoryMessage, Role } from '../../../types/chat';
+import { Action, HistoryMessage, Role } from '../../../types/chat';
 import { ExecuteButton } from '../../execute-button';
 import { Stepper } from '../../stepper';
 import { TransactionForm } from './transaction-form';
 
-export const ActionsModal = ({
-  wallet,
-  strategies,
-}: {
-  wallet: string;
-  strategies: ActionData[];
-}) => {
+export const ActionsModal = ({ wallet, strategies }: { wallet: string; strategies: Action[] }) => {
   const { writeToChat } = useStore(chatsSelector);
   const [open, setOpen] = useState<boolean>(false);
   const [currentStep, setCurrentStep] = useState<number>(1);
@@ -46,7 +40,7 @@ export const ActionsModal = ({
 
       writeToChat({
         role: Role.SYSTEM,
-        content: data.content,
+        body: data.body,
         transactions: data.transactions,
         timestamp: data.timestamp,
       });
@@ -64,7 +58,7 @@ export const ActionsModal = ({
           <TransactionForm
             key={index}
             index={index + 1}
-            action={i}
+            action={i.action_data}
             setCurrentStep={setCurrentStep}
             setResult={setResult}
           />

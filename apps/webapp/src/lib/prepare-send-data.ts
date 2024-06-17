@@ -12,8 +12,9 @@ export const prepareParams = async (
   switch (i.value_source) {
     case 'user_input': {
       switch (i.type) {
-        case 'address':
+        case 'address': {
           return { ...i, preparedValue: i.value };
+        }
         case 'amount':
           return { ...i, preparedValue: parseUnits(i.value ?? '0', i.decimals) };
         default:
@@ -58,6 +59,8 @@ export const prepareParams = async (
         preparedValue: Date.now() + 900000,
       };
     }
+    case 'action_result': {
+    }
     default:
       throw Error('Unknown value type');
   }
@@ -95,7 +98,9 @@ export const getSendParams = (
   })[],
 ) => {
   const sortedParams = transactionData.method_params
-    ? transactionData.method_params.map(param => getValueFromDynamicParams<unknown>(param, preparedParams))
+    ? transactionData.method_params.map(param =>
+        getValueFromDynamicParams<unknown>(param, preparedParams),
+      )
     : [];
   const to = getValueFromDynamicParams<Hex>(transactionData.to, preparedParams);
 

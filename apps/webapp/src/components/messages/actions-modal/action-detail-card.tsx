@@ -45,7 +45,7 @@ export const ActionDetailCard = ({ action }: { action: ActionData }) => {
             </div>
           </div>
         )}
-        {action.parameters_description.map(i => (
+        {action.parameters_description?.map(i => (
           <ParamCard params={i} key={i.name} />
         ))}
         <div className='flex flex-col'>

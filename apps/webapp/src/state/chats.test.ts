@@ -31,7 +31,7 @@ describe('Proof Slice', () => {
       history: [
         {
           role: Role.USER,
-          content: message,
+          body: message,
           timestamp,
         },
       ],
@@ -59,7 +59,7 @@ describe('Proof Slice', () => {
         history: [
           {
             role: Role.USER,
-            content: message,
+            body: message,
             timestamp,
           },
         ],
@@ -81,14 +81,14 @@ describe('Proof Slice', () => {
         history: [
           {
             role: Role.USER,
-            content: message,
+            body: message,
             timestamp,
           },
         ],
       };
       const secondMessage = {
         role: Role.SYSTEM,
-        content: message,
+        body: message,
         timestamp,
       };
 
@@ -101,7 +101,7 @@ describe('Proof Slice', () => {
     test('throw error if selected chat is not set', () => {
       const secondMessage = {
         role: Role.SYSTEM,
-        content: message,
+        body: message,
         timestamp,
       };
 

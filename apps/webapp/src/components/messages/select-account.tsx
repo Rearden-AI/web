@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react';
 
-import { ActionData } from '../../types/chat';
+import { Action, ActionData } from '../../types/chat';
 import { BorderWrapper } from '@rearden/ui/components/border-wrapper';
 import { Icons } from '@rearden/ui/components/icons';
 import {
@@ -16,7 +16,7 @@ import { ActionsModal } from './actions-modal';
 import { useSession } from 'next-auth/react';
 
 interface SelectAccountProps {
-  strategies: ActionData[];
+  strategies: Action[];
 }
 
 export const SelectAccount = ({ strategies }: SelectAccountProps) => {

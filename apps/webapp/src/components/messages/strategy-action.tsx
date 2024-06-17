@@ -11,6 +11,8 @@ interface StrategyActionProps {
 }
 
 export const StrategyAction = ({ action, index }: StrategyActionProps) => {
+  console.log({ action });
+
   return (
     <div className='flex items-start gap-3 rounded-md border border-border-secondary bg-card-secondary py-5 pl-4 pr-6 shadow-3xl'>
       <BorderWrapper
@@ -75,7 +77,7 @@ export const StrategyAction = ({ action, index }: StrategyActionProps) => {
               </div>
             </div>
           </div>
-          {action.parameters_description.map(i => (
+          {action.parameters_description?.map(i => (
             <ParamCard key={i.name} params={i} />
           ))}
         </div>

@@ -12,6 +12,7 @@ import { chatsSelector } from '../../../state/chats';
 import { ChatResponse, ExtendedChatSchema, Role } from '../../../types/chat';
 import { StrategyMessage } from '../../../components/messages/strategy-message';
 import { ResultMessage } from '../../../components/messages/result-message';
+import { Button } from '@rearden/ui/components/ui/button';
 
 export default function ChatPage({ params }: { params: { id: string } }) {
   const { selectedChat, writeToChat, selectChat } = useStore(chatsSelector);
@@ -73,44 +74,10 @@ export default function ChatPage({ params }: { params: { id: string } }) {
                 </div>
                 <div className='flex flex-col gap-2'>
                   <div className='flex flex-col'>
-                    <Markdown markdown={message.content ?? ''} />
-                    {message.contains_strategy_previews?.length ? (
-                      <ExecuteButton
-                        onClick={() => {
-                          void (async () => {
-                            try {
-                              const { data } = await axiosInstance.post<ChatResponse>(
-                                ApiRoutes.CHAT_BY_ID.replace(API_ID, params.id),
-                                {
-                                  generate_code: message.contains_strategy_previews,
-                                  message: '',
-                                  timestamp: Date.now(),
-                                },
-                              );
-
-                              await axiosInstance.post(ApiRoutes.STRATEGY_EXECUTIONS, {
-                                chat_uuid: params.id,
-                              });
-
-                              writeToChat({
-                                role: Role.SYSTEM,
-                                content: data.body,
-                                timestamp: data.timestamp,
-                                action_data: data.action_data,
-                                contains_strategy_previews: data.contains_strategy_previews,
-                              });
-                            } catch (error) {
-                              //
-                            }
-                          })();
-                        }}
-                      />
-                    ) : (
-                      <Fragment />
-                    )}
+                    <Markdown markdown={message.body ?? ''} />
                   </div>
-                  {message.action_data ? (
-                    <StrategyMessage strategies={[message.action_data]} />
+                  {message.actions ? (
+                    <StrategyMessage strategies={message.actions} />
                   ) : (
                     <Fragment />
                   )}
@@ -118,6 +85,37 @@ export default function ChatPage({ params }: { params: { id: string } }) {
                     <ResultMessage result={message.transactions} />
                   ) : (
                     <Fragment />
+                  )}
+
+                  {message.chooseable_actions?.length ? (
+                    message.chooseable_actions.map(i => (
+                      <div className='flex items-center'>
+                        <p>{i.name}</p>
+                        <Button
+                          onClick={() => {
+                            void (async () => {
+                              const { data } = await axiosInstance.post(
+                                ApiRoutes.CHAT_BY_ID.replace(API_ID, params.id),
+                                {
+                                  chosen_action_key: i.key,
+                                  message: '',
+                                  timestamp: Date.now(),
+                                },
+                              );
+
+                              writeToChat({
+                                role: Role.SYSTEM,
+                                ...data,
+                              });
+                            })();
+                          }}
+                        >
+                          Get strategy
+                        </Button>
+                      </div>
+                    ))
+                  ) : (
+                    <></>
                   )}
                 </div>
               </div>

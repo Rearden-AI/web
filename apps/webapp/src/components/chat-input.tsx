@@ -37,7 +37,7 @@ export const ChatInput = () => {
         const timestamp = Date.now();
         writeToChat({
           role: Role.USER,
-          content: input,
+          body: input,
           timestamp,
         });
         void (async () => {
@@ -49,10 +49,7 @@ export const ChatInput = () => {
 
           writeToChat({
             role: Role.SYSTEM,
-            content: data.body,
-            contains_strategy_previews: data.contains_strategy_previews,
-            timestamp: data.timestamp,
-            action_data: data.action_data,
+            ...data,
           });
         })();
       } else {
@@ -77,10 +74,7 @@ export const ChatInput = () => {
 
             writeToChat({
               role: Role.SYSTEM,
-              content: data.body,
-              contains_strategy_previews: data.contains_strategy_previews,
-              timestamp,
-              action_data: data.action_data,
+              ...data,
             });
 
             renameChat(chat.uuid, data.body ? data.body.slice(0, 31) : 'New Chat');

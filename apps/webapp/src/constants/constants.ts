@@ -9,11 +9,11 @@ export const mockChatAirdrop = {
   history: [
     {
       role: Role.USER,
-      content: 'Hi! What is airdrop and how it works?',
+      body: 'Hi! What is airdrop and how it works?',
     },
     {
       role: Role.SYSTEM,
-      content: `In a process called Airdrop, early users are rewarded with the protocol's native token for performing actions that benefit the protocol. \n\nA crypto airdrop usually involves the following steps:\n\n1. The project team communicates the details and requirements of the airdrop through their official channels or cryptocurrency communities.\n2. The interested participants register for the airdrop by providing their wallet address and other information or performing the required tasks.\n3. The project team verifies the eligibility and validity of the participants and distributes the tokens to their wallets according to the rules of the airdrop.\n4. The participants receive the tokens in their wallets and can use them according to the terms and conditions of the project.\n\nAre you interested in airdrop hunting?`,
+      body: `In a process called Airdrop, early users are rewarded with the protocol's native token for performing actions that benefit the protocol. \n\nA crypto airdrop usually involves the following steps:\n\n1. The project team communicates the details and requirements of the airdrop through their official channels or cryptocurrency communities.\n2. The interested participants register for the airdrop by providing their wallet address and other information or performing the required tasks.\n3. The project team verifies the eligibility and validity of the participants and distributes the tokens to their wallets according to the rules of the airdrop.\n4. The participants receive the tokens in their wallets and can use them according to the terms and conditions of the project.\n\nAre you interested in airdrop hunting?`,
       action_data: {
         network: {
           name: 'Mainnet',
@@ -427,16 +427,15 @@ export const mockChatAirdrop = {
     },
     // {
     //   role: Role.USER,
-    //   content: 'Yep, are there any options to try it out?',
+    //   body: 'Yep, are there any options to try it out?',
     // },
     // {
     //   role: Role.SYSTEM,
-    //   content: `Sure, one of the current trending option is zkSync Airdrop (L2 network with high likelihood of distributing tokens to the community). Here is the strategy to participate in early adoption of zkSync network using ETH asset:\n\n1. Bridge ETH to zkSync using Orbiter. Source https://www.orbiter.finance/\n2. Swap Assets on SyncSwap. Source https://syncswap.xyz/\n3. Provide Liquidity to Maverick. Source https://app.mav.xyz/?chain=1\n\nIf you are okay with this strategy, I can prepare its execution.`,
-    //   contains_strategy_previews: ['deposit_eth_lido', '"deposit_steth_eigenlayer"'],
+    //   body: `Sure, one of the current trending option is zkSync Airdrop (L2 network with high likelihood of distributing tokens to the community). Here is the strategy to participate in early adoption of zkSync network using ETH asset:\n\n1. Bridge ETH to zkSync using Orbiter. Source https://www.orbiter.finance/\n2. Swap Assets on SyncSwap. Source https://syncswap.xyz/\n3. Provide Liquidity to Maverick. Source https://app.mav.xyz/?chain=1\n\nIf you are okay with this strategy, I can prepare its execution.`,
     // },
     // {
     //   role: Role.SYSTEM,
-    //   content: '',
+    //   body: '',
     //   strategies: [
     //     // {
     //     //   action_type: ActionType.TRANSFER,
@@ -610,16 +609,15 @@ export const mockChat = {
   history: [
     {
       role: Role.USER,
-      content: '1',
+      body: '1',
     },
     {
       role: Role.SYSTEM,
-      content: `Earning yield on ETH can be divided by your risk tolerance.\n\nFor the long-term and low risk strategy you can supply ETH into native staking and earn 3-7% APY. Staked ETH you can supply into Eigenlayer and receive up 60% APY.\n\nHere is some explanation👇\n\n1. Lido / Rocket Pool / StakeWise / Everstake with APY up to 7% (currently is 2.9%).\n2. Eigenlayer doesn’t give a direct return on your position. APY is calculated based on the point rewards program and represent a projected APY:\n    - 1 stETH generates 24 points per day. 8760 points per year.\n    - 1 point is valued at $0.2 on average based on the Whales Market.\n    - Based on the ETH price of $3100 you can earn $1780 in points value.\n\nIf you are okay with this strategy I can prepare a guide for its execution.`,
-      contains_strategy_previews: ['deposit_eth_lido', '"deposit_steth_eigenlayer"'],
+      body: `Earning yield on ETH can be divided by your risk tolerance.\n\nFor the long-term and low risk strategy you can supply ETH into native staking and earn 3-7% APY. Staked ETH you can supply into Eigenlayer and receive up 60% APY.\n\nHere is some explanation👇\n\n1. Lido / Rocket Pool / StakeWise / Everstake with APY up to 7% (currently is 2.9%).\n2. Eigenlayer doesn’t give a direct return on your position. APY is calculated based on the point rewards program and represent a projected APY:\n    - 1 stETH generates 24 points per day. 8760 points per year.\n    - 1 point is valued at $0.2 on average based on the Whales Market.\n    - Based on the ETH price of $3100 you can earn $1780 in points value.\n\nIf you are okay with this strategy I can prepare a guide for its execution.`,
     },
     {
       role: Role.SYSTEM,
-      content: '',
+      body: '',
       strategies: [
         {
           // action_type: ActionType.DEPOSIT,
@@ -751,7 +749,7 @@ export const mockChat = {
     },
     {
       role: Role.SYSTEM,
-      content: '',
+      body: '',
       result: [
         {
           actionType: 'deposit',

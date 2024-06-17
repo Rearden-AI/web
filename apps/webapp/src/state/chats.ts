@@ -28,7 +28,7 @@ export const createChatsSlice = (): SliceCreator<ChatsSlice> => (set, get) => {
           history: [
             {
               role: Role.USER,
-              content: message,
+              body: message,
               timestamp,
             },
           ],
@@ -48,7 +48,7 @@ export const createChatsSlice = (): SliceCreator<ChatsSlice> => (set, get) => {
 
       let history = selectedChat.history;
 
-      history = [{ ...message, content: message.content }, ...history];
+      history = [{ ...message, body: message.body }, ...history];
 
       set(state => {
         if (state.chats.selectedChat) state.chats.selectedChat.history = history;

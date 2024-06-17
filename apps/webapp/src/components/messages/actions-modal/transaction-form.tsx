@@ -11,13 +11,13 @@ import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useAccount, useSwitchChain } from 'wagmi';
 import { wagmiConfig } from '../../../config/wagmi';
 import { getSendParams, prepareParams } from '../../../lib/prepare-send-data';
-import { ActionData, ActionDataInput } from '../../../types/chat';
+import { Action, ActionDataInput } from '../../../types/chat';
 import { ActionDetailCard } from './action-detail-card';
 import { ModalLoader } from './modal-loader';
 
 interface TransactionCardProps {
   index: number;
-  action: ActionData;
+  action: Action;
   setCurrentStep: Dispatch<SetStateAction<number>>;
   setResult: Dispatch<SetStateAction<number[]>>;
 }
@@ -34,8 +34,11 @@ export const TransactionForm = ({ index, action, setCurrentStep }: TransactionCa
     void (async () => {
       const balance = await getBalance(wagmiConfig, {
         address,
-        token: action.balance_data.coin === 'native' ? undefined : action.balance_data.coin,
-        chainId: action.network.chain.chainId,
+        token:
+          action.action_data.balance_data.coin === 'native'
+            ? undefined
+            : action.action_data.balance_data.coin,
+        chainId: action.action_data.network.chain.chainId,
       });
 
       setBalance(balance);
@@ -44,25 +47,26 @@ export const TransactionForm = ({ index, action, setCurrentStep }: TransactionCa
 
   useEffect(() => {
     setValues(
-      action.transaction_data.inputs.map(i => ({
+      action.action_data.transaction_data.inputs.map(i => ({
         ...i,
         value: i.value_source === 'user_input' ? (i.value ? `${i.value}` : '') : undefined,
       })),
     );
-  }, [action.transaction_data.inputs]);
+  }, [action.action_data.transaction_data.inputs]);
 
   const approveToGenerate = () => {
     void (async () => {
       if (!address || !balance) return;
 
-      await switchChainAsync({ chainId: action.network.chain.chainId });
+      await switchChainAsync({ chainId: action.action_data.network.chain.chainId });
 
       try {
         setLoading(true);
 
         const preparedParams = await Promise.all(
           values.map(
-            async (i, _, array) => await prepareParams(i, array, action.transaction_data.abis),
+            async (i, _, array) =>
+              await prepareParams(i, array, action.action_data.transaction_data.abis),
           ),
         );
 
@@ -71,7 +75,7 @@ export const TransactionForm = ({ index, action, setCurrentStep }: TransactionCa
         const transactionHash = await sendTransaction(wagmiConfig, sendParams);
 
         const receipt = await waitForTransactionReceipt(wagmiConfig, {
-          chainId: action.network.chain.chainId,
+          chainId: action.action_data.network.chain.chainId,
           hash: transactionHash,
         });
 
@@ -99,10 +103,10 @@ export const TransactionForm = ({ index, action, setCurrentStep }: TransactionCa
           </p>
         </BorderWrapper>
         <p className='w-fit bg-primary-gradient bg-clip-text text-lg font-bold leading-[26px] text-transparent'>
-          {action.description}
+          {action.action_data.description}
         </p>
       </div>
-      <ActionDetailCard action={action} />
+      <ActionDetailCard action={action.action_data} />
 
       {values.map((i, index, array) => {
         if (i.value_source !== 'user_input') return null;
