@@ -122,12 +122,24 @@ export interface ActionData {
   }[];
 }
 
+export enum UserInputValueType {
+  ADDRESS = 'address',
+  AMOUNT = 'amount',
+}
+
+export enum ValueSource {
+  USER_INPUT = 'user_input',
+  METHOD_RESULT = 'method_result',
+  ACTION_RESULT = 'action_result',
+  DEADLINE = 'deadline',
+}
+
 export interface UserInput {
   id: number;
   description: string;
   decimals: number;
-  type: 'address' | 'amount';
-  value_source: 'user_input';
+  type: UserInputValueType;
+  value_source: ValueSource.USER_INPUT;
   value?: string;
 }
 
@@ -138,7 +150,7 @@ export interface MethodResult {
   method_params: (unknown | InputId)[];
   to: Hex;
   type: 'amount';
-  value_source: 'method_result';
+  value_source: ValueSource.METHOD_RESULT;
 }
 
 export interface ActionResult {
@@ -146,7 +158,7 @@ export interface ActionResult {
   description: string;
   id: number;
   return_id: number;
-  value_source: 'action_result';
+  value_source: ValueSource.ACTION_RESULT;
 }
 
 export type ActionDataInput =
@@ -155,9 +167,25 @@ export type ActionDataInput =
   | ActionResult
   | {
       id: number;
-      value_source: 'deadline';
+      value_source: ValueSource.DEADLINE;
     };
 
 export interface InputId {
   input_id: number;
+}
+
+export type ActionDataUserInput =
+  | UserInput
+  | MethodResult
+  | (ActionResult & { input: UserInput; value: string; type: UserInputValueType })
+  | {
+      id: number;
+      value_source: ValueSource.DEADLINE;
+    };
+
+export type UserInputObject = Record<number, Record<number, UserInput>>;
+
+export interface PreparedParamValue {
+  id: number;
+  value: unknown;
 }

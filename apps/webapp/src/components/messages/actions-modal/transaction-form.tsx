@@ -10,19 +10,18 @@ import {
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useAccount, useSwitchChain } from 'wagmi';
 import { wagmiConfig } from '../../../config/wagmi';
-import { getSendParams, prepareParams } from '../../../lib/prepare-send-data';
-import { Action, ActionDataInput } from '../../../types/chat';
+import { getSendParams, mapInputValues, prepareParams } from '../../../lib/prepare-send-data';
+import { Action, ActionDataUserInput, UserInputObject, ValueSource } from '../../../types/chat';
 import { ActionDetailCard } from './action-detail-card';
 import { ModalLoader } from './modal-loader';
-import { ObjectInObject } from '../../../types/generic';
 
 interface TransactionCardProps {
   index: number;
   action: Action;
-  returnValues: ObjectInObject;
+  returnValues: UserInputObject;
   setCurrentStep: Dispatch<SetStateAction<number>>;
   setResult: Dispatch<SetStateAction<number[]>>;
-  setReturnValues: Dispatch<SetStateAction<ObjectInObject>>;
+  setReturnValues: Dispatch<SetStateAction<UserInputObject>>;
 }
 
 export const TransactionForm = ({
@@ -36,7 +35,7 @@ export const TransactionForm = ({
   const { address } = useAccount();
   const [loading, setLoading] = useState<boolean>(false);
   const [balance, setBalance] = useState<GetBalanceReturnType>();
-  const [values, setValues] = useState<ActionDataInput[]>([]);
+  const [values, setValues] = useState<ActionDataUserInput[]>([]);
 
   useEffect(() => {
     if (!address) return;
@@ -55,13 +54,8 @@ export const TransactionForm = ({
   }, [address, action]);
 
   useEffect(() => {
-    setValues(
-      action.action_data.transaction_data.inputs.map(i => ({
-        ...i,
-        value: i.value_source === 'user_input' ? (i.value ? `${i.value}` : '') : undefined,
-      })),
-    );
-  }, [action.action_data.transaction_data.inputs]);
+    setValues(mapInputValues(action.action_data.transaction_data.inputs, returnValues));
+  }, [action.action_data.transaction_data.inputs, returnValues]);
 
   const approveToGenerate = () => {
     void (async () => {
@@ -75,7 +69,7 @@ export const TransactionForm = ({
         const preparedParams = await Promise.all(
           values.map(
             async (i, _, array) =>
-              await prepareParams(i, array, returnValues, action.action_data.transaction_data.abis),
+              await prepareParams(i, array, action.action_data.transaction_data.abis),
           ),
         );
 
@@ -118,26 +112,31 @@ export const TransactionForm = ({
       <ActionDetailCard action={action.action_data} />
 
       {values.map((i, index, array) => {
-        if (i.value_source !== 'user_input') return null;
-        return (
-          <InputElement
-            key={index}
-            label={i.description}
-            placeholder={i.description}
-            type={i.type === 'amount' ? 'number' : 'text'}
-            value={i.value}
-            onChange={e => {
-              const updatedValue = array.map((j, ind) =>
-                index === ind ? { ...j, value: e.target.value } : j,
-              );
+        if (i.value_source === ValueSource.USER_INPUT)
+          return (
+            <InputElement
+              key={index}
+              label={i.description}
+              placeholder={i.description}
+              type={i.type === 'amount' ? 'number' : 'text'}
+              value={i.value}
+              onChange={e => {
+                const updatedValue = array.map((j, ind) =>
+                  index === ind ? { ...j, value: e.target.value } : j,
+                );
 
-              setValues(updatedValue);
-              if (action.action_data.transaction_data.returns?.length) {
-                setReturnValues(state => ({ ...state, [action.id]: { [i.id]: e.target.value } }));
-              }
-            }}
-          />
-        );
+                setValues(updatedValue);
+
+                if (action.action_data.transaction_data.returns?.length) {
+                  setReturnValues(state => ({
+                    ...state,
+                    [action.id]: { ...state[action.id], [i.id]: { ...i, value: e.target.value } },
+                  }));
+                }
+              }}
+            />
+          );
+        return null;
       })}
       <Button
         className='mt-4 w-[91px]'

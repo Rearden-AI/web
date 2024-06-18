@@ -1,6 +1,6 @@
 import { Hex } from 'viem';
 import { describe, expect, test } from 'vitest';
-import { AbiFunction, ActionDataInput, TransactionData } from '../types/chat';
+import { AbiFunction, ActionDataUserInput, TransactionData, ValueSource } from '../types/chat';
 import { getContractAbi, getSendParams, prepareParams } from './prepare-send-data';
 
 describe('prepare send data', () => {
@@ -9,40 +9,42 @@ describe('prepare send data', () => {
       const inputs = [
         {
           id: 0,
-          value_source: 'user_input',
+          value_source: ValueSource.USER_INPUT,
           value: '0x9a868D58C7F21DAd9562ge9638A957Fff69a4a0e',
           description: 'Enter receiver address',
           type: 'address',
         },
         {
           id: 1,
-          value_source: 'user_input',
+          value_source: ValueSource.USER_INPUT,
           value: '1',
           description: 'Enter ETH amount to send',
           type: 'amount',
           decimals: 18,
         },
-      ] as ActionDataInput[];
+      ] as ActionDataUserInput[];
 
-      const address = await prepareParams(inputs[0] as ActionDataInput, inputs, {});
-      const amount = await prepareParams(inputs[1] as ActionDataInput, inputs, {});
-      expect(address.preparedValue).toBe('0x9a868D58C7F21DAd9562ge9638A957Fff69a4a0e');
-      expect(amount.preparedValue).toBe(1000000000000000000n);
+      const address = await prepareParams(inputs[0] as ActionDataUserInput, inputs);
+      const amount = await prepareParams(inputs[1] as ActionDataUserInput, inputs);
+
+      expect(address.value).toBe('0x9a868D58C7F21DAd9562ge9638A957Fff69a4a0e');
+      expect(amount.value).toBe(1000000000000000000n);
     });
 
     describe('amount type', () => {
-      test('if value equal user_input than preparedValue equal 2000000', async () => {
+      test('if value equal user_input than value equal 2000000', async () => {
         const obj = {
           id: 1,
-          value_source: 'user_input',
+          value_source: ValueSource.USER_INPUT,
           description: 'test',
           type: 'amount',
           decimals: 6,
           value: '2',
-        } as ActionDataInput;
-        const value = await prepareParams(obj, [obj], {}, {});
+        } as ActionDataUserInput;
 
-        expect(value.preparedValue).toBe(2000000n);
+        const params = await prepareParams(obj, [obj], {});
+
+        expect(params.value).toBe(2000000n);
       });
     });
 
@@ -50,11 +52,12 @@ describe('prepare send data', () => {
       test('return now date plus 900000ms', async () => {
         const obj = {
           id: 1,
-          value_source: 'deadline',
-        } as ActionDataInput;
-        const value = await prepareParams(obj, [obj], {}, {});
+          value_source: ValueSource.DEADLINE,
+        } as ActionDataUserInput;
 
-        expect(value.preparedValue).toBe(Date.now() + 900000);
+        const params = await prepareParams(obj, [obj], {});
+
+        expect(params.value).toBe(Date.now() + 900000);
       });
     });
 
@@ -62,7 +65,7 @@ describe('prepare send data', () => {
       test('uniswap swap args', async () => {
         const obj = {
           id: 2,
-          value_source: 'method_result',
+          value_source: ValueSource.METHOD_RESULT,
           type: 'amount',
           to: '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D',
           method_name: 'getAmountsIn',
@@ -76,7 +79,7 @@ describe('prepare send data', () => {
             ],
           ],
           method_result: 0,
-        } as ActionDataInput;
+        } as ActionDataUserInput;
 
         const abi = {
           '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D': [
@@ -110,7 +113,7 @@ describe('prepare send data', () => {
         const array = [
           {
             id: 0,
-            value_source: 'user_input',
+            value_source: ValueSource.USER_INPUT,
             description: 'Enter USDT amount',
             type: 'amount',
             decimals: 6,
@@ -118,11 +121,11 @@ describe('prepare send data', () => {
           },
           {
             id: 1,
-            value_source: 'deadline',
+            value_source: ValueSource.DEADLINE,
           },
           {
             id: 2,
-            value_source: 'method_result',
+            value_source: ValueSource.METHOD_RESULT,
             type: 'amount',
             to: '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D',
             method_name: 'getAmountsIn',
@@ -137,10 +140,10 @@ describe('prepare send data', () => {
             ],
             method_result: 0,
           },
-        ] as ActionDataInput[];
+        ] as ActionDataUserInput[];
 
-        const value = await prepareParams(obj, array, {}, abi);
-        expect(value.preparedValue).toBeDefined();
+        const params = await prepareParams(obj, array, abi);
+        expect(params.value).toBeDefined();
       });
     });
   });
@@ -201,14 +204,14 @@ describe('prepare send data', () => {
         inputs: [
           {
             id: 0,
-            value_source: 'user_input',
+            value_source: ValueSource.USER_INPUT,
             value: null,
             description: 'Enter receiver address',
             type: 'address',
           },
           {
             id: 1,
-            value_source: 'user_input',
+            value_source: ValueSource.USER_INPUT,
             value: null,
             description: 'Enter ETH amount to send',
             type: 'amount',
@@ -223,25 +226,14 @@ describe('prepare send data', () => {
 
         const preparedParams = [
           {
-            description: 'Enter receiver address',
             id: 0,
-            preparedValue: address,
-            type: 'address',
             value: address,
-            value_source: 'user_input',
           },
           {
-            decimals: 18,
-            description: 'Enter ETH amount to send',
             id: 1,
-            preparedValue: amount,
-            type: 'amount',
-            value: '0.0001',
-            value_source: 'user_input',
+            value: amount,
           },
-        ] as unknown as (ActionDataInput & {
-          preparedValue: unknown;
-        })[];
+        ];
 
         const params = getSendParams(transactionData, preparedParams);
         expect(params).toStrictEqual({
@@ -257,25 +249,14 @@ describe('prepare send data', () => {
 
         const preparedParams = [
           {
-            description: 'Enter receiver address',
             id: 0,
-            preparedValue: address,
-            type: 'address',
             value: address,
-            value_source: 'user_input',
           },
           {
-            decimals: 18,
-            description: 'Enter ETH amount to send',
             id: 1,
-            preparedValue: amount,
-            type: 'amount',
-            value: '0.0001',
-            value_source: 'user_input',
+            value: amount,
           },
-        ] as unknown as (ActionDataInput & {
-          preparedValue: unknown;
-        })[];
+        ];
 
         const params = getSendParams(transactionData, preparedParams);
 

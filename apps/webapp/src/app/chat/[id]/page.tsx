@@ -77,13 +77,12 @@ export default function ChatPage({ params }: { params: { id: string } }) {
                   <div className='flex flex-col'>
                     <Markdown markdown={message.body ?? ''} />
                   </div>
-                  {message.actions ? <StrategyMessage actions={message.actions} /> : <Fragment />}
+                  {message.actions?.length ? <StrategyMessage actions={message.actions} /> : <Fragment />}
                   {message.transactions?.length ? (
                     <ResultMessage result={message.transactions} />
                   ) : (
                     <Fragment />
                   )}
-
                   {message.chooseable_actions?.length ? (
                     message.chooseable_actions.map(i => (
                       <div className='flex items-center'>

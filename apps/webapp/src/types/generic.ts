@@ -5,5 +5,3 @@ export interface PaginatedResponse<T> {
   total_pages: number;
   data: T;
 }
-
-export type ObjectInObject = Record<number, Record<number, string>>;

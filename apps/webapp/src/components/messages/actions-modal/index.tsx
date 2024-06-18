@@ -9,16 +9,16 @@ import {
 } from '@rearden/ui/components/ui/dialog';
 import { useParams } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
+import { useChainId } from 'wagmi';
 import axiosInstance from '../../../config/axios';
 import { API_ID, ApiRoutes } from '../../../constants/api-routes';
 import { useStore } from '../../../state';
 import { chatsSelector } from '../../../state/chats';
-import { Action, HistoryMessage, Role } from '../../../types/chat';
+import { Action, HistoryMessage, Role, UserInputObject } from '../../../types/chat';
+
 import { ExecuteButton } from '../../execute-button';
 import { Stepper } from '../../stepper';
 import { TransactionForm } from './transaction-form';
-import { ObjectInObject } from '../../../types/generic';
-import { useChainId } from 'wagmi';
 
 export const ActionsModal = ({ wallet, actions }: { wallet: string; actions: Action[] }) => {
   const { writeToChat } = useStore(chatsSelector);
@@ -26,7 +26,7 @@ export const ActionsModal = ({ wallet, actions }: { wallet: string; actions: Act
   const [open, setOpen] = useState<boolean>(false);
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [result, setResult] = useState<number[]>([]);
-  const [returnValues, setReturnValues] = useState<ObjectInObject>({});
+  const [returnValues, setReturnValues] = useState<UserInputObject>({});
   const params = useParams<{ id?: string }>();
 
   useEffect(() => {
@@ -72,7 +72,7 @@ export const ActionsModal = ({ wallet, actions }: { wallet: string; actions: Act
         ),
       };
     });
-  }, [actions]);
+  }, [actions, returnValues]);
 
   return (
     <Dialog

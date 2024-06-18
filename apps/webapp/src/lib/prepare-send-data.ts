@@ -1,29 +1,67 @@
 import { readContract } from '@wagmi/core';
 import { Abi, Hex, encodeFunctionData, parseUnits } from 'viem';
 import { wagmiConfig } from '../config/wagmi';
-import { AbiFunction, ActionDataInput, InputId, TransactionData } from '../types/chat';
+import {
+  AbiFunction,
+  ActionDataInput,
+  ActionDataUserInput,
+  InputId,
+  PreparedParamValue,
+  TransactionData,
+  UserInputObject,
+  UserInputValueType,
+  ValueSource,
+} from '../types/chat';
 import { checkProperty } from './check-property';
-import { ObjectInObject } from '../types/generic';
+
+export const mapInputValues = (
+  inputs: ActionDataInput[],
+  returnValues: UserInputObject,
+): ActionDataUserInput[] => {
+  return inputs.map(i => {
+    switch (i.value_source) {
+      case ValueSource.USER_INPUT:
+        return {
+          ...i,
+          value: i.value ? `${i.value}` : '',
+        };
+      case ValueSource.ACTION_RESULT:
+        const valueByActionId = returnValues[i.action_id];
+        const valueByReturnId = valueByActionId![i.return_id];
+
+        if (valueByReturnId) {
+          return {
+            ...i,
+            input: valueByReturnId,
+            value: valueByReturnId.value ?? '',
+            type: valueByReturnId.type,
+          };
+        }
+        throw new Error('Value by return id is not set');
+      default:
+        return i;
+    }
+  });
+};
 
 export const prepareParams = async (
-  i: ActionDataInput,
-  array: ActionDataInput[],
-  returnValues: ObjectInObject,
+  i: ActionDataUserInput,
+  array: ActionDataUserInput[],
   abis?: Record<Hex, AbiFunction[] | string>,
-): Promise<ActionDataInput & { preparedValue: unknown }> => {
+): Promise<PreparedParamValue> => {
   switch (i.value_source) {
-    case 'user_input': {
+    case ValueSource.USER_INPUT: {
       switch (i.type) {
-        case 'address': {
-          return { ...i, preparedValue: i.value };
+        case UserInputValueType.ADDRESS: {
+          return { id: i.id, value: i.value };
         }
-        case 'amount':
-          return { ...i, preparedValue: parseUnits(i.value ?? '0', i.decimals) };
+        case UserInputValueType.AMOUNT:
+          return { id: i.id, value: parseUnits(i.value ?? '0', i.decimals) };
         default:
           throw Error('Unknown input type');
       }
     }
-    case 'method_result': {
+    case ValueSource.METHOD_RESULT: {
       const abi = getContractAbi(i.to, abis);
       if (!abi) throw new Error(`ABI is not provided for ${i.to} contract`);
 
@@ -32,7 +70,7 @@ export const prepareParams = async (
           if (checkProperty(param, 'input_id')) {
             const selected = array.find(j => j.id === (param as InputId).input_id)!;
 
-            return await prepareParams(selected, array, returnValues, abis);
+            return await prepareParams(selected, array, abis);
           }
           return param;
         }),
@@ -43,29 +81,25 @@ export const prepareParams = async (
         address: i.to,
         functionName: i.method_name,
         args: args.map(i => {
-          if (checkProperty(i, 'preparedValue'))
-            return (i as { preparedValue: unknown }).preparedValue;
+          if (checkProperty(i, 'value')) return (i as { value: unknown }).value;
 
           return i;
         }),
       })) as unknown[];
 
       return {
-        ...i,
-        preparedValue: result[i.method_result],
+        id: i.id,
+        value: result[i.method_result],
       };
     }
-    case 'deadline': {
+    case ValueSource.DEADLINE: {
       return {
-        ...i,
-        preparedValue: Date.now() + 900000,
+        id: i.id,
+        value: Date.now() + 900000,
       };
     }
-    case 'action_result': {
-      return {
-        ...i,
-        preparedValue: returnValues[i.action_id]![i.return_id],
-      };
+    case ValueSource.ACTION_RESULT: {
+      return { id: i.id, value: (await prepareParams(i.input, array)).value };
     }
     default:
       throw Error('Unknown value type');
@@ -74,10 +108,10 @@ export const prepareParams = async (
 
 export function getValueFromDynamicParams<T>(
   value: T | InputId,
-  dynamicParams: (ActionDataInput & { preparedValue: unknown })[],
+  dynamicParams: PreparedParamValue[],
 ): T {
   if (checkProperty<InputId>(value, 'input_id'))
-    return dynamicParams.find(i => i.id === value.input_id)?.preparedValue as T;
+    return dynamicParams.find(i => i.id === value.input_id)?.value as T;
 
   return value;
 }
@@ -99,15 +133,14 @@ export const getContractAbi = (
 
 export const getSendParams = (
   transactionData: TransactionData,
-  preparedParams: (ActionDataInput & {
-    preparedValue: unknown;
-  })[],
+  preparedParams: PreparedParamValue[],
 ) => {
   const sortedParams = transactionData.method_params
     ? transactionData.method_params.map(param =>
         getValueFromDynamicParams<unknown>(param, preparedParams),
       )
     : [];
+
   const to = getValueFromDynamicParams<Hex>(transactionData.to, preparedParams);
 
   const abi = getContractAbi(to, transactionData.abis);

@@ -1,4 +1,4 @@
-import { ChatSchemaState, Role } from '../types/chat';
+import { ChatSchemaState, Role, ValueSource } from '../types/chat';
 
 export const mockChatAirdrop = {
   name: null,
@@ -399,15 +399,15 @@ export const mockChatAirdrop = {
           inputs: [
             {
               id: 0,
-              value: 'user_input',
+              value: ValueSource.USER_INPUT,
               description: 'Enter USDT amount',
               type: 'token_amount',
               decimals: 6,
             },
-            { id: 1, type: 'deadline' },
+            { id: 1, type: ValueSource.DEADLINE },
             {
               id: 2,
-              value: 'method_result',
+              value: ValueSource.METHOD_RESULT,
               type: 'amount',
               to: '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D',
               method_name: 'getAmountsIn',
