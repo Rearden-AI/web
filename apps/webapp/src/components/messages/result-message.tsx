@@ -9,7 +9,6 @@ import {
   TableHeader,
   TableRow,
 } from '@rearden/ui/components/ui/table';
-import { Networks } from '../../constants/networks';
 import { TransactionResult } from '../../types/transactions';
 import { ActionTypeCard } from '../action-type-card';
 

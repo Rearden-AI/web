@@ -1,12 +1,6 @@
 'use client';
 
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@rearden/ui/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@rearden/ui/components/ui/dialog';
 import { useParams } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import { useChainId } from 'wagmi';
