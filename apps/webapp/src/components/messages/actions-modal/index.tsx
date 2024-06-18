@@ -45,7 +45,7 @@ export const ActionsModal = ({ wallet, actions }: { wallet: string; actions: Act
 
       writeToChat({
         role: Role.SYSTEM,
-        body: data.body,
+        content: data.content,
         transactions: data.transactions,
         timestamp: data.timestamp,
       });
