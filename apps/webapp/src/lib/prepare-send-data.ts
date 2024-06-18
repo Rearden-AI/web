@@ -91,7 +91,8 @@ export const getContractAbi = (
 
   if (!contractAbi) return;
 
-  const abi = typeof contractAbi === 'string' ? JSON.parse(contractAbi) : contractAbi;
+  const abi =
+    typeof contractAbi === 'string' ? (JSON.parse(contractAbi) as AbiFunction[]) : contractAbi;
 
   return abi;
 };

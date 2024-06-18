@@ -48,7 +48,7 @@ export const ResultMessage = ({ result }: { result: TransactionResult[] }) => {
                     classNameText='order-2'
                     classNameIcon='order-1 w-4 h-4'
                   />
-                  <p className='text-sm font-medium italic capitalize'>{i.action_name}</p>
+                  <p className='text-sm font-medium capitalize italic'>{i.action_name}</p>
                 </div>
               </TableCell>
               <TableCell className='pl-3'>

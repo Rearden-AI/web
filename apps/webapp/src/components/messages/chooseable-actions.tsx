@@ -28,11 +28,11 @@ export const ChooseableActions = ({ actions }: { actions: ChooseableAction[] }) 
                 {index + 1}
               </p>
             </BorderWrapper>
-            <div className='flex justify-between w-full items-center'>
+            <div className='flex w-full items-center justify-between'>
               <p className='w-fit bg-primary-gradient bg-clip-text text-lg font-bold leading-[26px] text-transparent'>
                 {i.name}
               </p>
-              <p className='text-base font-medium leading-[26px] rounded-sm bg-card px-3 py-1'>
+              <p className='rounded-sm bg-card px-3 py-1 text-base font-medium leading-[26px]'>
                 {' '}
                 APY ≈ {i.approxApy}%
               </p>
@@ -58,7 +58,9 @@ export const ChooseableActions = ({ actions }: { actions: ChooseableAction[] }) 
                     ...data,
                   });
                 })();
-              } catch (error) {}
+              } catch (error) {
+                //
+              }
             }}
           />
         </div>

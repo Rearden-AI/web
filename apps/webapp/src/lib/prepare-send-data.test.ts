@@ -24,8 +24,8 @@ describe('prepare send data', () => {
         },
       ] as ActionDataUserInput[];
 
-      const address = await prepareParams(inputs[0] as ActionDataUserInput, inputs);
-      const amount = await prepareParams(inputs[1] as ActionDataUserInput, inputs);
+      const address = await prepareParams(inputs[0]!, inputs);
+      const amount = await prepareParams(inputs[1]!, inputs);
 
       expect(address.value).toBe('0x9a868D58C7F21DAd9562ge9638A957Fff69a4a0e');
       expect(amount.value).toBe(1000000000000000000n);

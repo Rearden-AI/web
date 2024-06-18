@@ -147,7 +147,7 @@ export interface MethodResult {
   id: number;
   method_name: string;
   method_result: number;
-  method_params: (unknown | InputId)[];
+  method_params: unknown[];
   to: Hex;
   type: 'amount';
   value_source: ValueSource.METHOD_RESULT;

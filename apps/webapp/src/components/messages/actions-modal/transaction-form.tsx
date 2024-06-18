@@ -68,6 +68,7 @@ export const TransactionForm = ({
 
   useEffect(() => {
     setInputs(mapInputValues(action.action_data.transaction_data.inputs, actionValues));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const approveToGenerate = () => {
@@ -175,7 +176,7 @@ export const TransactionForm = ({
               key={index}
               label={i.description}
               placeholder={i.description}
-              type={i.type === 'amount' ? 'number' : 'text'}
+              type={i.type === UserInputValueType.AMOUNT ? 'number' : 'text'}
               value={i.value}
               onChange={e => {
                 const updatedValue = array.map((j, ind) =>

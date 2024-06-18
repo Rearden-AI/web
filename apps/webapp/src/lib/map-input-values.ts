@@ -9,10 +9,12 @@ export const mapInputValues = (
       case ValueSource.USER_INPUT:
         return {
           ...i,
-          value: i.value ? `${i.value}` : '',
+          value: i.value ? i.value.toString() : '',
         };
       case ValueSource.ACTION_RESULT:
+        // eslint-disable-next-line no-case-declarations
         const valueByActionId = returnValues[i.action_id];
+        // eslint-disable-next-line no-case-declarations
         const valueByReturnId = valueByActionId![i.return_id];
 
         if (valueByReturnId) {
