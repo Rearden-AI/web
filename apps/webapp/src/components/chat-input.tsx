@@ -39,7 +39,7 @@ export const ChatInput = () => {
         const timestamp = Date.now();
         writeToChat({
           role: Role.USER,
-          body: input,
+          content: input,
           timestamp,
         });
         void (async () => {
@@ -51,6 +51,7 @@ export const ChatInput = () => {
 
           writeToChat({
             role: Role.SYSTEM,
+            content: data.body,
             ...data,
           });
         })();
@@ -76,6 +77,7 @@ export const ChatInput = () => {
 
             writeToChat({
               role: Role.SYSTEM,
+              content: data.body,
               ...data,
             });
 

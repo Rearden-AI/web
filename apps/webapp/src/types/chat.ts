@@ -53,7 +53,7 @@ export interface ChatSchema {
 
 export interface HistoryMessage {
   role: Role;
-  body?: string;
+  content?: string;
   transactions?: TransactionResult[];
   timestamp: number;
   actions?: Action[];

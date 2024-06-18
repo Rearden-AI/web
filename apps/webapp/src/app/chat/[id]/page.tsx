@@ -75,9 +75,13 @@ export default function ChatPage({ params }: { params: { id: string } }) {
                 </div>
                 <div className='flex flex-col gap-2'>
                   <div className='flex flex-col'>
-                    <Markdown markdown={message.body ?? ''} />
+                    <Markdown markdown={message.content ?? ''} />
                   </div>
-                  {message.actions?.length ? <StrategyMessage actions={message.actions} /> : <Fragment />}
+                  {message.actions?.length ? (
+                    <StrategyMessage actions={message.actions} />
+                  ) : (
+                    <Fragment />
+                  )}
                   {message.transactions?.length ? (
                     <ResultMessage result={message.transactions} />
                   ) : (
@@ -89,22 +93,25 @@ export default function ChatPage({ params }: { params: { id: string } }) {
                         <p>{i.name}</p>
                         <Button
                           onClick={() => {
-                            void (async () => {
-                              const { data } = await axiosInstance.post<ChatResponse>(
-                                ApiRoutes.CHAT_BY_ID.replace(API_ID, params.id),
-                                {
-                                  chosen_action_key: i.key,
-                                  message: '',
-                                  timestamp: Date.now(),
-                                  chain_id: chain,
-                                },
-                              );
+                            try {
+                              void (async () => {
+                                const { data } = await axiosInstance.post<ChatResponse>(
+                                  ApiRoutes.CHAT_BY_ID.replace(API_ID, params.id),
+                                  {
+                                    chosen_action_key: i.key,
+                                    message: '',
+                                    timestamp: Date.now(),
+                                    chain_id: chain,
+                                  },
+                                );
 
-                              writeToChat({
-                                role: Role.SYSTEM,
-                                ...data,
-                              });
-                            })();
+                                writeToChat({
+                                  role: Role.SYSTEM,
+                                  content: data.body,
+                                  ...data,
+                                });
+                              })();
+                            } catch (error) {}
                           }}
                         >
                           Get strategy

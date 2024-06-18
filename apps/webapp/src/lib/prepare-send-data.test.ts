@@ -268,6 +268,70 @@ describe('prepare send data', () => {
       });
     });
 
-    // describe('send other tokens', () => {});
+    describe('send USDC token', () => {
+      const contract = '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48';
+      const transactionData = {
+        to: contract,
+        method_name: 'transfer',
+        method_params: [{ input_id: 0 }, { input_id: 1 }],
+        abis: {
+          [contract]: [
+            {
+              constant: false,
+              inputs: [
+                { name: '_to', type: 'address' },
+                { name: '_value', type: 'uint256' },
+              ],
+              name: 'transfer',
+              outputs: [{ name: '', type: 'bool' }],
+              payable: false,
+              stateMutability: 'nonpayable',
+              type: 'function',
+            },
+          ],
+        },
+        inputs: [
+          {
+            id: 0,
+            value_source: 'user_input',
+            value: null,
+            description: 'Enter receiver address',
+            type: 'address',
+          },
+          {
+            id: 1,
+            value_source: 'user_input',
+            value: null,
+            description: 'Enter USDC amount to send',
+            type: 'amount',
+            decimals: 6,
+          },
+        ],
+      } as unknown as TransactionData;
+
+      test('send USDC data field should be defined', () => {
+        const address = '0x940b68AE6a76Ef1A1f1a617789CffC8B1cf9c6c3';
+        const amount = 1000000n;
+
+        const preparedParams = [
+          {
+            id: 0,
+            value: address,
+          },
+          {
+            id: 1,
+            value: amount,
+          },
+        ];
+
+        const params = getSendParams(transactionData, preparedParams);
+
+        expect(params).toStrictEqual({
+          to: contract,
+          value: undefined,
+          data: '0xa9059cbb000000000000000000000000940b68ae6a76ef1a1f1a617789cffc8b1cf9c6c300000000000000000000000000000000000000000000000000000000000f4240',
+        });
+      });
+    });
   });
 });
