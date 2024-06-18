@@ -11,7 +11,7 @@ import { chatsSelector } from '../../../state/chats';
 import { ExtendedChatSchema, Role } from '../../../types/chat';
 import { StrategyMessage } from '../../../components/messages/strategy-message';
 import { ResultMessage } from '../../../components/messages/result-message';
-import { ChooseableActions } from '../../../components/messages/chooseable_actions';
+import { ChooseableActions } from '../../../components/messages/chooseable-actions';
 
 export default function ChatPage({ params }: { params: { id: string } }) {
   const { selectedChat, selectChat } = useStore(chatsSelector);
