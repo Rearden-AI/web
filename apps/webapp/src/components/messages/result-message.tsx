@@ -61,12 +61,7 @@ export const ResultMessage = ({ result }: { result: TransactionResult[] }) => {
               </TableCell>
               <TableCell className='pr-3 text-right'>
                 <div className='flex items-center justify-end gap-2'>
-                  <Image
-                    src={i.token_icon}
-                    width={20}
-                    height={20}
-                    alt={i.token_symbol}
-                  />
+                  <Image src={i.token_icon} width={20} height={20} alt={i.token_symbol} />
                   <p>
                     {i.token_symbol} {i.amount}
                   </p>
