@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 
 import { cn } from '@rearden/ui/lib/utils';
 import { Icons } from '@rearden/ui/components/icons';
@@ -19,7 +19,7 @@ export const Stepper = ({
         {steps.length > 1 &&
           steps.map((i, index) => {
             return (
-              <>
+              <Fragment key={index}>
                 <div key={i.index} className='flex flex-col items-center gap-1'>
                   <p
                     className={cn(
@@ -48,7 +48,7 @@ export const Stepper = ({
                     )}
                   />
                 )}
-              </>
+              </Fragment>
             );
           })}
       </div>

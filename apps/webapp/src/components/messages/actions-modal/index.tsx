@@ -26,7 +26,7 @@ export const ActionsModal = ({ wallet, actions }: { wallet: string; actions: Act
   const [open, setOpen] = useState<boolean>(false);
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [result, setResult] = useState<number[]>([]);
-  const [returnValues, setReturnValues] = useState<UserInputObject>({});
+  const [actionValues, setActionValues] = useState<UserInputObject>({});
   const params = useParams<{ id?: string }>();
 
   useEffect(() => {
@@ -64,15 +64,15 @@ export const ActionsModal = ({ wallet, actions }: { wallet: string; actions: Act
             key={index}
             index={index + 1}
             action={i}
-            returnValues={returnValues}
+            actionValues={actionValues}
             setCurrentStep={setCurrentStep}
             setResult={setResult}
-            setReturnValues={setReturnValues}
+            setActionValues={setActionValues}
           />
         ),
       };
     });
-  }, [actions, returnValues]);
+  }, [actions, actionValues]);
 
   return (
     <Dialog
@@ -81,14 +81,12 @@ export const ActionsModal = ({ wallet, actions }: { wallet: string; actions: Act
         setOpen(value);
       }}
     >
-      <DialogTrigger asChild>
-        <ExecuteButton
-          disabled={Boolean(!wallet)}
-          onClick={() => {
-            setOpen(true);
-          }}
-        />
-      </DialogTrigger>
+      <ExecuteButton
+        disabled={Boolean(!wallet)}
+        onClick={() => {
+          setOpen(true);
+        }}
+      />
       <DialogContent className='flex w-[515px] flex-col gap-4'>
         <DialogHeader>
           <DialogTitle>Strategy execution</DialogTitle>

@@ -29,26 +29,26 @@ import { mapInputValues } from '../../../lib/map-input-values';
 interface TransactionCardProps {
   index: number;
   action: Action;
-  returnValues: UserInputObject;
+  actionValues: UserInputObject;
   setCurrentStep: Dispatch<SetStateAction<number>>;
   setResult: Dispatch<SetStateAction<number[]>>;
-  setReturnValues: Dispatch<SetStateAction<UserInputObject>>;
+  setActionValues: Dispatch<SetStateAction<UserInputObject>>;
 }
 
 export const TransactionForm = ({
   index,
   action,
-  returnValues,
+  actionValues,
   setResult,
   setCurrentStep,
-  setReturnValues,
+  setActionValues,
 }: TransactionCardProps) => {
   const { switchChainAsync } = useSwitchChain();
   const { address } = useAccount();
   const params = useParams<{ id?: string }>();
   const [loading, setLoading] = useState<boolean>(false);
   const [balance, setBalance] = useState<GetBalanceReturnType>();
-  const [values, setValues] = useState<ActionDataUserInput[]>([]);
+  const [inputs, setInputs] = useState<ActionDataUserInput[]>([]);
 
   useEffect(() => {
     if (!address) return;
@@ -67,7 +67,7 @@ export const TransactionForm = ({
   }, [address, action]);
 
   useEffect(() => {
-    setValues(mapInputValues(action.action_data.transaction_data.inputs, returnValues));
+    setInputs(mapInputValues(action.action_data.transaction_data.inputs, actionValues));
   }, []);
 
   const approveToGenerate = () => {
@@ -80,7 +80,7 @@ export const TransactionForm = ({
         setLoading(true);
 
         const preparedParams = await Promise.all(
-          values.map(
+          inputs.map(
             async (i, _, array) =>
               await prepareParams(i, array, action.action_data.transaction_data.abis),
           ),
@@ -92,7 +92,7 @@ export const TransactionForm = ({
           ApiRoutes.TRANSACTIONS,
           {
             amount: (
-              values.find(
+              inputs.find(
                 i =>
                   i.value_source === ValueSource.USER_INPUT &&
                   i.type === UserInputValueType.AMOUNT &&
@@ -112,8 +112,6 @@ export const TransactionForm = ({
           { withCredentials: true },
         );
 
-        console.log({ data });
-
         const transactionHash = await sendTransaction(wagmiConfig, sendParams);
 
         const receipt = await waitForTransactionReceipt(wagmiConfig, {
@@ -128,8 +126,9 @@ export const TransactionForm = ({
             { withCredentials: true },
           );
 
-          values.map(i => {
-            setReturnValues(state => ({
+          //Write user inputted values for next actions
+          inputs.map(i => {
+            setActionValues(state => ({
               ...state,
               [action.id]: {
                 ...state[action.id],
@@ -169,7 +168,7 @@ export const TransactionForm = ({
       </div>
       <ActionDetailCard action={action.action_data} />
 
-      {values.map((i, index, array) => {
+      {inputs.map((i, index, array) => {
         if (i.value_source === ValueSource.USER_INPUT)
           return (
             <InputElement
@@ -183,7 +182,7 @@ export const TransactionForm = ({
                   index === ind ? { ...j, value: e.target.value } : j,
                 );
 
-                setValues(updatedValue);
+                setInputs(updatedValue);
               }}
             />
           );

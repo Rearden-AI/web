@@ -8,15 +8,14 @@ import axiosInstance from '../../../config/axios';
 import { API_ID, ApiRoutes } from '../../../constants/api-routes';
 import { useStore } from '../../../state';
 import { chatsSelector } from '../../../state/chats';
-import { ChatResponse, ExtendedChatSchema, Role } from '../../../types/chat';
+import { ExtendedChatSchema, Role } from '../../../types/chat';
 import { StrategyMessage } from '../../../components/messages/strategy-message';
 import { ResultMessage } from '../../../components/messages/result-message';
-import { Button } from '@rearden/ui/components/ui/button';
-import { useChainId } from 'wagmi';
+import { ChooseableActions } from '../../../components/messages/chooseable_actions';
 
 export default function ChatPage({ params }: { params: { id: string } }) {
-  const { selectedChat, writeToChat, selectChat } = useStore(chatsSelector);
-  const chain = useChainId();
+  const { selectedChat, selectChat } = useStore(chatsSelector);
+
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
 
   useEffect(() => {
@@ -88,36 +87,7 @@ export default function ChatPage({ params }: { params: { id: string } }) {
                     <Fragment />
                   )}
                   {message.chooseable_actions?.length ? (
-                    message.chooseable_actions.map(i => (
-                      <div className='flex items-center'>
-                        <p>{i.name}</p>
-                        <Button
-                          onClick={() => {
-                            try {
-                              void (async () => {
-                                const { data } = await axiosInstance.post<ChatResponse>(
-                                  ApiRoutes.CHAT_BY_ID.replace(API_ID, params.id),
-                                  {
-                                    chosen_action_key: i.key,
-                                    message: '',
-                                    timestamp: Date.now(),
-                                    chain_id: chain,
-                                  },
-                                );
-
-                                writeToChat({
-                                  role: Role.SYSTEM,
-                                  content: data.body,
-                                  ...data,
-                                });
-                              })();
-                            } catch (error) {}
-                          }}
-                        >
-                          Get strategy
-                        </Button>
-                      </div>
-                    ))
+                    <ChooseableActions actions={message.chooseable_actions} />
                   ) : (
                     <></>
                   )}

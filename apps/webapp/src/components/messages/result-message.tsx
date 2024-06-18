@@ -49,19 +49,11 @@ export const ResultMessage = ({ result }: { result: TransactionResult[] }) => {
                     classNameText='order-2'
                     classNameIcon='order-1 w-4 h-4'
                   />
-                  <p className='text-sm font-medium italic'>{i.action_name}</p>
+                  <p className='text-sm font-medium italic capitalize'>{i.action_name}</p>
                 </div>
               </TableCell>
               <TableCell className='pl-3'>
-                <a
-                  href={
-                    Networks[i.network]?.txPathname
-                      ? `${Networks[i.network]?.txPathname}${i.transaction_hash}`
-                      : `${Networks[i.network]?.explorer}/tx/${i.transaction_hash}`
-                  }
-                  target='_blank'
-                  rel='noreferrer noopener'
-                >
+                <a href={i.transaction_on_explorer} target='_blank' rel='noreferrer noopener'>
                   {i.transaction_hash.slice(0, 7) +
                     '...' +
                     i.transaction_hash.slice(i.transaction_hash.length - 5)}
@@ -70,7 +62,7 @@ export const ResultMessage = ({ result }: { result: TransactionResult[] }) => {
               <TableCell className='pr-3 text-right'>
                 <div className='flex items-center justify-end gap-2'>
                   <Image
-                    src={`/${i.token_symbol}.png`}
+                    src={i.token_icon}
                     width={20}
                     height={20}
                     alt={i.token_symbol}

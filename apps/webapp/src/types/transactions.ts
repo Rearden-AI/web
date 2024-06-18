@@ -14,11 +14,13 @@ export interface TransactionResult {
   chat_uuid: string;
   from_address: Hex;
   id: number;
-  network: number;
+  network: string;
   status: TransactionStatus;
   timestamp: number;
   to_address: Hex;
+  token_icon: string;
   token_symbol: string;
   transaction_hash: string;
+  transaction_on_explorer: string;
   transaction_type: ActionType;
 }
