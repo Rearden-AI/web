@@ -31,10 +31,9 @@ export const mapInputValues = (
 
         if (valueByReturnId) {
           return {
-            ...i,
-            input: valueByReturnId,
-            value: valueByReturnId.value ?? '',
-            type: valueByReturnId.type,
+            ...valueByReturnId,
+            description: i.description,
+            id: i.id,
           };
         }
         throw new Error('Value by return id is not set');

@@ -11,7 +11,13 @@ import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useAccount, useSwitchChain } from 'wagmi';
 import { wagmiConfig } from '../../../config/wagmi';
 import { getSendParams, mapInputValues, prepareParams } from '../../../lib/prepare-send-data';
-import { Action, ActionDataUserInput, UserInputObject, ValueSource } from '../../../types/chat';
+import {
+  Action,
+  ActionDataUserInput,
+  UserInput,
+  UserInputObject,
+  ValueSource,
+} from '../../../types/chat';
 import { ActionDetailCard } from './action-detail-card';
 import { ModalLoader } from './modal-loader';
 
@@ -28,6 +34,7 @@ export const TransactionForm = ({
   index,
   action,
   returnValues,
+  setResult,
   setCurrentStep,
   setReturnValues,
 }: TransactionCardProps) => {
@@ -55,7 +62,7 @@ export const TransactionForm = ({
 
   useEffect(() => {
     setValues(mapInputValues(action.action_data.transaction_data.inputs, returnValues));
-  }, [action.action_data.transaction_data.inputs, returnValues]);
+  }, []);
 
   const approveToGenerate = () => {
     void (async () => {
@@ -83,11 +90,24 @@ export const TransactionForm = ({
         });
 
         if (receipt.status === 'success') {
+          values.map(i => {
+            setReturnValues(state => ({
+              ...state,
+              [action.id]: {
+                ...state[action.id],
+                [i.id]: { ...i } as UserInput,
+              },
+            }));
+          });
+
           setCurrentStep(state => state + 1);
         }
+
+        // setResult(state => )
       } catch (error) {
         console.log(error);
       }
+
       setLoading(false);
     })();
   };
@@ -126,13 +146,6 @@ export const TransactionForm = ({
                 );
 
                 setValues(updatedValue);
-
-                if (action.action_data.transaction_data.returns?.length) {
-                  setReturnValues(state => ({
-                    ...state,
-                    [action.id]: { ...state[action.id], [i.id]: { ...i, value: e.target.value } },
-                  }));
-                }
               }}
             />
           );
