@@ -16,10 +16,14 @@ import {
   ActionDataUserInput,
   UserInput,
   UserInputObject,
+  UserInputValueType,
   ValueSource,
 } from '../../../types/chat';
 import { ActionDetailCard } from './action-detail-card';
 import { ModalLoader } from './modal-loader';
+import axiosInstance from '../../../config/axios';
+import { API_ID, ApiRoutes } from '../../../constants/api-routes';
+import { useParams } from 'next/navigation';
 
 interface TransactionCardProps {
   index: number;
@@ -40,6 +44,7 @@ export const TransactionForm = ({
 }: TransactionCardProps) => {
   const { switchChainAsync } = useSwitchChain();
   const { address } = useAccount();
+  const params = useParams<{ id?: string }>();
   const [loading, setLoading] = useState<boolean>(false);
   const [balance, setBalance] = useState<GetBalanceReturnType>();
   const [values, setValues] = useState<ActionDataUserInput[]>([]);
@@ -82,6 +87,32 @@ export const TransactionForm = ({
 
         const sendParams = getSendParams(action.action_data.transaction_data, preparedParams);
 
+        const { data } = await axiosInstance.post<{ id: number }>(
+          ApiRoutes.TRANSACTIONS,
+          {
+            amount: (
+              values.find(
+                i =>
+                  i.value_source === ValueSource.USER_INPUT &&
+                  i.type === UserInputValueType.AMOUNT &&
+                  i.value,
+              ) as UserInput
+            ).value,
+            token_symbol: balance.symbol,
+            transaction_type: action.action_data.type,
+            status: 'pending',
+            to_address: action.action_data.transaction_data.to,
+            from_address: address,
+            chat_uuid: params.id,
+            action_name: action.action_data.transaction_data.method_name,
+            network: action.action_data.network.name,
+            timestamp: Date.now(),
+          },
+          { withCredentials: true },
+        );
+
+        console.log({ data });
+
         const transactionHash = await sendTransaction(wagmiConfig, sendParams);
 
         const receipt = await waitForTransactionReceipt(wagmiConfig, {
@@ -90,6 +121,11 @@ export const TransactionForm = ({
         });
 
         if (receipt.status === 'success') {
+          await axiosInstance.patch(
+            ApiRoutes.TRANSACTIONS_BY_ID.replace(API_ID, data.id.toString()),
+            { transaction_hash: receipt.transactionHash, status: 'succeeded' },
+            { withCredentials: true },
+          );
           values.map(i => {
             setReturnValues(state => ({
               ...state,
@@ -100,10 +136,10 @@ export const TransactionForm = ({
             }));
           });
 
+          setResult(state => [...state, data.id]);
+
           setCurrentStep(state => state + 1);
         }
-
-        // setResult(state => )
       } catch (error) {
         console.log(error);
       }

@@ -31,7 +31,7 @@ describe('Proof Slice', () => {
       history: [
         {
           role: Role.USER,
-          body: message,
+          content: message,
           timestamp,
         },
       ],
