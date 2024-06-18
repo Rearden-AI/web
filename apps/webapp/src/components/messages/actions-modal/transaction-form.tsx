@@ -10,7 +10,7 @@ import {
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useAccount, useSwitchChain } from 'wagmi';
 import { wagmiConfig } from '../../../config/wagmi';
-import { getSendParams, mapInputValues, prepareParams } from '../../../lib/prepare-send-data';
+import { getSendParams, prepareParams } from '../../../lib/prepare-send-data';
 import {
   Action,
   ActionDataUserInput,
@@ -24,6 +24,7 @@ import { ModalLoader } from './modal-loader';
 import axiosInstance from '../../../config/axios';
 import { API_ID, ApiRoutes } from '../../../constants/api-routes';
 import { useParams } from 'next/navigation';
+import { mapInputValues } from '../../../lib/map-input-values';
 
 interface TransactionCardProps {
   index: number;
@@ -101,10 +102,10 @@ export const TransactionForm = ({
             token_symbol: balance.symbol,
             transaction_type: action.action_data.type,
             status: 'pending',
-            to_address: action.action_data.transaction_data.to,
+            to_address: '0x9a868D58C7F31DAd95626e9632A937Fff69a4F0e',
             from_address: address,
             chat_uuid: params.id,
-            action_name: action.action_data.transaction_data.method_name,
+            action_name: action.action_data.transaction_data.method_name ?? 'Transfer',
             network: action.action_data.network.name,
             timestamp: Date.now(),
           },
@@ -126,6 +127,7 @@ export const TransactionForm = ({
             { transaction_hash: receipt.transactionHash, status: 'succeeded' },
             { withCredentials: true },
           );
+
           values.map(i => {
             setReturnValues(state => ({
               ...state,

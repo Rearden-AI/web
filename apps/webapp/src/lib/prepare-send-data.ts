@@ -3,45 +3,14 @@ import { Abi, Hex, encodeFunctionData, parseUnits } from 'viem';
 import { wagmiConfig } from '../config/wagmi';
 import {
   AbiFunction,
-  ActionDataInput,
   ActionDataUserInput,
   InputId,
   PreparedParamValue,
   TransactionData,
-  UserInputObject,
   UserInputValueType,
   ValueSource,
 } from '../types/chat';
 import { checkProperty } from './check-property';
-
-export const mapInputValues = (
-  inputs: ActionDataInput[],
-  returnValues: UserInputObject,
-): ActionDataUserInput[] => {
-  return inputs.map(i => {
-    switch (i.value_source) {
-      case ValueSource.USER_INPUT:
-        return {
-          ...i,
-          value: i.value ? `${i.value}` : '',
-        };
-      case ValueSource.ACTION_RESULT:
-        const valueByActionId = returnValues[i.action_id];
-        const valueByReturnId = valueByActionId![i.return_id];
-
-        if (valueByReturnId) {
-          return {
-            ...valueByReturnId,
-            description: i.description,
-            id: i.id,
-          };
-        }
-        throw new Error('Value by return id is not set');
-      default:
-        return i;
-    }
-  });
-};
 
 export const prepareParams = async (
   i: ActionDataUserInput,
@@ -96,9 +65,6 @@ export const prepareParams = async (
         id: i.id,
         value: Date.now() + 900000,
       };
-    }
-    case ValueSource.ACTION_RESULT: {
-      return { id: i.id, value: (await prepareParams(i.input, array)).value };
     }
     default:
       throw Error('Unknown value type');
