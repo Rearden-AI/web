@@ -7,13 +7,14 @@ import {
   waitForTransactionReceipt,
   type GetBalanceReturnType,
 } from '@wagmi/core';
-import { Dispatch, SetStateAction, useCallback, useEffect, useMemo, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
 import { useAccount, useSwitchChain } from 'wagmi';
 import { wagmiConfig } from '../../../config/wagmi';
 import { getSendParams, prepareParams } from '../../../lib/prepare-send-data';
 import {
   Action,
   ActionDataUserInput,
+  ActionType,
   UserInput,
   UserInputObject,
   UserInputValueType,
@@ -25,8 +26,8 @@ import axiosInstance from '../../../config/axios';
 import { API_ID, ApiRoutes } from '../../../constants/api-routes';
 import { useParams } from 'next/navigation';
 import { mapInputValues } from '../../../lib/map-input-values';
-import { formatUnits, isAddress } from 'viem';
-import { validateAmount } from '../../../lib/validation';
+import { formatUnits } from 'viem';
+import { inputsValidation } from '../../../lib/validation';
 
 interface TransactionCardProps {
   index: number;
@@ -48,6 +49,7 @@ export const TransactionForm = ({
   const { switchChainAsync } = useSwitchChain();
   const { address } = useAccount();
   const params = useParams<{ id?: string }>();
+
   const [loading, setLoading] = useState<boolean>(false);
   const [balance, setBalance] = useState<GetBalanceReturnType>();
   const [inputs, setInputs] = useState<ActionDataUserInput[]>([]);
@@ -68,52 +70,28 @@ export const TransactionForm = ({
     })();
   }, [address, action]);
 
-  const validate = useCallback(
-    (value: string, type: UserInputValueType) => {
-      let validations: Validation[];
-
-      if (type === UserInputValueType.AMOUNT) {
-        validations = [
-          {
-            type: 'error',
-            issue: 'insufficient funds',
-            checkFn: (amount: string) => Boolean(balance) && validateAmount(amount, balance!),
-          },
-        ];
-      } else {
-        validations = [
-          {
-            type: 'error',
-            issue: 'is not valid address',
-            checkFn: (value: string) => Boolean(value) && !isAddress(value),
-          },
-        ];
-      }
-
-      const results = validations.filter(v => v.checkFn(value));
-      const error = results.find(v => v.type === 'error');
-
-      return error ? error : results.find(v => v.type === 'warn');
-    },
-    [balance],
-  );
-
   useEffect(() => {
     setInputs(mapInputValues(action.action_data.transaction_data.inputs, actionValues));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const validationResult = useMemo(() => {
-    if (!inputs.length) return {};
+    if (!inputs.length || action.action_data.type === ActionType.SWAP) return {};
 
     const validatoinObj: Record<number, Validation | undefined> = {};
+
     inputs.forEach((i, index) => {
       if (i.value_source === ValueSource.USER_INPUT) {
-        validatoinObj[index] = validate(i.value ?? '', i.type);
+        validatoinObj[index] = inputsValidation(
+          i.value ?? '',
+          i.type,
+          i.type === UserInputValueType.AMOUNT ? balance : undefined,
+        );
       }
     });
+
     return validatoinObj;
-  }, [inputs, validate]);
+  }, [inputs, action, balance]);
 
   const disableButton = useMemo(() => {
     return (
@@ -223,7 +201,6 @@ export const TransactionForm = ({
         </p>
       </div>
       <ActionDetailCard action={action.action_data} />
-
       {inputs.map((i, index, array) => {
         if (i.value_source === ValueSource.USER_INPUT)
           return (
@@ -235,7 +212,9 @@ export const TransactionForm = ({
               value={i.value}
               validationResult={validationResult[index]}
               balance={
-                i.type === UserInputValueType.AMOUNT && balance
+                i.type === UserInputValueType.AMOUNT &&
+                balance &&
+                action.action_data.type !== ActionType.SWAP
                   ? {
                       symbol: balance.symbol,
                       displayValue: formatUnits(balance.value, balance.decimals),
@@ -243,11 +222,9 @@ export const TransactionForm = ({
                   : undefined
               }
               onChange={e => {
-                const updatedValue = array.map((j, ind) =>
-                  index === ind ? { ...j, value: e.target.value } : j,
+                setInputs(
+                  array.map((j, ind) => (index === ind ? { ...j, value: e.target.value } : j)),
                 );
-
-                setInputs(updatedValue);
               }}
             />
           );

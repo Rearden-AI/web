@@ -14,7 +14,7 @@ import { ExecuteButton } from '../../execute-button';
 import { Stepper } from '../../stepper';
 import { TransactionForm } from './transaction-form';
 
-export const ActionsModal = ({ wallet, actions }: { wallet: string; actions: Action[] }) => {
+export const ActionsModal = ({ actions }: { actions: Action[] }) => {
   const { writeToChat } = useStore(chatsSelector);
   const chain = useChainId();
   const [open, setOpen] = useState<boolean>(false);
@@ -76,7 +76,6 @@ export const ActionsModal = ({ wallet, actions }: { wallet: string; actions: Act
       }}
     >
       <ExecuteButton
-        disabled={Boolean(!wallet)}
         onClick={() => {
           setOpen(true);
         }}

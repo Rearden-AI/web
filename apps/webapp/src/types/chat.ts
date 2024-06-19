@@ -17,6 +17,8 @@ export type SupportNework = 1 | 324 | 17000;
 export enum ActionType {
   SWAP = 'Swap',
   TRANSFER = 'Transfer',
+  DEPOSIT = 'Deposit',
+  APPROVE = 'Approve',
 }
 
 export enum ChatSchemaState {

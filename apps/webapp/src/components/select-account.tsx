@@ -1,8 +1,6 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-
-import { Action } from '../../types/chat';
 import { BorderWrapper } from '@rearden/ui/components/border-wrapper';
 import { Icons } from '@rearden/ui/components/icons';
 import {
@@ -12,14 +10,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@rearden/ui/components/ui/select';
-import { ActionsModal } from './actions-modal';
 import { useSession } from 'next-auth/react';
 
-interface SelectAccountProps {
-  actions: Action[];
-}
-
-export const SelectAccount = ({ actions }: SelectAccountProps) => {
+export const SelectAccount = () => {
   const { data: session } = useSession();
   const [wallet, setWallet] = useState('');
 
@@ -65,7 +58,6 @@ export const SelectAccount = ({ actions }: SelectAccountProps) => {
           </Select>
         </BorderWrapper>
       </div>
-      <ActionsModal wallet={wallet} actions={actions} />
     </div>
   );
 };
