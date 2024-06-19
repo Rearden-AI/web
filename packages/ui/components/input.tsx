@@ -57,18 +57,16 @@ export const InputElement = ({
         )}
         <Input {...props} className='ml-3 h-6 pl-0' ref={inputRef} />
       </BorderWrapper>
-      {balance && (
-        <p
-          className={cn(
-            'text-sandstone text-[12px] font-semibold leading-4',
-            validationResult && 'text-error',
-          )}
-        >
-          {validationResult
-            ? validationResult.issue
-            : `Your balance: ${balance.symbol} ${balance.displayValue}`}
-        </p>
-      )}
+
+      <p
+        className={cn(
+          'text-sandstone text-[12px] font-semibold leading-4',
+          validationResult && 'text-error',
+        )}
+      >
+        {balance && !validationResult && `Your balance: ${balance.symbol} ${balance.displayValue}`}
+        {validationResult?.issue}
+      </p>
     </div>
   );
 };

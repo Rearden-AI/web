@@ -1,5 +1,5 @@
 import { BorderWrapper } from '@rearden/ui/components/border-wrapper';
-import { InputElement } from '@rearden/ui/components/input';
+import { InputElement, Validation } from '@rearden/ui/components/input';
 import { Button } from '@rearden/ui/components/ui/button';
 import {
   getBalance,
@@ -7,7 +7,7 @@ import {
   waitForTransactionReceipt,
   type GetBalanceReturnType,
 } from '@wagmi/core';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useCallback, useEffect, useMemo, useState } from 'react';
 import { useAccount, useSwitchChain } from 'wagmi';
 import { wagmiConfig } from '../../../config/wagmi';
 import { getSendParams, prepareParams } from '../../../lib/prepare-send-data';
@@ -25,6 +25,8 @@ import axiosInstance from '../../../config/axios';
 import { API_ID, ApiRoutes } from '../../../constants/api-routes';
 import { useParams } from 'next/navigation';
 import { mapInputValues } from '../../../lib/map-input-values';
+import { formatUnits, isAddress } from 'viem';
+import { validateAmount } from '../../../lib/validation';
 
 interface TransactionCardProps {
   index: number;
@@ -66,10 +68,63 @@ export const TransactionForm = ({
     })();
   }, [address, action]);
 
+  const validate = useCallback(
+    (value: string, type: UserInputValueType) => {
+      let validations: Validation[];
+
+      if (type === UserInputValueType.AMOUNT) {
+        validations = [
+          {
+            type: 'error',
+            issue: 'insufficient funds',
+            checkFn: (amount: string) => Boolean(balance) && validateAmount(amount, balance!),
+          },
+        ];
+      } else {
+        validations = [
+          {
+            type: 'error',
+            issue: 'is not valid address',
+            checkFn: (value: string) => Boolean(value) && !isAddress(value),
+          },
+        ];
+      }
+
+      const results = validations.filter(v => v.checkFn(value));
+      const error = results.find(v => v.type === 'error');
+
+      return error ? error : results.find(v => v.type === 'warn');
+    },
+    [balance],
+  );
+
   useEffect(() => {
     setInputs(mapInputValues(action.action_data.transaction_data.inputs, actionValues));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const validationResult = useMemo(() => {
+    if (!inputs.length) return {};
+
+    const validatoinObj: Record<number, Validation | undefined> = {};
+    inputs.forEach((i, index) => {
+      if (i.value_source === ValueSource.USER_INPUT) {
+        validatoinObj[index] = validate(i.value ?? '', i.type);
+      }
+    });
+    return validatoinObj;
+  }, [inputs, validate]);
+
+  const disableButton = useMemo(() => {
+    return (
+      Boolean(Object.values(validationResult).find(Boolean)) ||
+      Boolean(
+        inputs
+          .filter(i => i.value_source === ValueSource.USER_INPUT)
+          .find(i => !(i as UserInput).value),
+      )
+    );
+  }, [validationResult, inputs]);
 
   const approveToGenerate = () => {
     void (async () => {
@@ -178,6 +233,15 @@ export const TransactionForm = ({
               placeholder={i.description}
               type={i.type === UserInputValueType.AMOUNT ? 'number' : 'text'}
               value={i.value}
+              validationResult={validationResult[index]}
+              balance={
+                i.type === UserInputValueType.AMOUNT && balance
+                  ? {
+                      symbol: balance.symbol,
+                      displayValue: formatUnits(balance.value, balance.decimals),
+                    }
+                  : undefined
+              }
               onChange={e => {
                 const updatedValue = array.map((j, ind) =>
                   index === ind ? { ...j, value: e.target.value } : j,
@@ -189,11 +253,7 @@ export const TransactionForm = ({
           );
         return null;
       })}
-      <Button
-        className='mt-4 w-[91px]'
-        onClick={approveToGenerate}
-        // disabled={!Number(debounceAmount) || Boolean(validationResult)}
-      >
+      <Button className='mt-4 w-[91px]' onClick={approveToGenerate} disabled={disableButton}>
         Proceed
       </Button>
     </div>
