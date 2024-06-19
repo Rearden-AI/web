@@ -25,7 +25,6 @@ const getChats = async ({
 }) => {
   const { data: response } = await axiosInstance.get<PaginatedResponse<ChatSchema[]>>(
     ApiRoutes.CHATS + `?page_number=${pageParam}&page_size=15`,
-    { withCredentials: true },
   );
 
   return filterUniqueByKey<ChatSchema>(response.data, prevChats, 'uuid');

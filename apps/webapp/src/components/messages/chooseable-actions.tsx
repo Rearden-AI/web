@@ -12,6 +12,7 @@ export const ChooseableActions = ({ actions }: { actions: ChooseableAction[] }) 
   const { writeToChat } = useStore(chatsSelector);
   const params = useParams<{ id?: string }>();
   const chain = useChainId();
+
   return (
     <div className='flex flex-col gap-4'>
       {actions.map((i, index) => (

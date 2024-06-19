@@ -46,7 +46,6 @@ export const ChatInput = () => {
           const { data } = await axiosInstance.post<ChatResponse>(
             ApiRoutes.CHAT_BY_ID.replace(API_ID, chatId),
             { message: input, timestamp: timestamp, chain_id: chain },
-            { withCredentials: true },
           );
 
           writeToChat({
@@ -58,11 +57,9 @@ export const ChatInput = () => {
       } else {
         void (async () => {
           try {
-            const { data: chat } = await axiosInstance.post<ChatSchema>(
-              ApiRoutes.CHATS,
-              { chain_id: chain },
-              { withCredentials: true },
-            );
+            const { data: chat } = await axiosInstance.post<ChatSchema>(ApiRoutes.CHATS, {
+              chain_id: chain,
+            });
 
             const timestamp = Date.now();
             addChat({ ...chat, isNew: true }, input, timestamp);
@@ -72,7 +69,6 @@ export const ChatInput = () => {
             const { data } = await axiosInstance.post<ChatResponse>(
               ApiRoutes.CHAT_BY_ID.replace(API_ID, chat.uuid),
               { message: input, timestamp, chain_id: chain },
-              { withCredentials: true },
             );
 
             writeToChat({

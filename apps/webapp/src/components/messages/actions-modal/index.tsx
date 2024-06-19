@@ -34,7 +34,6 @@ export const ActionsModal = ({ actions }: { actions: Action[] }) => {
           message: '',
           chain_id: chain,
         },
-        { withCredentials: true },
       );
 
       writeToChat({

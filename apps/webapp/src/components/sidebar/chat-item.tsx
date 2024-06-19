@@ -30,14 +30,10 @@ export const ChatItem = ({ chat }: { chat: ChatSchema }) => {
 
   const handleRename = () => {
     void (async () => {
-      await axiosInstance.patch(
-        ApiRoutes.CHAT_BY_ID.replace(API_ID, chat.uuid),
-        {
-          name: name || null,
-          chain_id: chain,
-        },
-        { withCredentials: true },
-      );
+      await axiosInstance.patch(ApiRoutes.CHAT_BY_ID.replace(API_ID, chat.uuid), {
+        name: name || null,
+        chain_id: chain,
+      });
       setEditMode(false);
       renameChat(chat.uuid, name);
     })();

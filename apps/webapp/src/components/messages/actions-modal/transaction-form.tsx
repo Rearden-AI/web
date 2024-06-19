@@ -122,29 +122,25 @@ export const TransactionForm = ({
 
         const sendParams = getSendParams(action.action_data.transaction_data, preparedParams);
 
-        const { data } = await axiosInstance.post<{ id: number }>(
-          ApiRoutes.TRANSACTIONS,
-          {
-            amount: (
-              inputs.find(
-                i =>
-                  i.value_source === ValueSource.USER_INPUT &&
-                  i.type === UserInputValueType.AMOUNT &&
-                  i.value,
-              ) as UserInput
-            ).value,
-            token_symbol: balance.symbol,
-            transaction_type: action.action_data.type,
-            status: 'pending',
-            to_address: '0x9a868D58C7F31DAd95626e9632A937Fff69a4F0e',
-            from_address: address,
-            chat_uuid: params.id,
-            action_name: action.action_data.transaction_data.method_name ?? 'Transfer',
-            network: action.action_data.network.name,
-            timestamp: Date.now(),
-          },
-          { withCredentials: true },
-        );
+        const { data } = await axiosInstance.post<{ id: number }>(ApiRoutes.TRANSACTIONS, {
+          amount: (
+            inputs.find(
+              i =>
+                i.value_source === ValueSource.USER_INPUT &&
+                i.type === UserInputValueType.AMOUNT &&
+                i.value,
+            ) as UserInput
+          ).value,
+          token_symbol: balance.symbol,
+          transaction_type: action.action_data.type,
+          status: 'pending',
+          to_address: '0x9a868D58C7F31DAd95626e9632A937Fff69a4F0e',
+          from_address: address,
+          chat_uuid: params.id,
+          action_name: action.action_data.transaction_data.method_name ?? 'Transfer',
+          network: action.action_data.network.name,
+          timestamp: Date.now(),
+        });
 
         const transactionHash = await sendTransaction(wagmiConfig, sendParams);
 
@@ -157,7 +153,6 @@ export const TransactionForm = ({
           await axiosInstance.patch(
             ApiRoutes.TRANSACTIONS_BY_ID.replace(API_ID, data.id.toString()),
             { transaction_hash: receipt.transactionHash, status: 'succeeded' },
-            { withCredentials: true },
           );
 
           //Write user inputted values for next actions

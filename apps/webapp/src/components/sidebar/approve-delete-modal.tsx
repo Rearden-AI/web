@@ -63,9 +63,7 @@ export const ApproveDeleteModal = ({ chat }: { chat: ChatSchema }) => {
               onClick={e => {
                 e.preventDefault();
                 void (async () => {
-                  await axiosInstance.delete(ApiRoutes.CHAT_BY_ID.replace(API_ID, chat.uuid), {
-                    withCredentials: true,
-                  });
+                  await axiosInstance.delete(ApiRoutes.CHAT_BY_ID.replace(API_ID, chat.uuid));
                   removeChat(chat.uuid);
                   params.id === chat.uuid && router.push(PagePath.INDEX);
                   setOpen(false);

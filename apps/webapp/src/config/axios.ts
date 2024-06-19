@@ -2,6 +2,7 @@ import Axios, { AxiosRequestConfig } from 'axios';
 
 const axiosInstance = Axios.create({
   baseURL: process.env['NEXT_PUBLIC_API_URL'],
+  withCredentials: true,
 });
 
 export interface RetryQueueItem {

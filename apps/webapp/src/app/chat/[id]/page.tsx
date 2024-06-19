@@ -19,12 +19,12 @@ export default function ChatPage({ params }: { params: { id: string } }) {
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
 
   useEffect(() => {
+    // if chat is new than get data should not be
     if (selectedChat?.isNew && selectedChat.uuid === params.id) return;
     void (async () => {
       try {
         const { data: chat } = await axiosInstance.get<ExtendedChatSchema>(
           ApiRoutes.CHAT_BY_ID.replace(API_ID, params.id),
-          { withCredentials: true },
         );
 
         selectChat({ ...chat, history: chat.history.reverse() });

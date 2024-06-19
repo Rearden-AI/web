@@ -23,9 +23,7 @@ export const RainbowKitAuthCustomProvider = ({
 
   const authenticationAdapter = createAuthenticationAdapter({
     getNonce: async () => {
-      const { data } = await axiosInstance.get<string>(ApiRoutes.NONCE, {
-        withCredentials: true,
-      });
+      const { data } = await axiosInstance.get<string>(ApiRoutes.NONCE);
 
       return data;
     },
@@ -50,14 +48,10 @@ export const RainbowKitAuthCustomProvider = ({
       try {
         setStatus('loading');
 
-        const { data } = await axiosInstance.post<boolean>(
-          ApiRoutes.VERIFY,
-          {
-            signature,
-            message: message.prepareMessage(),
-          },
-          { withCredentials: true },
-        );
+        const { data } = await axiosInstance.post<boolean>(ApiRoutes.VERIFY, {
+          signature,
+          message: message.prepareMessage(),
+        });
 
         await signIn('credentials', {
           address: message.address,
