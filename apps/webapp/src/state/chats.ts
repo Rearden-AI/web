@@ -48,7 +48,7 @@ export const createChatsSlice = (): SliceCreator<ChatsSlice> => (set, get) => {
 
       let history = selectedChat.history;
 
-      history = [{ ...message }, ...history];
+      history = [...history, { ...message }];
 
       set(state => {
         if (state.chats.selectedChat) state.chats.selectedChat.history = history;

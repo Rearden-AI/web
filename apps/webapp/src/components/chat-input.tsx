@@ -45,7 +45,7 @@ export const ChatInput = () => {
         void (async () => {
           const { data } = await axiosInstance.post<ChatResponse>(
             ApiRoutes.CHAT_BY_ID.replace(API_ID, chatId),
-            { message: input, timestamp: timestamp, chain_id: chain },
+            { message: input, timestamp, chain_id: chain },
           );
 
           writeToChat({
