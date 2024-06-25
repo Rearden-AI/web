@@ -28,6 +28,7 @@ import { useParams } from 'next/navigation';
 import { mapInputValues } from '../../../lib/map-input-values';
 import { formatUnits } from 'viem';
 import { inputsValidation } from '../../../lib/validation';
+import { useConnectModal } from '@rainbow-me/rainbowkit';
 
 interface TransactionCardProps {
   index: number;
@@ -49,6 +50,7 @@ export const TransactionForm = ({
   const { switchChainAsync } = useSwitchChain();
   const { address } = useAccount();
   const params = useParams<{ id?: string }>();
+  const { openConnectModal } = useConnectModal();
 
   const [loading, setLoading] = useState<boolean>(false);
   const [balance, setBalance] = useState<GetBalanceReturnType>();
@@ -225,8 +227,12 @@ export const TransactionForm = ({
           );
         return null;
       })}
-      <Button className='mt-4 w-[91px]' onClick={approveToGenerate} disabled={disableButton}>
-        Proceed
+      <Button
+        className='mt-4 min-w-[91px] px-4'
+        onClick={address ? approveToGenerate : openConnectModal}
+        disabled={address ? disableButton : false}
+      >
+        {address ? 'Proceed' : 'Connect wallet'}
       </Button>
     </div>
   );
