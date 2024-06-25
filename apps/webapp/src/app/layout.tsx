@@ -28,7 +28,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <Providers session={session}>
           <div className='flex h-screen w-full flex-col gap-4 px-6 py-4'>
             <Header />
-            <div className='flex flex-1'>
+            <div className='flex flex-1 gap-4 '>
               <Sidebar />
               <div className='mx-auto flex max-w-[933px] flex-1 flex-col justify-between px-0'>
                 <div className='flex max-h-[calc(100vh-170px)] flex-1'>{children}</div>

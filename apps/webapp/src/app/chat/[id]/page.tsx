@@ -12,6 +12,7 @@ import { ExtendedChatSchema, Role } from '../../../types/chat';
 import { StrategyMessage } from '../../../components/messages/strategy-message';
 import { ResultMessage } from '../../../components/messages/result-message';
 import { ChooseableActions } from '../../../components/messages/chooseable-actions';
+import moment from 'moment';
 
 export default function ChatPage({ params }: { params: { id: string } }) {
   const { selectedChat, selectChat } = useStore(chatsSelector);
@@ -71,6 +72,9 @@ export default function ChatPage({ params }: { params: { id: string } }) {
                       {message.role === Role.USER ? 'You' : 'Rearden'}
                     </p>
                   </div>
+                  <p className='w-fit bg-primary-gradient bg-clip-text text-sm font-semibold text-transparent'>
+                    {moment(message.timestamp).format('HH:mm')}
+                  </p>
                 </div>
                 <div className='flex flex-col gap-2'>
                   <div className='flex flex-col'>
