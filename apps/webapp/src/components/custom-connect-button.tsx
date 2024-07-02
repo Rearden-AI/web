@@ -23,26 +23,9 @@ export const CustomConnectButton = () => {
           (!authenticationStatus || authenticationStatus === 'authenticated');
 
         return (
-          <div
-            {...(!ready && {
-              'aria-hidden': true,
-              style: {
-                opacity: 0,
-                pointerEvents: 'none',
-                userSelect: 'none',
-              },
-            })}
-          >
+          <div>
             {(() => {
-              if (!connected) {
-                return (
-                  <Button onClick={openConnectModal} className='w-[141px]'>
-                    Connect Wallet
-                  </Button>
-                );
-              }
-
-              if (chain.unsupported) {
+              if (chain?.unsupported) {
                 return (
                   <Button onClick={openChainModal} variant='secondary' className='px-10'>
                     Wrong network
@@ -50,36 +33,44 @@ export const CustomConnectButton = () => {
                 );
               }
 
-              return (
-                <div style={{ display: 'flex', gap: 12 }}>
-                  <Button onClick={openChainModal} variant='secondary' className='px-10'>
-                    {chain.hasIcon && (
-                      <div
-                        style={{
-                          background: chain.iconBackground,
-                          width: 12,
-                          height: 12,
-                          borderRadius: 999,
-                          overflow: 'hidden',
-                          marginRight: 4,
-                        }}
-                      >
-                        {chain.iconUrl && (
-                          <img
-                            alt={chain.name ?? 'Chain icon'}
-                            src={chain.iconUrl}
-                            style={{ width: 12, height: 12 }}
-                          />
-                        )}
-                      </div>
-                    )}
-                    {chain.name}
-                  </Button>
+              if (connected) {
+                return (
+                  <div style={{ display: 'flex', gap: 12 }}>
+                    <Button onClick={openChainModal} variant='secondary' className='px-10'>
+                      {chain.hasIcon && (
+                        <div
+                          style={{
+                            background: chain.iconBackground,
+                            width: 12,
+                            height: 12,
+                            borderRadius: 999,
+                            overflow: 'hidden',
+                            marginRight: 4,
+                          }}
+                        >
+                          {chain.iconUrl && (
+                            <img
+                              alt={chain.name ?? 'Chain icon'}
+                              src={chain.iconUrl}
+                              style={{ width: 12, height: 12 }}
+                            />
+                          )}
+                        </div>
+                      )}
+                      {chain.name}
+                    </Button>
 
-                  <Button onClick={openAccountModal} variant='secondary' className='px-10'>
-                    {account.displayName}
-                  </Button>
-                </div>
+                    <Button onClick={openAccountModal} variant='secondary' className='px-10'>
+                      {account.displayName}
+                    </Button>
+                  </div>
+                );
+              }
+
+              return (
+                <Button onClick={openConnectModal} className='w-[141px]'>
+                  Connect Wallet
+                </Button>
               );
             })()}
           </div>

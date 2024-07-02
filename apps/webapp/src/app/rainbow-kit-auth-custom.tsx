@@ -1,14 +1,15 @@
 import {
-  AuthenticationStatus,
   RainbowKitAuthenticationProvider,
   createAuthenticationAdapter,
 } from '@rainbow-me/rainbowkit';
 import { Session } from 'next-auth';
 import { signIn, signOut } from 'next-auth/react';
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { SiweMessage } from 'siwe';
 import axiosInstance from '../config/axios';
 import { ApiRoutes } from '../constants/api-routes';
+import { useStore } from '../state';
+import { authSelector } from '../state/auth';
 
 export const RainbowKitAuthCustomProvider = ({
   children,
@@ -17,9 +18,11 @@ export const RainbowKitAuthCustomProvider = ({
   children: React.ReactNode;
   session: Session | null;
 }) => {
-  const [status, setStatus] = useState<AuthenticationStatus>(
-    session ? 'authenticated' : 'unauthenticated',
-  );
+  const { status, setStatus } = useStore(authSelector);
+
+  useEffect(() => {
+    setStatus(session ? 'authenticated' : 'unauthenticated');
+  }, [session, setStatus]);
 
   const authenticationAdapter = createAuthenticationAdapter({
     getNonce: async () => {
@@ -66,8 +69,9 @@ export const RainbowKitAuthCustomProvider = ({
     },
 
     signOut: async () => {
-      await signOut();
+      await axiosInstance.post(ApiRoutes.LOGOUT);
       setStatus('unauthenticated');
+      await signOut();
     },
   });
   return (

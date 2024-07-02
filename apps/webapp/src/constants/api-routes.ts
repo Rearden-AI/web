@@ -12,4 +12,5 @@ export enum ApiRoutes {
   TRANSACTIONS_BY_ID = '/transactions/{id}',
   NONCE = '/auth/nonce',
   VERIFY = '/auth/verify',
+  LOGOUT = '/auth/logout',
 }
