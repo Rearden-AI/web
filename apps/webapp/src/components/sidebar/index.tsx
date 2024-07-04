@@ -3,7 +3,6 @@
 import { BorderWrapper } from '@rearden/ui/components/border-wrapper';
 import { Icons } from '@rearden/ui/components/icons';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useEffect, useRef } from 'react';
 import axiosInstance from '../../config/axios';
@@ -15,6 +14,7 @@ import { chatsSelector } from '../../state/chats';
 import { ChatSchema } from '../../types/chat';
 import { PaginatedResponse } from '../../types/generic';
 import { ChatItem } from './chat-item';
+import { authSelector } from '../../state/auth';
 
 const getChats = async ({
   pageParam,
@@ -34,11 +34,11 @@ export const Sidebar = () => {
   const loaderRef = useRef<HTMLDivElement | null>(null);
 
   const { all, addChats } = useStore(chatsSelector);
-  const { data: session } = useSession();
+  const { status } = useStore(authSelector);
 
   const { data, fetchNextPage } = useInfiniteQuery({
     queryKey: ['chats'],
-    enabled: Boolean(session?.address),
+    enabled: status === 'authenticated',
     initialPageParam: 1,
     queryFn: ({ pageParam }) => getChats({ pageParam, prevChats: all }),
     getNextPageParam: (lastPage, allPages) => (lastPage.length ? allPages.length + 1 : undefined),
@@ -54,7 +54,7 @@ export const Sidebar = () => {
   }, [data?.pages, addChats]);
 
   useEffect(() => {
-    if (!session?.address) return;
+    if (status !== 'authenticated') return;
     const observer = new IntersectionObserver(entries => {
       const target = entries[0];
       if (target?.isIntersecting) {
@@ -72,7 +72,7 @@ export const Sidebar = () => {
         observer.unobserve(loaderRef.current);
       }
     };
-  }, [fetchNextPage, session]);
+  }, [fetchNextPage, status]);
 
   return (
     <BorderWrapper

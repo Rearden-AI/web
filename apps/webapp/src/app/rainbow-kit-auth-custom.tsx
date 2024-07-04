@@ -2,27 +2,38 @@ import {
   RainbowKitAuthenticationProvider,
   createAuthenticationAdapter,
 } from '@rainbow-me/rainbowkit';
-import { Session } from 'next-auth';
-import { signIn, signOut } from 'next-auth/react';
+import { getSession, signIn, signOut } from 'next-auth/react';
 import React, { useEffect } from 'react';
 import { SiweMessage } from 'siwe';
 import axiosInstance from '../config/axios';
 import { ApiRoutes } from '../constants/api-routes';
 import { useStore } from '../state';
 import { authSelector } from '../state/auth';
+import { getAccount } from '@wagmi/core';
+import { wagmiConfig } from '../config/wagmi';
 
-export const RainbowKitAuthCustomProvider = ({
-  children,
-  session,
-}: {
-  children: React.ReactNode;
-  session: Session | null;
-}) => {
+export const RainbowKitAuthCustomProvider = ({ children }: { children: React.ReactNode }) => {
   const { status, setStatus } = useStore(authSelector);
 
   useEffect(() => {
-    setStatus(session ? 'authenticated' : 'unauthenticated');
-  }, [session, setStatus]);
+    const interval = setInterval(() => {
+      void (async () => {
+        const account = getAccount(wagmiConfig);
+        const session = await getSession();
+
+        setStatus(account.address && session ? 'authenticated' : 'unauthenticated');
+
+        session && !account.address && (await signOut());
+
+        account.address && session && clearInterval(interval);
+      })();
+    }, 1000);
+
+    return () => {
+      clearInterval(interval);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const authenticationAdapter = createAuthenticationAdapter({
     getNonce: async () => {
