@@ -13,13 +13,20 @@ import { StrategyMessage } from '../../../components/messages/strategy-message';
 import { ResultMessage } from '../../../components/messages/result-message';
 import { ChooseableActions } from '../../../components/messages/chooseable-actions';
 import moment from 'moment';
+import { authSelector } from '../../../state/auth';
+import { redirect } from 'next/navigation';
 
 export default function ChatPage({ params }: { params: { id: string } }) {
   const { selectedChat, selectChat } = useStore(chatsSelector);
+  const { isAuth } = useStore(authSelector);
 
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
 
   useEffect(() => {
+    if (!isAuth) {
+      selectChat(undefined);
+      redirect('/');
+    }
     // if chat is new than get data should not be
     if (selectedChat?.isNew && selectedChat.uuid === params.id) return;
     void (async () => {
@@ -34,7 +41,7 @@ export default function ChatPage({ params }: { params: { id: string } }) {
       }
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [params.id, selectChat, selectedChat?.isNew]);
+  }, [params.id, selectChat, selectedChat?.isNew, isAuth]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });

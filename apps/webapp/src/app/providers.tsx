@@ -8,6 +8,7 @@ import { WagmiProvider } from 'wagmi';
 import { rainbowTheme } from '../config/rainbow-theme';
 import { wagmiConfig } from '../config/wagmi';
 import { RainbowKitAuthCustomProvider } from './rainbow-kit-auth-custom';
+import { CheckIsAuth } from './check-is-auth';
 
 const queryClient = new QueryClient();
 
@@ -22,9 +23,11 @@ export const Providers = ({
     <SessionProvider refetchInterval={0} session={session}>
       <WagmiProvider config={wagmiConfig}>
         <QueryClientProvider client={queryClient}>
-          <RainbowKitAuthCustomProvider>
-            <RainbowKitProvider theme={rainbowTheme}>{children} </RainbowKitProvider>
-          </RainbowKitAuthCustomProvider>
+          <CheckIsAuth>
+            <RainbowKitAuthCustomProvider session={session}>
+              <RainbowKitProvider theme={rainbowTheme}>{children} </RainbowKitProvider>
+            </RainbowKitAuthCustomProvider>
+          </CheckIsAuth>
         </QueryClientProvider>
       </WagmiProvider>
     </SessionProvider>

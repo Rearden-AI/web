@@ -2,38 +2,22 @@ import {
   RainbowKitAuthenticationProvider,
   createAuthenticationAdapter,
 } from '@rainbow-me/rainbowkit';
-import { getSession, signIn, signOut } from 'next-auth/react';
-import React, { useEffect } from 'react';
+import { signIn, signOut } from 'next-auth/react';
+import React from 'react';
 import { SiweMessage } from 'siwe';
 import axiosInstance from '../config/axios';
 import { ApiRoutes } from '../constants/api-routes';
+import { Session } from 'next-auth';
 import { useStore } from '../state';
 import { authSelector } from '../state/auth';
-import { getAccount } from '@wagmi/core';
-import { wagmiConfig } from '../config/wagmi';
 
-export const RainbowKitAuthCustomProvider = ({ children }: { children: React.ReactNode }) => {
+export const RainbowKitAuthCustomProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+  session: Session | null;
+}) => {
   const { status, setStatus } = useStore(authSelector);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      void (async () => {
-        const account = getAccount(wagmiConfig);
-        const session = await getSession();
-
-        setStatus(account.address && session ? 'authenticated' : 'unauthenticated');
-
-        session && !account.address && (await signOut());
-
-        account.address && session && clearInterval(interval);
-      })();
-    }, 1000);
-
-    return () => {
-      clearInterval(interval);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const authenticationAdapter = createAuthenticationAdapter({
     getNonce: async () => {
@@ -74,15 +58,18 @@ export const RainbowKitAuthCustomProvider = ({ children }: { children: React.Rea
         setStatus('authenticated');
         return data;
       } catch (error) {
+        console.log(error);
+
         setStatus('unauthenticated');
         return false;
       }
     },
 
     signOut: async () => {
-      await axiosInstance.post(ApiRoutes.LOGOUT);
       setStatus('unauthenticated');
-      await signOut();
+      await signOut({
+        redirect: false,
+      });
     },
   });
   return (

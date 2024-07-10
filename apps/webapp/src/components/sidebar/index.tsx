@@ -34,11 +34,11 @@ export const Sidebar = () => {
   const loaderRef = useRef<HTMLDivElement | null>(null);
 
   const { all, addChats } = useStore(chatsSelector);
-  const { status } = useStore(authSelector);
+  const { isAuth } = useStore(authSelector);
 
   const { data, fetchNextPage } = useInfiniteQuery({
     queryKey: ['chats'],
-    enabled: status === 'authenticated',
+    enabled: isAuth,
     initialPageParam: 1,
     queryFn: ({ pageParam }) => getChats({ pageParam, prevChats: all }),
     getNextPageParam: (lastPage, allPages) => (lastPage.length ? allPages.length + 1 : undefined),
@@ -54,7 +54,8 @@ export const Sidebar = () => {
   }, [data?.pages, addChats]);
 
   useEffect(() => {
-    if (status !== 'authenticated') return;
+    if (!isAuth) return;
+
     const observer = new IntersectionObserver(entries => {
       const target = entries[0];
       if (target?.isIntersecting) {
@@ -72,7 +73,7 @@ export const Sidebar = () => {
         observer.unobserve(loaderRef.current);
       }
     };
-  }, [fetchNextPage, status]);
+  }, [fetchNextPage, isAuth]);
 
   return (
     <BorderWrapper

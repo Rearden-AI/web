@@ -13,4 +13,5 @@ export enum ApiRoutes {
   NONCE = '/auth/nonce',
   VERIFY = '/auth/verify',
   LOGOUT = '/auth/logout',
+  ME = '/auth/me',
 }

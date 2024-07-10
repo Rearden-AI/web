@@ -1,43 +1,35 @@
-// import { disconnect } from '@wagmi/core';
-import Axios, { AxiosRequestConfig } from 'axios';
-// import { wagmiConfig } from './wagmi';
-// import { signOut } from 'next-auth/react';
+import Axios, { AxiosError, AxiosRequestConfig } from 'axios';
+import { deleteCookie, getCookie } from 'cookies-next';
+import { ApiRoutes } from '../constants/api-routes';
+import { disconnect } from '@wagmi/core';
+import { wagmiConfig } from './wagmi';
+import { REARDEN_SESSION_ID } from '../constants/constants';
+
+export const BASE_URL = process.env['NEXT_PUBLIC_API_URL']!;
 
 const axiosInstance = Axios.create({
-  baseURL: process.env['NEXT_PUBLIC_API_URL'],
+  baseURL: BASE_URL,
   withCredentials: true,
 });
 
-// axiosInstance.interceptors.response.use(
-//   function (response) {
-//     // Any status code that lie within the range of 2xx cause this function to trigger
-//     // Do something with response data
-//     return response;
-//   },
-//   async function (error) {
-//     const err = error as AxiosError;
-//     console.log(error);
+axiosInstance.interceptors.response.use(
+  function (response) {
+    return response;
+  },
+  async function (error) {
+    const err = error as AxiosError;
+    if (err.response?.status === 401) {
+      await disconnect(wagmiConfig);
 
-//     // useStore().auth.setStatus('unauthenticated');
-//     // await axiosInstance.post(ApiRoutes.LOGOUT);
-//     // await disconnect(wagmiConfig);
-//     // await signOut();
-//     // const status = err.response ? err.response.status : null;
+      if (getCookie(REARDEN_SESSION_ID)) {
+        deleteCookie(REARDEN_SESSION_ID);
+        await axiosInstance.post(ApiRoutes.LOGOUT);
+      }
+    }
 
-//     // if (status === 401) {
-//     //   useStore().auth.setStatus('unauthenticated');
-//     //   await axiosInstance.post(ApiRoutes.LOGOUT);
-//     //   await disconnect(wagmiConfig);
-//     //   await signOut();
-//     // } else if (status === 404) {
-//     //   // Handle not found errors
-//     // } else {
-//     //   // Handle other errors
-//     // }
-
-//     return Promise.reject(err);
-//   },
-// );
+    return Promise.reject(err);
+  },
+);
 
 export interface RetryQueueItem {
   resolve: (value?: unknown) => void;
