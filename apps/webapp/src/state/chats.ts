@@ -10,11 +10,18 @@ export interface ChatsSlice {
   writeToChat: (message: HistoryMessage) => void;
   renameChat: (id: string, name: string) => void;
   removeChat: (id: string) => void;
+  clearChats: () => void;
 }
 
 export const createChatsSlice = (): SliceCreator<ChatsSlice> => (set, get) => {
   return {
     all: [],
+    clearChats: () => {
+      set(state => {
+        state.chats.all = [];
+      });
+    },
+
     selectChat: chat => {
       set(state => {
         state.chats.selectedChat = chat;

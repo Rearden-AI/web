@@ -8,16 +8,16 @@ import { useEffect } from 'react';
 import { getAccount } from '@wagmi/core';
 import { wagmiConfig } from '../config/wagmi';
 import { REARDEN_SESSION_ID } from '../constants/constants';
+import { chatsSelector } from '../state/chats';
 
 export const CheckIsAuth = ({ children }: { children: React.ReactNode }) => {
   const { setAuth, setStatus } = useStore(authSelector);
+  const { clearChats } = useStore(chatsSelector);
   const { disconnect } = useDisconnect();
 
   useAccountEffect({
     async onConnect() {
       const cookie = getCookie(REARDEN_SESSION_ID);
-
-      console.log(cookie);
 
       if (!cookie) return;
       await axiosInstance.get<string>(ApiRoutes.ME);
@@ -39,6 +39,7 @@ export const CheckIsAuth = ({ children }: { children: React.ReactNode }) => {
 
       setStatus('unauthenticated');
       setAuth(false);
+      clearChats();
     },
   });
 
@@ -60,6 +61,7 @@ export const CheckIsAuth = ({ children }: { children: React.ReactNode }) => {
             deleteCookie(REARDEN_SESSION_ID);
             setStatus('unauthenticated');
             setAuth(false);
+            clearChats();
           }
         })();
       }
