@@ -17,6 +17,8 @@ export const CheckIsAuth = ({ children }: { children: React.ReactNode }) => {
     async onConnect() {
       const cookie = getCookie(REARDEN_SESSION_ID);
 
+      console.log(cookie);
+
       if (!cookie) return;
       await axiosInstance.get<string>(ApiRoutes.ME);
 

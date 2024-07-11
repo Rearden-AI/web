@@ -17,7 +17,7 @@ export const RainbowKitAuthCustomProvider = ({
   children: React.ReactNode;
   session: Session | null;
 }) => {
-  const { status, setStatus } = useStore(authSelector);
+  const { status, setStatus, setAuth } = useStore(authSelector);
 
   const authenticationAdapter = createAuthenticationAdapter({
     getNonce: async () => {
@@ -56,10 +56,11 @@ export const RainbowKitAuthCustomProvider = ({
           redirect: false,
         });
         setStatus('authenticated');
+        setAuth(true);
         return data;
       } catch (error) {
         console.log(error);
-
+        setAuth(false);
         setStatus('unauthenticated');
         return false;
       }

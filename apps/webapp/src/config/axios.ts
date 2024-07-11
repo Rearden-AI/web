@@ -1,9 +1,9 @@
 import Axios, { AxiosError, AxiosRequestConfig } from 'axios';
-import { deleteCookie, getCookie } from 'cookies-next';
-import { ApiRoutes } from '../constants/api-routes';
-import { disconnect } from '@wagmi/core';
-import { wagmiConfig } from './wagmi';
-import { REARDEN_SESSION_ID } from '../constants/constants';
+// import { deleteCookie, getCookie } from 'cookies-next';
+// import { ApiRoutes } from '../constants/api-routes';
+// import { disconnect } from '@wagmi/core';
+// import { wagmiConfig } from './wagmi';
+// import { REARDEN_SESSION_ID } from '../constants/constants';
 
 export const BASE_URL = process.env['NEXT_PUBLIC_API_URL']!;
 
@@ -18,14 +18,14 @@ axiosInstance.interceptors.response.use(
   },
   async function (error) {
     const err = error as AxiosError;
-    if (err.response?.status === 401) {
-      await disconnect(wagmiConfig);
+    // if (err.response?.status === 401) {
+    //   await disconnect(wagmiConfig);
 
-      if (getCookie(REARDEN_SESSION_ID)) {
-        deleteCookie(REARDEN_SESSION_ID);
-        await axiosInstance.post(ApiRoutes.LOGOUT);
-      }
-    }
+    //   if (getCookie(REARDEN_SESSION_ID)) {
+    //     deleteCookie(REARDEN_SESSION_ID);
+    //     await axiosInstance.post(ApiRoutes.LOGOUT);
+    //   }
+    // }
 
     return Promise.reject(err);
   },
