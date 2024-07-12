@@ -3,7 +3,6 @@ import { inter } from '@rearden/ui/lib/fonts';
 import { cn } from '@rearden/ui/lib/utils';
 import '@rearden/ui/styles/globals.css';
 import type { Metadata } from 'next';
-import { getServerSession } from 'next-auth/next';
 import { ChatInput } from '../components/chat-input';
 import { Header } from '../components/header';
 import { Sidebar } from '../components/sidebar';
@@ -18,14 +17,12 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const session = await getServerSession(authOptions);
-
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang='en' suppressHydrationWarning>
       <head />
       <body className={cn(inter.variable)}>
-        <Providers session={session}>
+        <Providers>
           <div className='flex h-screen w-full flex-col gap-4 px-6 py-4'>
             <Header />
             <div className='flex flex-1 gap-4 '>

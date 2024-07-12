@@ -1,6 +1,5 @@
 'use client';
 
-import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
@@ -18,16 +17,15 @@ import { formatUnits } from 'viem';
 import { wagmiConfig } from '../../config/wagmi';
 
 export const AccountBalance = () => {
-  const { data: session } = useSession();
   const [tokens, setTokens] = useState<GetBalanceReturnType[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const address = session?.address;
-    if (!address) {
-      setTokens([]);
-      return;
-    }
+    const address = '0x';
+    // if (!address) {
+    //   setTokens([]);
+    //   return;
+    // }
     void (async () => {
       const tokensRes = await Promise.all(
         [undefined, '0x3F1c547b21f65e10480dE3ad8E19fAAC46C95034' as `0x${string}`].map(async i => {
@@ -43,7 +41,7 @@ export const AccountBalance = () => {
       setTokens(tokensRes);
       setLoading(false);
     })();
-  }, [session]);
+  }, []);
 
   return (
     <div className='flex flex-col gap-6'>

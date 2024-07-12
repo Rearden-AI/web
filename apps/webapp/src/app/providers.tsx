@@ -2,8 +2,6 @@
 
 import { RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { Session } from 'next-auth';
-import { SessionProvider } from 'next-auth/react';
 import { WagmiProvider } from 'wagmi';
 import { rainbowTheme } from '../config/rainbow-theme';
 import { wagmiConfig } from '../config/wagmi';
@@ -12,24 +10,16 @@ import { CheckIsAuth } from './check-is-auth';
 
 const queryClient = new QueryClient();
 
-export const Providers = ({
-  children,
-  session,
-}: {
-  children: React.ReactNode;
-  session: Session | null;
-}) => {
+export const Providers = ({ children }: { children: React.ReactNode }) => {
   return (
-    <SessionProvider refetchInterval={0} session={session}>
-      <WagmiProvider config={wagmiConfig}>
-        <QueryClientProvider client={queryClient}>
-          <CheckIsAuth>
-            <RainbowKitAuthCustomProvider session={session}>
-              <RainbowKitProvider theme={rainbowTheme}>{children} </RainbowKitProvider>
-            </RainbowKitAuthCustomProvider>
-          </CheckIsAuth>
-        </QueryClientProvider>
-      </WagmiProvider>
-    </SessionProvider>
+    <WagmiProvider config={wagmiConfig}>
+      <QueryClientProvider client={queryClient}>
+        <CheckIsAuth>
+          <RainbowKitAuthCustomProvider>
+            <RainbowKitProvider theme={rainbowTheme}>{children} </RainbowKitProvider>
+          </RainbowKitAuthCustomProvider>
+        </CheckIsAuth>
+      </QueryClientProvider>
+    </WagmiProvider>
   );
 };

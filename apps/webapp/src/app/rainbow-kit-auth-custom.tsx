@@ -2,21 +2,14 @@ import {
   RainbowKitAuthenticationProvider,
   createAuthenticationAdapter,
 } from '@rainbow-me/rainbowkit';
-import { signIn, signOut } from 'next-auth/react';
 import React from 'react';
 import { SiweMessage } from 'siwe';
 import axiosInstance from '../config/axios';
 import { ApiRoutes } from '../constants/api-routes';
-import { Session } from 'next-auth';
 import { useStore } from '../state';
 import { authSelector } from '../state/auth';
 
-export const RainbowKitAuthCustomProvider = ({
-  children,
-}: {
-  children: React.ReactNode;
-  session: Session | null;
-}) => {
+export const RainbowKitAuthCustomProvider = ({ children }: { children: React.ReactNode }) => {
   const { status, setStatus, setAuth } = useStore(authSelector);
 
   const authenticationAdapter = createAuthenticationAdapter({
@@ -51,10 +44,6 @@ export const RainbowKitAuthCustomProvider = ({
           message: message.prepareMessage(),
         });
 
-        await signIn('credentials', {
-          address: message.address,
-          redirect: false,
-        });
         setStatus('authenticated');
         setAuth(true);
         return data;
@@ -66,11 +55,9 @@ export const RainbowKitAuthCustomProvider = ({
       }
     },
 
+    // eslint-disable-next-line @typescript-eslint/require-await
     signOut: async () => {
       setStatus('unauthenticated');
-      await signOut({
-        redirect: false,
-      });
     },
   });
   return (
