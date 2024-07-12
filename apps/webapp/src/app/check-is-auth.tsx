@@ -42,7 +42,8 @@ export const CheckIsAuth = ({ children }: { children: React.ReactNode }) => {
 
       setStatus('unauthenticated');
       setAuth(false);
-      clearChats();
+
+      window.location.reload();
     },
   });
 
