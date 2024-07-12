@@ -35,10 +35,8 @@ export const CheckIsAuth = ({ children }: { children: React.ReactNode }) => {
           //
         }
 
-        console.log(process.env['NEXT_COOKIE_SUB_DOMAIN']);
-
         deleteCookie(REARDEN_SESSION_ID, {
-          domain: process.env['NEXT_COOKIE_SUB_DOMAIN']!,
+          domain: process.env['NEXT_PUBLIC_SUB_DOMAIN']!,
         });
       }
 
@@ -64,7 +62,7 @@ export const CheckIsAuth = ({ children }: { children: React.ReactNode }) => {
               //
             }
             deleteCookie(REARDEN_SESSION_ID, {
-              domain: process.env['NEXT_COOKIE_SUB_DOMAIN']!,
+              domain: process.env['NEXT_PUBLIC_SUB_DOMAIN']!,
             });
             setStatus('unauthenticated');
             setAuth(false);
