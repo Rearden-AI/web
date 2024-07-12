@@ -34,6 +34,9 @@ export const CheckIsAuth = ({ children }: { children: React.ReactNode }) => {
         } catch (error) {
           //
         }
+
+        console.log(process.env['NEXT_COOKIE_SUB_DOMAIN']);
+
         deleteCookie(REARDEN_SESSION_ID, {
           domain: process.env['NEXT_COOKIE_SUB_DOMAIN']!,
         });
@@ -60,7 +63,9 @@ export const CheckIsAuth = ({ children }: { children: React.ReactNode }) => {
             } catch (error) {
               //
             }
-            deleteCookie(REARDEN_SESSION_ID);
+            deleteCookie(REARDEN_SESSION_ID, {
+              domain: process.env['NEXT_COOKIE_SUB_DOMAIN']!,
+            });
             setStatus('unauthenticated');
             setAuth(false);
             clearChats();
