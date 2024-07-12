@@ -34,7 +34,9 @@ export const CheckIsAuth = ({ children }: { children: React.ReactNode }) => {
         } catch (error) {
           //
         }
-        deleteCookie(REARDEN_SESSION_ID);
+        deleteCookie(REARDEN_SESSION_ID, {
+          domain: '.rearden.xyz',
+        });
       }
 
       setStatus('unauthenticated');
