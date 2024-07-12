@@ -2,7 +2,7 @@ import { AuthenticationStatus } from '@rainbow-me/rainbowkit';
 import { AllSlices, SliceCreator } from '.';
 
 export interface AuthSlice {
-  isAuth: boolean;
+  isAuth?: boolean;
   status: AuthenticationStatus;
   setStatus: (status: AuthenticationStatus) => void;
   setAuth: (isAuth: boolean) => void;
@@ -10,7 +10,6 @@ export interface AuthSlice {
 
 export const createAuthSlice = (): SliceCreator<AuthSlice> => set => {
   return {
-    isAuth: false,
     status: 'unauthenticated',
     setStatus: status => {
       set(state => {

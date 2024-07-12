@@ -23,6 +23,10 @@ export default function ChatPage({ params }: { params: { id: string } }) {
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
 
   useEffect(() => {
+    if (isAuth === undefined) {
+      return;
+    }
+
     if (!isAuth) {
       selectChat(undefined);
       redirect('/');
@@ -37,7 +41,7 @@ export default function ChatPage({ params }: { params: { id: string } }) {
 
         selectChat({ ...chat, history: chat.history });
       } catch (error) {
-        //
+        redirect('/');
       }
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps

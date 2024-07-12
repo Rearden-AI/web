@@ -35,7 +35,7 @@ export const CheckIsAuth = ({ children }: { children: React.ReactNode }) => {
           //
         }
         deleteCookie(REARDEN_SESSION_ID, {
-          domain: '.rearden.xyz',
+          domain: process.env['NEXT_COOKIE_SUB_DOMAIN']!,
         });
       }
 
