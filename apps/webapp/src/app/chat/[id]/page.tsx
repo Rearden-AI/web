@@ -19,6 +19,7 @@ import { redirect } from 'next/navigation';
 export default function ChatPage({ params }: { params: { id: string } }) {
   const { selectedChat, selectChat } = useStore(chatsSelector);
   const { isAuth } = useStore(authSelector);
+  console.log({ isAuth });
 
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
 

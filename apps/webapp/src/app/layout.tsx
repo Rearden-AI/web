@@ -6,7 +6,6 @@ import type { Metadata } from 'next';
 import { ChatInput } from '../components/chat-input';
 import { Header } from '../components/header';
 import { Sidebar } from '../components/sidebar';
-import { authOptions } from '../config/auth';
 import { Providers } from './providers';
 
 export const metadata: Metadata = {

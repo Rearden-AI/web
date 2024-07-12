@@ -1,19 +1,16 @@
 import axiosInstance from '../config/axios';
 import { ApiRoutes } from '../constants/api-routes';
 import { deleteCookie, getCookie } from 'cookies-next';
-import { useAccountEffect, useDisconnect } from 'wagmi';
+import { useAccountEffect } from 'wagmi';
 import { useStore } from '../state';
 import { authSelector } from '../state/auth';
 import { useEffect } from 'react';
 import { getAccount } from '@wagmi/core';
 import { wagmiConfig } from '../config/wagmi';
 import { REARDEN_SESSION_ID } from '../constants/constants';
-import { chatsSelector } from '../state/chats';
 
 export const CheckIsAuth = ({ children }: { children: React.ReactNode }) => {
   const { setAuth, setStatus } = useStore(authSelector);
-  const { clearChats } = useStore(chatsSelector);
-  const { disconnect } = useDisconnect();
 
   useAccountEffect({
     async onConnect() {
@@ -52,7 +49,10 @@ export const CheckIsAuth = ({ children }: { children: React.ReactNode }) => {
       const account = getAccount(wagmiConfig);
       const cookie = getCookie(REARDEN_SESSION_ID);
 
-      if (!account.address) {
+      if (account.address && !cookie) {
+        setStatus('unauthenticated');
+        setAuth(false);
+      } else if (!account.address) {
         void (async () => {
           const cookie = getCookie(REARDEN_SESSION_ID);
 
@@ -67,13 +67,8 @@ export const CheckIsAuth = ({ children }: { children: React.ReactNode }) => {
             });
             setStatus('unauthenticated');
             setAuth(false);
-            clearChats();
           }
         })();
-      }
-
-      if (!cookie) {
-        disconnect();
       }
     }, 1000);
 
