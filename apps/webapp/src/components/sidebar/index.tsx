@@ -38,7 +38,7 @@ export const Sidebar = () => {
 
   const { data, fetchNextPage } = useInfiniteQuery({
     queryKey: ['chats'],
-    enabled: isAuth,
+    enabled: Boolean(isAuth),
     initialPageParam: 1,
     queryFn: ({ pageParam }) => getChats({ pageParam, prevChats: all }),
     getNextPageParam: (lastPage, allPages) => (lastPage.length ? allPages.length + 1 : undefined),
