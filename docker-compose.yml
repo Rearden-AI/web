@@ -27,6 +27,19 @@ services:
       - 9001:3000
     networks:
       - coplilot_network
+  defi_copilot_dev:
+    container_name: defi_copilot_dev
+    image: defi_copilot_dev:latest
+    build:
+      context: ./
+      dockerfile: ./apps/webapp/Dockerfile
+      args:
+        NODE: development
+    restart: always
+    ports:
+      - 9004:3000
+    networks:
+      - coplilot_network
   defi_copilot_langing:
     container_name: defi_copilot_langing
     image: defi_copilot_langing:latest
