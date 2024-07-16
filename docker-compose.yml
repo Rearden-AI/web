@@ -8,7 +8,7 @@ services:
       context: ./
       dockerfile: ./apps/webapp/Dockerfile
       args:
-        NODE: development
+        NODE: production
     restart: always
     ports:
       - 9000:3000
@@ -21,7 +21,7 @@ services:
       context: ./
       dockerfile: ./apps/webapp/Dockerfile
       args:
-        NODE: production
+        NODE: development
     restart: always
     ports:
       - 9001:3000
