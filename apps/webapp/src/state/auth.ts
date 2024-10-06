@@ -1,5 +1,5 @@
 import { AuthenticationStatus } from '@rainbow-me/rainbowkit';
-import { AllSlices, SliceCreator } from '.';
+import { AllSlices, SliceCreator } from '.'
 
 export interface AuthSlice {
   isAuth?: boolean;
