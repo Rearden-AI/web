@@ -142,13 +142,13 @@ describe('Proof Slice', () => {
       expect(useStore.getState().chats.all.length).toBe(0);
     });
 
-    // test('throw error if try rename not existed chat', () => {
-    //   useStore.getState().chats.addChats([chat]);
-    //   const newName = 'test_2';
+    test('throw error if try rename not existed chat', () => {
+      useStore.getState().chats.addChats([chat]);
+      const newName = 'test_2';
 
-    //   expect(() => useStore.getState().chats.renameChat('2', newName)).toThrowError(
-    //     'Chat doesn`t exist',
-    //   );
-    // });
+      expect(() => useStore.getState().chats.renameChat('2', newName)).toThrowError(
+        'Chat doesn`t exist',
+      );
+    });
   });
 });
